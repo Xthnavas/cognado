@@ -9,13 +9,15 @@
 </head>
 <body>
 
+<!-- ================= ERROR DATA.JS ================= -->
 <div class="modal" id="errorModal" role="dialog" aria-modal="true">
   <div class="modal-card">
     <h2>⚠️ Falta <span class="rev">data.js</span></h2>
-    <p>El archivo de contenido no se cargó. Asegúrate de tener <code>data.js</code> en la <strong>misma carpeta</strong> que <code>ponte.html</code>.</p>
+    <p>El archivo de contenido no se cargó. Asegúrate de tener <code>data.js</code> en la <strong>misma carpeta</strong> que <code>index.html</code>.</p>
   </div>
 </div>
 
+<!-- ================= ONBOARDING ================= -->
 <div class="modal" id="onboarding" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle">
   <div class="modal-card">
     <h2 id="onboardingTitle">Bienvenido a <span class="rev">Cognados</span></h2>
@@ -23,12 +25,14 @@
     <div class="steps">
       <div class="step"><div class="num">1</div><div class="txt"><strong>Elige una categoría</strong> de patrón y voltea sus tarjetas.</div></div>
       <div class="step"><div class="num">2</div><div class="txt"><strong>Escucha la pronunciación</strong> tocando el altavoz 🔊.</div></div>
-      <div class="step"><div class="num">3</div><div class="txt"><strong>Resuelve las trampas</strong> (falsos amigos) al final.</div></div>
+      <div class="step"><div class="num">3</div><div class="txt"><strong>Resuelve las trampas</strong> (falsos amigos).</div></div>
+      <div class="step"><div class="num">4</div><div class="txt"><strong>Practica con Marco o Sophie</strong>, tus tutores de IA.</div></div>
     </div>
     <button class="btn-primary" id="startBtn">Empezar →</button>
   </div>
 </div>
 
+<!-- ================= CELEBRACIÓN ================= -->
 <div class="modal" id="celebration" role="dialog" aria-modal="true" aria-labelledby="celebrationTitle">
   <div class="modal-card">
     <h2 id="celebrationTitle">¡Bravissimo! 🎉</h2>
@@ -43,8 +47,9 @@
   </div>
 </div>
 
+<!-- ================= HEADER ================= -->
 <header>
-  <div class="logo">Cognados <em id="logoLang">italiano</em></div>
+  <div class="logo">Cognados<em id="logoLang">italiano</em></div>
   <div class="head-right">
     <div class="lang-toggle" id="langToggle" role="tablist" aria-label="Selecciona idioma">
       <button class="lang-btn active" data-lang="it" role="tab" aria-selected="true">Italiano</button>
@@ -60,7 +65,7 @@
 <main>
   <div class="hero">
     <h1>Ya hablas <span class="rev" id="heroLang">italiano</span> sin saberlo.</h1>
-    <p>109 palabras por idioma, organizadas por patrón. Elige una categoría y descubre lo que tu cerebro ya reconoce.</p>
+    <p>109 palabras por idioma, organizadas por patrón. Elige una categoría, practica con tu tutor de IA y descubre lo que tu cerebro ya reconoce.</p>
   </div>
 
   <div class="review-banner" id="reviewBanner" role="status">
@@ -96,6 +101,47 @@
     </div>
   </section>
 
+  <!-- ================= TUTOR IA ================= -->
+  <section id="tutor">
+    <div class="section-head">
+      <p class="kicker">Conversación</p>
+      <h2>Habla con <span id="tutorNameHead">Marco</span></h2>
+      <p class="sub">Tu tutor de IA nativo. Practica italiano real sin miedo a equivocarte. Él te corrige con cariño.</p>
+    </div>
+
+    <div class="chat" id="chat">
+      <div class="chat-header">
+        <div class="chat-avatar" id="chatAvatar">👨‍🍳</div>
+        <div class="chat-who">
+          <div class="chat-name" id="chatName">Marco</div>
+          <div class="chat-status" id="chatStatus">Tutor nativo · Roma</div>
+        </div>
+        <button class="chat-reset" id="chatReset" aria-label="Reiniciar conversación" title="Nueva conversación">↻</button>
+      </div>
+
+      <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"></div>
+
+      <div class="chat-starters" id="chatStarters"></div>
+
+      <form class="chat-input" id="chatForm">
+        <textarea
+          id="chatTextarea"
+          placeholder="Escribe en italiano..."
+          rows="1"
+          maxlength="500"
+          autocomplete="off"
+          aria-label="Escribe tu mensaje"
+        ></textarea>
+        <button type="submit" id="chatSend" aria-label="Enviar mensaje">
+          <span class="send-icon">➤</span>
+        </button>
+      </form>
+      <p class="chat-unavailable" id="chatUnavailable" style="display:none; padding:0 1rem 0.9rem; font-size:0.82rem; opacity:0.7;">
+        Esta práctica funciona cuando abres la página dentro de la app de Claude.
+      </p>
+    </div>
+  </section>
+
   <div class="progress-wrap">
     <div class="bar-bg" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar">
       <div class="bar-fill" id="barFill"></div>
@@ -109,7 +155,7 @@
 
 <footer>
   <p><strong>Cognados</strong> · aprende italiano y francés desde el español que ya tienes.</p>
-  <p>Hecho por Jorge Navas</p>
+  <p>Hecho por Jorge Navas.</p>
 </footer>
 
 <script src="data.js"></script>
@@ -130,6 +176,21 @@
   var trapAttempts = 0;
   var currentCat = 0;
 
+  // ============ IA NATIVA (capacidad "sample", sin clave, gratis) ============
+  var sampleFn = null;
+  var sampleReady = (async function(){
+    try{
+      sampleFn = window.claude ? await window.claude.use('sample') : null;
+    }catch(e){ sampleFn = null; }
+    if(!sampleFn){
+      document.getElementById('chatForm').style.display = 'none';
+      document.getElementById('chatStarters').style.display = 'none';
+      document.getElementById('chatUnavailable').style.display = 'block';
+    }
+    return sampleFn;
+  })();
+
+  // ============ UTILIDADES ============
   function countAllCards(){
     var n = 0;
     DATA[lang].categorias.forEach(function(c){ n += c.cognados.length; });
@@ -137,6 +198,13 @@
   }
   function countAllTraps(){ return DATA[lang].trampas.length; }
 
+  function escapeHTML(str){
+    return String(str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  // ============ ESTADO ============
   function defaultState(){
     return { xp: 0, done: 0, cards: {}, traps: {}, lastVisit: null, streak: 0 };
   }
@@ -410,9 +478,9 @@
   function showFeedback(t, isCorrect){
     var head = isCorrect ? '<strong>¡Exacto!</strong> ' : '<strong>Casi.</strong> ';
     trapFeedbackEl.innerHTML =
-      head + t.note +
-      '<span class="mnemonic">💡 ' + t.mnemonic + '</span>' +
-      '<span class="phrase">Ejemplo: <em>' + t.phrase + '</em>' +
+      head + escapeHTML(t.note) +
+      '<span class="mnemonic">💡 ' + escapeHTML(t.mnemonic) + '</span>' +
+      '<span class="phrase">Ejemplo: <em>' + escapeHTML(t.phrase) + '</em>' +
       '<button class="speak-inline" aria-label="Escuchar ejemplo">🔊</button></span>';
     var inlineSpeak = trapFeedbackEl.querySelector('.speak-inline');
     if(inlineSpeak) inlineSpeak.addEventListener('click', function(){ speak(t.phrase); });
@@ -426,6 +494,225 @@
 
   trapSpeakBtn.addEventListener('click', function(){
     speak(DATA[lang].trampas[trapIndex].word);
+  });
+
+  // ============================================================
+  //                      💬 TUTOR IA 💬
+  // ============================================================
+  var chatMessagesEl = document.getElementById('chatMessages');
+  var chatStartersEl = document.getElementById('chatStarters');
+  var chatFormEl = document.getElementById('chatForm');
+  var chatTextareaEl = document.getElementById('chatTextarea');
+  var chatSendEl = document.getElementById('chatSend');
+  var chatResetEl = document.getElementById('chatReset');
+  var isChatLoading = false;
+
+  function chatStorageKey(){ return 'ponte-chat-' + lang; }
+
+  function loadChat(){
+    try{
+      var saved = JSON.parse(localStorage.getItem(chatStorageKey()) || 'null');
+      if(Array.isArray(saved) && saved.length) return saved;
+    }catch(e){}
+    return [{ role: 'model', text: DATA[lang].tutor.greeting }];
+  }
+
+  function saveChat(history){
+    try{
+      var trimmed = history.slice(-30);
+      localStorage.setItem(chatStorageKey(), JSON.stringify(trimmed));
+    }catch(e){}
+  }
+
+  var chatHistory = loadChat();
+
+  function renderChatHeader(){
+    var tutor = DATA[lang].tutor;
+    document.getElementById('tutorNameHead').textContent = tutor.name;
+    document.getElementById('chatAvatar').textContent = tutor.avatar;
+    document.getElementById('chatName').textContent = tutor.name;
+    document.getElementById('chatStatus').textContent = tutor.status;
+    chatTextareaEl.placeholder = lang === 'it' ? 'Scrivi in italiano...' : 'Écris en français...';
+    document.getElementById('chatAvatar').setAttribute('aria-hidden', 'true');
+  }
+
+  function renderStarters(){
+    chatStartersEl.innerHTML = '';
+    if(!sampleFn) return;
+    var tutor = DATA[lang].tutor;
+    var onlyGreeting = chatHistory.length <= 1;
+    if(!onlyGreeting){ chatStartersEl.style.display = 'none'; return; }
+    chatStartersEl.style.display = 'flex';
+    tutor.starters.forEach(function(s){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'starter';
+      b.textContent = s;
+      b.addEventListener('click', function(){
+        chatTextareaEl.value = s;
+        autoResizeTextarea();
+        chatTextareaEl.focus();
+      });
+      chatStartersEl.appendChild(b);
+    });
+  }
+
+  function addMessage(role, text, opts){
+    opts = opts || {};
+    var wrap = document.createElement('div');
+    wrap.className = 'msg msg-' + role;
+    if(opts.error) wrap.classList.add('msg-error');
+
+    var bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.innerHTML = escapeHTML(text).replace(/\n/g, '<br>');
+
+    wrap.appendChild(bubble);
+
+    if(role === 'model' && !opts.error && text.length > 1){
+      var speakBtn = document.createElement('button');
+      speakBtn.className = 'msg-speak';
+      speakBtn.setAttribute('aria-label', 'Escuchar mensaje');
+      speakBtn.type = 'button';
+      speakBtn.textContent = '🔊';
+      speakBtn.addEventListener('click', function(){
+        speak(text);
+      });
+      wrap.appendChild(speakBtn);
+    }
+
+    chatMessagesEl.appendChild(wrap);
+    scrollChatToBottom();
+    return bubble;
+  }
+
+  function scrollChatToBottom(){
+    requestAnimationFrame(function(){
+      chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+    });
+  }
+
+  function renderChat(){
+    chatMessagesEl.innerHTML = '';
+    chatHistory.forEach(function(m){
+      addMessage(m.role, m.text, m.error ? { error: true } : {});
+    });
+    renderStarters();
+  }
+
+  function showTyping(){
+    var t = document.createElement('div');
+    t.className = 'msg msg-model typing';
+    t.id = 'typingIndicator';
+    t.innerHTML = '<div class="bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>';
+    chatMessagesEl.appendChild(t);
+    scrollChatToBottom();
+    return t.querySelector('.bubble');
+  }
+
+  function hideTyping(){
+    var t = document.getElementById('typingIndicator');
+    if(t) t.remove();
+  }
+
+  function autoResizeTextarea(){
+    chatTextareaEl.style.height = 'auto';
+    chatTextareaEl.style.height = Math.min(chatTextareaEl.scrollHeight, 120) + 'px';
+  }
+
+  chatTextareaEl.addEventListener('input', autoResizeTextarea);
+
+  chatTextareaEl.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' && !e.shiftKey){
+      e.preventDefault();
+      chatFormEl.dispatchEvent(new Event('submit', { cancelable: true }));
+    }
+  });
+
+  chatFormEl.addEventListener('submit', function(e){
+    e.preventDefault();
+    var text = chatTextareaEl.value.trim();
+    if(!text || isChatLoading) return;
+    sendMessage(text);
+    chatTextareaEl.value = '';
+    autoResizeTextarea();
+  });
+
+  function sendMessage(text){
+    var userMsg = { role: 'user', text: text };
+    chatHistory.push(userMsg);
+    addMessage('user', text);
+    saveChat(chatHistory);
+    renderStarters();
+
+    isChatLoading = true;
+    chatSendEl.disabled = true;
+
+    var typingBubble = null;
+    var typingShown = false;
+
+    callAI(chatHistory)
+      .then(function(reply){
+        if(typingShown) hideTyping();
+        var cleanReply = (reply || '').trim();
+        if(!cleanReply){
+          cleanReply = lang === 'it' ? 'Scusa, non ho capito. Puoi ripetere?' : "Désolée, je n'ai pas compris. Tu peux répéter?";
+        }
+        var modelMsg = { role: 'model', text: cleanReply };
+        chatHistory.push(modelMsg);
+        addMessage('model', cleanReply);
+        speak(cleanReply.replace(/\[.*?\]/g, '').trim());
+        saveChat(chatHistory);
+      })
+      .catch(function(err){
+        if(typingShown) hideTyping();
+        var errorMsg;
+        if(err && err.code === 'not_granted'){
+          errorMsg = 'Necesitas permitir el uso de Claude en esta página para practicar con ' + DATA[lang].tutor.name + '.';
+        } else if(err && err.code === 'rate_limited'){
+          errorMsg = 'Vas muy rápido. Espera un momento y vuelve a intentar.';
+        } else {
+          errorMsg = lang === 'it'
+            ? '⚠️ Connessione interrotta. Riprova tra poco.'
+            : '⚠️ Connexion interrompue. Réessaie dans un instant.';
+        }
+        addMessage('model', errorMsg, { error: true });
+        console.error('Sample error:', err);
+      })
+      .then(function(){
+        isChatLoading = false;
+        chatSendEl.disabled = false;
+        chatTextareaEl.focus();
+      });
+
+    // Muestra "escribiendo..." solo si la respuesta tarda un poco (evita parpadeo)
+    setTimeout(function(){
+      if(isChatLoading){ typingBubble = showTyping(); typingShown = true; }
+    }, 300);
+  }
+
+  // ============ LLAMADA A LA IA NATIVA (capacidad sample) ============
+  async function callAI(history){
+    await sampleReady;
+    if(!sampleFn){
+      var e = new Error('sample no disponible');
+      e.code = 'not_granted';
+      throw e;
+    }
+    var turns = [{ role: 'user', content: DATA[lang].tutor.systemPrompt }];
+    history.forEach(function(m){
+      turns.push({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text });
+    });
+    var result = await sampleFn(turns, { cache: false });
+    return result.text;
+  }
+
+  // ============ RESET DEL CHAT ============
+  chatResetEl.addEventListener('click', function(){
+    if(!confirm(lang === 'it' ? 'Vuoi iniziare una nuova conversazione?' : 'Veux-tu commencer une nouvelle conversation?')) return;
+    chatHistory = [{ role: 'model', text: DATA[lang].tutor.greeting }];
+    saveChat(chatHistory);
+    renderChat();
   });
 
   // ============ CELEBRACIÓN ============
@@ -499,6 +786,10 @@
     renderTrap(trapIndex);
     refreshCounters();
     refreshReviewBanner();
+
+    chatHistory = loadChat();
+    renderChatHeader();
+    renderChat();
   }
 
   // ============ TOGGLE IDIOMA ============
