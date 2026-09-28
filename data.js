@@ -109,7 +109,14 @@ CONTEXTO: El estudiante quiere practicar conversación básica para viajar a Ita
       { word: 'parente', opts: [['Un pariente lejano', false], ['Un familiar', true], ['Un conocido', false]], note: '"Parente" = familiar.', mnemonic: 'I parenti = los familiares.', phrase: 'Vado a trovare i parenti.' }
     ],
     verbos: {
-      pronombres: ['io', 'tu', 'lui/lei', 'noi', 'voi', 'loro'],
+      pronombres: [
+  { it: 'io', es: 'yo' },
+  { it: 'tu', es: 'tú' },
+  { it: 'lui/lei', es: 'él/ella' },
+  { it: 'noi', es: 'nosotros' },
+  { it: 'voi', es: 'vosotros' },
+  { it: 'loro', es: 'ellos' }
+],
       lista: [
         { inf: 'essere', es: 'ser / estar', formas: ['sono','sei','è','siamo','siete','sono'], ejemplo: 'Sono di Panama.', ejEs: 'Soy de Panamá.' },
         { inf: 'avere', es: 'tener', formas: ['ho','hai','ha','abbiamo','avete','hanno'], ejemplo: 'Ho due fratelli.', ejEs: 'Tengo dos hermanos.' },
@@ -286,7 +293,14 @@ CONTEXTO: El estudiante quiere practicar conversación básica para viajar a Fra
       { word: 'journée', opts: [['Jornada laboral', false], ['Día completo', true], ['Viaje de un día', false]], note: 'Día como duración completa.', mnemonic: 'Bonne journée! = ¡Buen día!', phrase: 'Bonne journée!' }
     ],
     verbos: {
-      pronombres: ['je', 'tu', 'il/elle', 'nous', 'vous', 'ils/elles'],
+      pronombres: [
+  { it: 'je', es: 'yo' },
+  { it: 'tu', es: 'tú' },
+  { it: 'il/elle', es: 'él/ella' },
+  { it: 'nous', es: 'nosotros' },
+  { it: 'vous', es: 'vosotros / usted' },
+  { it: 'ils/elles', es: 'ellos/ellas' }
+],
       lista: [
         { inf: 'être', es: 'ser / estar', formas: ['suis','es','est','sommes','êtes','sont'], ejemplo: 'Je suis de Panama.', ejEs: 'Soy de Panamá.' },
         { inf: 'avoir', es: 'tener', formas: ['ai','as','a','avons','avez','ont'], ejemplo: "J'ai deux frères.", ejEs: 'Tengo dos hermanos.' },
