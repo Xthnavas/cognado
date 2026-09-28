@@ -631,9 +631,9 @@
       var row = document.createElement('div');
       row.className = 'conj-row';
       row.innerHTML =
-        '<span class="conj-pron">' + pro[i] + '</span>' +
-        '<span class="conj-form">' + forma + '</span>' +
-        '<button class="conj-speak" aria-label="Escuchar ' + forma + '">🔊</button>';
+  '<span class="conj-pron">' + pro[i].it + ' <em>(' + pro[i].es + ')</em></span>' +
+  '<span class="conj-form">' + forma + '</span>' +
+  '<button class="conj-speak" aria-label="Escuchar ' + forma + '">🔊</button>';
       row.querySelector('.conj-speak').addEventListener('click', function(){
         speak(forma);
       });
