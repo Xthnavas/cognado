@@ -1,272 +1,194 @@
 window.PONTE_DATA = {
-
   it: {
     label: 'italiano',
     voice: 'it-IT',
     tutor: {
-      name: 'Marco',
-      avatar: '👨‍🍳',
-      status: 'Tutor nativo · Roma',
+      name: 'Marco', avatar: '👨‍🍳', status: 'Tutor nativo · Roma',
       greeting: "Ciao! Sono Marco, il tuo tutor di italiano. Piacere di conoscerti! Come ti chiami?",
-      starters: [
-        'Ciao Marco!',
-        'Mi chiamo...',
-        'Come stai?',
-        'Non capisco'
-      ],
+      starters: ['Ciao Marco!', 'Mi chiamo...', 'Come stai?', 'Non capisco'],
       systemPrompt: `Eres "Marco", un tutor de italiano nativo de Roma, amable, paciente y con sentido del humor. Estás ayudando a un hispanohablante principiante a practicar italiano conversacional.
 
 REGLAS ESTRICTAS:
 1. Responde SIEMPRE en italiano. Solo usas español muy brevemente para correcciones.
 2. Usa vocabulario simple, frases cortas (nivel A1-A2).
-3. Si el estudiante comete un error, responde primero de forma natural a lo que dijo y luego corrige brevemente. Formato: "Ah, capisco! [respuesta natural]. Piccola correzione: si dice '[correcto]', non '[incorrecto]'. [continuación]".
+3. Si el estudiante comete un error, responde primero de forma natural y luego corrige brevemente. Formato: "Ah, capisco! [respuesta natural]. Piccola correzione: si dice '[correcto]', non '[incorrecto]'. [continuación]".
 4. Si el estudiante escribe en español, anímalo suavemente a intentar en italiano: "Prova a dirlo in italiano! :)"
 5. Haz SIEMPRE una pregunta al final para mantener la conversación viva.
 6. NUNCA respondas con más de 3 frases cortas. Sé conciso.
 7. Si no entiendes algo, pide que repita: "Come? Puoi ripetere?"
-8. Adapta tu vocabulario al nivel del estudiante. Si responde con frases simples, mantente simple.
+8. Adapta tu vocabulario al nivel del estudiante.
 
 CONTEXTO: El estudiante quiere practicar conversación básica para viajar a Italia. Empieza presentándote brevemente y preguntándole su nombre.`
     },
     categorias: [
-      {
-        id: 'zione',
-        titulo: '-ción → -zione',
-        cognados: [
-          { es: 'información', target: 'informazione', phrase: "Ho bisogno di un'informazione." },
-          { es: 'nación', target: 'nazione', phrase: "L'Italia è una nazione." },
-          { es: 'educación', target: 'educazione', phrase: "L'educazione è importante." },
-          { es: 'atención', target: 'attenzione', phrase: "Attenzione al cane!" },
-          { es: 'estación', target: 'stazione', phrase: "La stazione è vicina." },
-          { es: 'función', target: 'funzione', phrase: "Questa funzione non va." },
-          { es: 'acción', target: 'azione', phrase: "L'azione è rapida." },
-          { es: 'dirección', target: 'direzione', phrase: "Vado in quella direzione." },
-          { es: 'tradición', target: 'tradizione', phrase: "È una tradizione italiana." },
-          { es: 'condición', target: 'condizione', phrase: "In buona condizione." },
-          { es: 'posición', target: 'posizione', phrase: "Cambio posizione." },
-          { es: 'intención', target: 'intenzione', phrase: "Non era mia intenzione." },
-          { es: 'celebración', target: 'celebrazione', phrase: "Che bella celebrazione!" },
-          { es: 'aplicación', target: 'applicazione', phrase: "Uso questa applicazione." },
-          { es: 'comunicación', target: 'comunicazione', phrase: "La comunicazione è importante." }
-        ]
-      },
-      {
-        id: 'ta',
-        titulo: '-dad → -tà',
-        cognados: [
-          { es: 'ciudad', target: 'città', phrase: "Roma è una città bellissima." },
-          { es: 'universidad', target: 'università', phrase: "Studio all'università." },
-          { es: 'libertad', target: 'libertà', phrase: "La libertà è preziosa." },
-          { es: 'curiosidad', target: 'curiosità', phrase: "La curiosità è una virtù." },
-          { es: 'felicidad', target: 'felicità', phrase: "Ti auguro felicità." },
-          { es: 'realidad', target: 'realtà', phrase: "La realtà è diversa." },
-          { es: 'actividad', target: 'attività', phrase: "Quale attività preferisci?" },
-          { es: 'personalidad', target: 'personalità', phrase: "Ha una bella personalità." },
-          { es: 'sociedad', target: 'società', phrase: "La società cambia." },
-          { es: 'calidad', target: 'qualità', phrase: "Alta qualità." },
-          { es: 'dificultad', target: 'difficoltà', phrase: "Che difficoltà!" },
-          { es: 'cantidad', target: 'quantità', phrase: "Una grande quantità." },
-          { es: 'electricidad', target: 'elettricità', phrase: "Manca l'elettricità." },
-          { es: 'identidad', target: 'identità', phrase: "La mia identità." },
-          { es: 'capacidad', target: 'capacità', phrase: "Ha capacità." }
-        ]
-      },
-      {
-        id: 'bile',
-        titulo: '-ble → -bile',
-        cognados: [
-          { es: 'posible', target: 'possibile', phrase: "È possibile?" },
-          { es: 'terrible', target: 'terribile', phrase: "Che cosa terribile!" },
-          { es: 'responsable', target: 'responsabile', phrase: "Sei responsabile." },
-          { es: 'increíble', target: 'incredibile', phrase: "È incredibile!" },
-          { es: 'probable', target: 'probabile', phrase: "È probabile." },
-          { es: 'imposible', target: 'impossibile', phrase: "Impossibile!" },
-          { es: 'horrible', target: 'orribile', phrase: "Che orribile!" },
-          { es: 'visible', target: 'visibile', phrase: "Non è visibile." },
-          { es: 'flexible', target: 'flessibile', phrase: "Un piano flessibile." },
-          { es: 'amable', target: 'amabile', phrase: "Una persona amabile." },
-          { es: 'notable', target: 'notevole', phrase: "Un risultato notevole." },
-          { es: 'estable', target: 'stabile', phrase: "Una situazione stabile." }
-        ]
-      },
-      {
-        id: 'ario',
-        titulo: '-ario → -ario',
-        cognados: [
-          { es: 'diccionario', target: 'dizionario', phrase: "Uso il dizionario." },
-          { es: 'necesario', target: 'necessario', phrase: "È necessario studiare." },
-          { es: 'calendario', target: 'calendario', phrase: "Guardo il calendario." },
-          { es: 'salario', target: 'salario', phrase: "Il salario è buono." },
-          { es: 'vocabulario', target: 'vocabolario', phrase: "Il vocabolario italiano." },
-          { es: 'aniversario', target: 'anniversario', phrase: "Buon anniversario!" },
-          { es: 'adversario', target: 'avversario', phrase: "Il mio avversario." },
-          { es: 'escenario', target: 'scenario', phrase: "Che scenario!" },
-          { es: 'funcionario', target: 'funzionario', phrase: "Un funzionario pubblico." },
-          { es: 'millonario', target: 'milionario', phrase: "È un milionario." },
-          { es: 'revolucionario', target: 'rivoluzionario', phrase: "Un'idea rivoluzionaria." },
-          { es: 'imaginario', target: 'immaginario', phrase: "Un amico immaginario." }
-        ]
-      },
-      {
-        id: 'oso',
-        titulo: '-oso → -oso',
-        cognados: [
-          { es: 'famoso', target: 'famoso', phrase: "È famoso." },
-          { es: 'curioso', target: 'curioso', phrase: "Sono curioso." },
-          { es: 'precioso', target: 'prezioso', phrase: "Un oggetto prezioso." },
-          { es: 'delicioso', target: 'delizioso', phrase: "Un dolce delizioso." },
-          { es: 'peligroso', target: 'pericoloso', phrase: "È pericoloso." },
-          { es: 'numeroso', target: 'numeroso', phrase: "Un gruppo numeroso." },
-          { es: 'religioso', target: 'religioso', phrase: "Un uomo religioso." },
-          { es: 'misterioso', target: 'misterioso', phrase: "Un caso misterioso." },
-          { es: 'ambicioso', target: 'ambizioso', phrase: "Un piano ambizioso." },
-          { es: 'generoso', target: 'generoso', phrase: "Sei generoso." },
-          { es: 'nervioso', target: 'nervoso', phrase: "Sono nervoso." },
-          { es: 'valiente', target: 'valente', phrase: "Un cavaliere valente." }
-        ]
-      },
-      {
-        id: 'ale',
-        titulo: '-al → -ale',
-        cognados: [
-          { es: 'animal', target: 'animale', phrase: "Un animale selvatico." },
-          { es: 'normal', target: 'normale', phrase: "È normale." },
-          { es: 'natural', target: 'naturale', phrase: "È naturale." },
-          { es: 'final', target: 'finale', phrase: "Il finale è bello." },
-          { es: 'personal', target: 'personale', phrase: "Un parere personale." },
-          { es: 'general', target: 'generale', phrase: "In generale." },
-          { es: 'original', target: 'originale', phrase: "Un'idea originale." },
-          { es: 'cultural', target: 'culturale', phrase: "Un evento culturale." },
-          { es: 'social', target: 'sociale', phrase: "La vita sociale." },
-          { es: 'especial', target: 'speciale', phrase: "Un giorno speciale." },
-          { es: 'comercial', target: 'commerciale', phrase: "Un centro commerciale." },
-          { es: 'internacional', target: 'internazionale', phrase: "Una squadra internazionale." }
-        ]
-      },
-      {
-        id: 'ista',
-        titulo: '-ista → -ista',
-        cognados: [
-          { es: 'artista', target: 'artista', phrase: "Un grande artista." },
-          { es: 'turista', target: 'turista', phrase: "Sono un turista." },
-          { es: 'pianista', target: 'pianista', phrase: "Un pianista famoso." },
-          { es: 'dentista', target: 'dentista', phrase: "Vado dal dentista." },
-          { es: 'optimista', target: 'ottimista', phrase: "Sono ottimista." },
-          { es: 'realista', target: 'realista', phrase: "Un approccio realista." },
-          { es: 'socialista', target: 'socialista', phrase: "Un partito socialista." },
-          { es: 'capitalista', target: 'capitalista', phrase: "Un sistema capitalista." },
-          { es: 'periodista', target: 'giornalista', phrase: "Un giornalista famoso." },
-          { es: 'futbolista', target: 'calciatore', phrase: "Un calciatore famoso." }
-        ]
-      },
-      {
-        id: 'ente',
-        titulo: '-ente → -ente',
-        cognados: [
-          { es: 'presidente', target: 'presidente', phrase: "Il presidente parla." },
-          { es: 'cliente', target: 'cliente', phrase: "Il cliente ha sempre ragione." },
-          { es: 'diferente', target: 'differente', phrase: "Sono differenti." },
-          { es: 'inteligente', target: 'intelligente', phrase: "Sei intelligente." },
-          { es: 'paciente', target: 'paziente', phrase: "Sii paziente." },
-          { es: 'ingrediente', target: 'ingrediente', phrase: "Un ingrediente segreto." },
-          { es: 'ambiente', target: 'ambiente', phrase: "Un bell'ambiente." },
-          { es: 'presente', target: 'presente', phrase: "Sono presente." },
-          { es: 'accidente', target: 'incidente', phrase: "Un incidente stradale." },
-          { es: 'ausente', target: 'assente', phrase: "Oggi sono assente." }
-        ]
-      },
-      {
-        id: 'ico',
-        titulo: '-ico → -ico',
-        cognados: [
-          { es: 'político', target: 'politico', phrase: "Un discorso politico." },
-          { es: 'económico', target: 'economico', phrase: "Un problema economico." },
-          { es: 'música', target: 'musica', phrase: "Ascolto la musica." },
-          { es: 'público', target: 'pubblico', phrase: "Il trasporto pubblico." },
-          { es: 'técnico', target: 'tecnico', phrase: "Un problema tecnico." },
-          { es: 'práctico', target: 'pratico', phrase: "Un uomo pratico." },
-          { es: 'típico', target: 'tipico', phrase: "Un piatto tipico." },
-          { es: 'magnífico', target: 'magnifico', phrase: "Che magnifico!" },
-          { es: 'auténtico', target: 'autentico', phrase: "Un caffè autentico." },
-          { es: 'histórico', target: 'storico', phrase: "Un evento storico." },
-          { es: 'básico', target: 'basilare', phrase: "Un concetto basilare." }
-        ]
-      }
+      { id: 'zione', titulo: '-ción → -zione', cognados: [
+        { es: 'información', target: 'informazione' }, { es: 'nación', target: 'nazione' },
+        { es: 'educación', target: 'educazione' }, { es: 'atención', target: 'attenzione' },
+        { es: 'estación', target: 'stazione' }, { es: 'función', target: 'funzione' },
+        { es: 'acción', target: 'azione' }, { es: 'dirección', target: 'direzione' },
+        { es: 'tradición', target: 'tradizione' }, { es: 'condición', target: 'condizione' },
+        { es: 'posición', target: 'posizione' }, { es: 'intención', target: 'intenzione' },
+        { es: 'celebración', target: 'celebrazione' }, { es: 'aplicación', target: 'applicazione' },
+        { es: 'comunicación', target: 'comunicazione' }
+      ]},
+      { id: 'ta', titulo: '-dad → -tà', cognados: [
+        { es: 'ciudad', target: 'città' }, { es: 'universidad', target: 'università' },
+        { es: 'libertad', target: 'libertà' }, { es: 'curiosidad', target: 'curiosità' },
+        { es: 'felicidad', target: 'felicità' }, { es: 'realidad', target: 'realtà' },
+        { es: 'actividad', target: 'attività' }, { es: 'personalidad', target: 'personalità' },
+        { es: 'sociedad', target: 'società' }, { es: 'calidad', target: 'qualità' },
+        { es: 'dificultad', target: 'difficoltà' }, { es: 'cantidad', target: 'quantità' },
+        { es: 'electricidad', target: 'elettricità' }, { es: 'identidad', target: 'identità' },
+        { es: 'capacidad', target: 'capacità' }
+      ]},
+      { id: 'bile', titulo: '-ble → -bile', cognados: [
+        { es: 'posible', target: 'possibile' }, { es: 'terrible', target: 'terribile' },
+        { es: 'responsable', target: 'responsabile' }, { es: 'increíble', target: 'incredibile' },
+        { es: 'probable', target: 'probabile' }, { es: 'imposible', target: 'impossibile' },
+        { es: 'horrible', target: 'orribile' }, { es: 'visible', target: 'visibile' },
+        { es: 'flexible', target: 'flessibile' }, { es: 'amable', target: 'amabile' },
+        { es: 'notable', target: 'notevole' }, { es: 'estable', target: 'stabile' }
+      ]},
+      { id: 'ario', titulo: '-ario → -ario', cognados: [
+        { es: 'diccionario', target: 'dizionario' }, { es: 'necesario', target: 'necessario' },
+        { es: 'calendario', target: 'calendario' }, { es: 'salario', target: 'salario' },
+        { es: 'vocabulario', target: 'vocabolario' }, { es: 'aniversario', target: 'anniversario' },
+        { es: 'adversario', target: 'avversario' }, { es: 'escenario', target: 'scenario' },
+        { es: 'funcionario', target: 'funzionario' }, { es: 'millonario', target: 'milionario' },
+        { es: 'revolucionario', target: 'rivoluzionario' }, { es: 'imaginario', target: 'immaginario' }
+      ]},
+      { id: 'oso', titulo: '-oso → -oso', cognados: [
+        { es: 'famoso', target: 'famoso' }, { es: 'curioso', target: 'curioso' },
+        { es: 'precioso', target: 'prezioso' }, { es: 'delicioso', target: 'delizioso' },
+        { es: 'peligroso', target: 'pericoloso' }, { es: 'numeroso', target: 'numeroso' },
+        { es: 'religioso', target: 'religioso' }, { es: 'misterioso', target: 'misterioso' },
+        { es: 'ambicioso', target: 'ambizioso' }, { es: 'generoso', target: 'generoso' },
+        { es: 'nervioso', target: 'nervoso' }, { es: 'valiente', target: 'valente' }
+      ]},
+      { id: 'ale', titulo: '-al → -ale', cognados: [
+        { es: 'animal', target: 'animale' }, { es: 'normal', target: 'normale' },
+        { es: 'natural', target: 'naturale' }, { es: 'final', target: 'finale' },
+        { es: 'personal', target: 'personale' }, { es: 'general', target: 'generale' },
+        { es: 'original', target: 'originale' }, { es: 'cultural', target: 'culturale' },
+        { es: 'social', target: 'sociale' }, { es: 'especial', target: 'speciale' },
+        { es: 'comercial', target: 'commerciale' }, { es: 'internacional', target: 'internazionale' }
+      ]},
+      { id: 'ista', titulo: '-ista → -ista', cognados: [
+        { es: 'artista', target: 'artista' }, { es: 'turista', target: 'turista' },
+        { es: 'pianista', target: 'pianista' }, { es: 'dentista', target: 'dentista' },
+        { es: 'optimista', target: 'ottimista' }, { es: 'realista', target: 'realista' },
+        { es: 'socialista', target: 'socialista' }, { es: 'capitalista', target: 'capitalista' },
+        { es: 'periodista', target: 'giornalista' }, { es: 'futbolista', target: 'calciatore' }
+      ]},
+      { id: 'ente', titulo: '-ente → -ente', cognados: [
+        { es: 'presidente', target: 'presidente' }, { es: 'cliente', target: 'cliente' },
+        { es: 'diferente', target: 'differente' }, { es: 'inteligente', target: 'intelligente' },
+        { es: 'paciente', target: 'paziente' }, { es: 'ingrediente', target: 'ingrediente' },
+        { es: 'ambiente', target: 'ambiente' }, { es: 'presente', target: 'presente' },
+        { es: 'accidente', target: 'incidente' }, { es: 'ausente', target: 'assente' }
+      ]},
+      { id: 'ico', titulo: '-ico → -ico', cognados: [
+        { es: 'político', target: 'politico' }, { es: 'económico', target: 'economico' },
+        { es: 'música', target: 'musica' }, { es: 'público', target: 'pubblico' },
+        { es: 'técnico', target: 'tecnico' }, { es: 'práctico', target: 'pratico' },
+        { es: 'típico', target: 'tipico' }, { es: 'magnífico', target: 'magnifico' },
+        { es: 'auténtico', target: 'autentico' }, { es: 'histórico', target: 'storico' },
+        { es: 'básico', target: 'basilare' }
+      ]}
     ],
     trampas: [
-      { word: 'burro',
-        opts: [['Un animal, como en español', false], ['Mantequilla', true], ['Un tonto', false]],
-        note: 'El animal se dice "asino".',
-        mnemonic: 'Imagina un burro untado de mantequilla.',
-        phrase: 'Mi piace il pane con il burro.' },
-      { word: 'salire',
-        opts: [['Salir de un lugar', false], ['Subir', true], ['Saltar', false]],
-        note: 'Para "salir" en italiano se usa "uscire".',
-        mnemonic: 'Salire su un albero = subir a un árbol. Imagina un mono subiendo.',
-        phrase: 'Devo salire al secondo piano.' },
-      { word: 'guardare',
-        opts: [['Guardar algo', false], ['Mirar', true], ['Cuidar', false]],
-        note: 'Para "guardar" se usa "conservare" o "tenere".',
-        mnemonic: 'Guardare la TV = mirar la tele. Nadie mete la tele en un cajón.',
-        phrase: 'Mi piace guardare i film italiani.' },
-      { word: 'stanza',
-        opts: [['Una estancia larga', false], ['Habitación', true], ['Una pausa', false]],
-        note: '"Stanza" es habitación o cuarto de una casa.',
-        mnemonic: 'Tu stanza es tu cuarto. Ahí vive tu "estancia".',
-        phrase: 'La mia stanza è piccola ma accogliente.' },
-      { word: 'magazzino',
-        opts: [['Una revista', false], ['Un almacén', true], ['Una tienda de ropa', false]],
-        note: 'La revista se dice "rivista".',
-        mnemonic: 'Il magazzino è dove tieni le cose: el almacén.',
-        phrase: 'Il magazzino è pieno di scatole.' },
-      { word: 'camera',
-        opts: [['Una cámara de fotos', false], ['Una habitación', true], ['Un armario', false]],
-        note: 'La cámara de fotos se dice "macchina fotografica".',
-        mnemonic: 'Prenoto una camera = reservo una habitación. No una cámara.',
-        phrase: 'Ho prenotato una camera doppia.' },
-      { word: 'fattoria',
-        opts: [['Una factoría industrial', false], ['Una granja', true], ['Una fábrica de ropa', false]],
-        note: 'La factoría industrial se dice "fabbrica".',
-        mnemonic: 'Una fattoria toscana = una granja toscana.',
-        phrase: 'Vivono in una fattoria.' },
-      { word: 'rumore',
-        opts: [['Un rumor', false], ['Un ruido', true], ['Un murmullo', false]],
-        note: 'El rumor (chisme) se dice "voce" o "pettegolezzo".',
-        mnemonic: 'Che rumore! = ¡Qué ruido! No un chisme.',
-        phrase: "C'è troppo rumore qui." },
-      { word: 'confetti',
-        opts: [['Confeti de fiesta', false], ['Caramelos', true], ['Papel picado', false]],
-        note: 'El confeti de fiesta se dice "coriandoli".',
-        mnemonic: 'I confetti italiani son caramelos de azúcar, no el confeti de fiesta.',
-        phrase: 'Mi piacciono i confetti di mandorla.' },
-      { word: 'parente',
-        opts: [['Un pariente lejano', false], ['Un familiar', true], ['Un conocido', false]],
-        note: '"Parente" se refiere siempre a un familiar directo o indirecto.',
-        mnemonic: 'I parenti = los familiares. No un simple conocido.',
-        phrase: 'Vado a trovare i miei parenti.' }
+      { word: 'burro', opts: [['Un animal, como en español', false], ['Mantequilla', true], ['Un tonto', false]], note: 'El animal se dice "asino".', mnemonic: 'Imagina un burro untado de mantequilla.', phrase: 'Mi piace il pane con il burro.' },
+      { word: 'salire', opts: [['Salir de un lugar', false], ['Subir', true], ['Saltar', false]], note: 'Para "salir" se usa "uscire".', mnemonic: 'Salire su un albero = subir a un árbol.', phrase: 'Devo salire al secondo piano.' },
+      { word: 'guardare', opts: [['Guardar algo', false], ['Mirar', true], ['Cuidar', false]], note: 'Para "guardar" se usa "conservare".', mnemonic: 'Guardare la TV = mirar la tele.', phrase: 'Mi piace guardare i film italiani.' },
+      { word: 'stanza', opts: [['Una estancia larga', false], ['Habitación', true], ['Una pausa', false]], note: '"Stanza" es habitación o cuarto.', mnemonic: 'Tu stanza es tu cuarto.', phrase: 'La mia stanza è piccola.' },
+      { word: 'magazzino', opts: [['Una revista', false], ['Un almacén', true], ['Una tienda', false]], note: 'La revista se dice "rivista".', mnemonic: 'Il magazzino è dove tieni le cose.', phrase: 'Il magazzino è pieno.' },
+      { word: 'camera', opts: [['Una cámara', false], ['Una habitación', true], ['Un armario', false]], note: 'La cámara se dice "macchina fotografica".', mnemonic: 'Prenoto una camera = reservo una habitación.', phrase: 'Ho prenotato una camera.' },
+      { word: 'fattoria', opts: [['Una factoría', false], ['Una granja', true], ['Una fábrica', false]], note: 'La factoría se dice "fabbrica".', mnemonic: 'Una fattoria toscana = una granja.', phrase: 'Vivono in una fattoria.' },
+      { word: 'rumore', opts: [['Un rumor', false], ['Un ruido', true], ['Un murmullo', false]], note: 'El rumor (chisme) se dice "pettegolezzo".', mnemonic: 'Che rumore! = ¡Qué ruido!', phrase: "C'è troppo rumore." },
+      { word: 'confetti', opts: [['Confeti', false], ['Caramelos', true], ['Papel picado', false]], note: 'El confeti se dice "coriandoli".', mnemonic: 'Son caramelos de azúcar.', phrase: 'Mi piacciono i confetti.' },
+      { word: 'parente', opts: [['Un pariente lejano', false], ['Un familiar', true], ['Un conocido', false]], note: '"Parente" = familiar.', mnemonic: 'I parenti = los familiares.', phrase: 'Vado a trovare i parenti.' }
+    ],
+    verbos: {
+      pronombres: ['io', 'tu', 'lui/lei', 'noi', 'voi', 'loro'],
+      lista: [
+        { inf: 'essere', es: 'ser / estar', formas: ['sono','sei','è','siamo','siete','sono'], ejemplo: 'Sono di Panama.', ejEs: 'Soy de Panamá.' },
+        { inf: 'avere', es: 'tener', formas: ['ho','hai','ha','abbiamo','avete','hanno'], ejemplo: 'Ho due fratelli.', ejEs: 'Tengo dos hermanos.' },
+        { inf: 'andare', es: 'ir', formas: ['vado','vai','va','andiamo','andate','vanno'], ejemplo: 'Vado a Roma.', ejEs: 'Voy a Roma.' },
+        { inf: 'fare', es: 'hacer', formas: ['faccio','fai','fa','facciamo','fate','fanno'], ejemplo: 'Faccio sport.', ejEs: 'Hago deporte.' },
+        { inf: 'volere', es: 'querer', formas: ['voglio','vuoi','vuole','vogliamo','volete','vogliono'], ejemplo: 'Voglio un caffè.', ejEs: 'Quiero un café.' },
+        { inf: 'potere', es: 'poder', formas: ['posso','puoi','può','possiamo','potete','possono'], ejemplo: 'Posso aiutarti?', ejEs: '¿Puedo ayudarte?' },
+        { inf: 'dovere', es: 'deber', formas: ['devo','devi','deve','dobbiamo','dovete','devono'], ejemplo: 'Devo studiare.', ejEs: 'Debo estudiar.' },
+        { inf: 'sapere', es: 'saber', formas: ['so','sai','sa','sappiamo','sapete','sanno'], ejemplo: 'Non so nuotare.', ejEs: 'No sé nadar.' },
+        { inf: 'vedere', es: 'ver', formas: ['vedo','vedi','vede','vediamo','vedete','vedono'], ejemplo: 'Vedo il mare.', ejEs: 'Veo el mar.' },
+        { inf: 'mangiare', es: 'comer', formas: ['mangio','mangi','mangia','mangiamo','mangiate','mangiano'], ejemplo: 'Mangio la pasta.', ejEs: 'Como pasta.' }
+      ]
+    },
+    construccion: [
+      { es: 'Yo soy de Panamá', palabras: ['Io','sono','di','Panama'], distractores: ['è','siamo','a'], traduccion: 'Io sono di Panama.' },
+      { es: 'Tú eres italiano', palabras: ['Tu','sei','italiano'], distractores: ['sono','è','Roma'], traduccion: 'Tu sei italiano.' },
+      { es: 'Él tiene un perro', palabras: ['Lui','ha','un','cane'], distractores: ['ho','hai','gatto'], traduccion: 'Lui ha un cane.' },
+      { es: 'Nosotros vamos a Roma', palabras: ['Noi','andiamo','a','Roma'], distractores: ['vado','vai','Milano'], traduccion: 'Noi andiamo a Roma.' },
+      { es: 'Quiero un café', palabras: ['Voglio','un','caffè'], distractores: ['vuoi','vuole','tè'], traduccion: 'Voglio un caffè.' },
+      { es: 'No sé nadar', palabras: ['Non','so','nuotare'], distractores: ['sai','sa','cantare'], traduccion: 'Non so nuotare.' },
+      { es: 'Veo el mar', palabras: ['Vedo','il','mare'], distractores: ['vedi','vede','montagna'], traduccion: 'Vedo il mare.' },
+      { es: '¿Puedes ayudarme?', palabras: ['Puoi','aiutarmi'], distractores: ['posso','può','grazie'], traduccion: 'Puoi aiutarmi?' }
+    ],
+    supervivencia: [
+      { categoria: 'Saludos', icono: '👋', frases: [
+        { es: 'Hola / Chau', target: 'Ciao' },
+        { es: 'Buenos días', target: 'Buongiorno' },
+        { es: 'Buenas tardes/noches', target: 'Buonasera' },
+        { es: 'Adiós', target: 'Arrivederci' },
+        { es: 'Por favor', target: 'Per favore' },
+        { es: 'Gracias', target: 'Grazie' },
+        { es: 'De nada', target: 'Prego' },
+        { es: 'Disculpe', target: 'Scusi' }
+      ]},
+      { categoria: 'Básicos', icono: '💬', frases: [
+        { es: 'Sí / No', target: 'Sì / No' },
+        { es: 'No entiendo', target: 'Non capisco' },
+        { es: '¿Habla español?', target: 'Parla spagnolo?' },
+        { es: '¿Cómo se dice...?', target: 'Come si dice...?' },
+        { es: '¿Cuánto cuesta?', target: 'Quanto costa?' },
+        { es: '¿Dónde está el baño?', target: "Dov'è il bagno?" }
+      ]},
+      { categoria: 'Restaurante', icono: '🍽️', frases: [
+        { es: 'Una mesa para dos', target: 'Un tavolo per due' },
+        { es: 'El menú, por favor', target: 'Il menù, per favore' },
+        { es: 'Quisiera...', target: 'Vorrei...' },
+        { es: 'La cuenta, por favor', target: 'Il conto, per favore' },
+        { es: 'Sin gluten', target: 'Senza glutine' },
+        { es: '¡Está delicioso!', target: 'È delizioso!' }
+      ]},
+      { categoria: 'Direcciones', icono: '🧭', frases: [
+        { es: '¿Dónde está la estación?', target: "Dov'è la stazione?" },
+        { es: 'A la derecha', target: 'A destra' },
+        { es: 'A la izquierda', target: 'A sinistra' },
+        { es: 'Todo recto', target: 'Sempre dritto' },
+        { es: '¿Está lejos?', target: 'È lontano?' },
+        { es: 'Estoy perdido', target: 'Mi sono perso' }
+      ]},
+      { categoria: 'Emergencias', icono: '🚨', frases: [
+        { es: '¡Ayuda!', target: 'Aiuto!' },
+        { es: 'Llamen a la policía', target: 'Chiamate la polizia' },
+        { es: 'No me siento bien', target: 'Non mi sento bene' },
+        { es: 'Necesito un médico', target: 'Ho bisogno di un medico' }
+      ]}
     ]
   },
-
   fr: {
     label: 'francés',
     voice: 'fr-FR',
     tutor: {
-      name: 'Sophie',
-      avatar: '👩‍🎨',
-      status: 'Tutrice native · Paris',
+      name: 'Sophie', avatar: '👩‍🎨', status: 'Tutrice native · Paris',
       greeting: "Salut! Je m'appelle Sophie, ta tutrice de français. Enchantée! Comment tu t'appelles?",
-      starters: [
-        'Salut Sophie!',
-        'Je m\'appelle...',
-        'Ça va?',
-        'Je ne comprends pas'
-      ],
+      starters: ['Salut Sophie!', "Je m'appelle...", 'Ça va?', 'Je ne comprends pas'],
       systemPrompt: `Eres "Sophie", una tutora de francés nativa de París, amable, paciente y con sentido del humor. Estás ayudando a un hispanohablante principiante a practicar francés conversacional.
 
 REGLAS ESTRICTAS:
 1. Responde SIEMPRE en francés. Solo usas español muy brevemente para correcciones.
 2. Usa vocabulario simple, frases cortas (nivel A1-A2).
-3. Si el estudiante comete un error, responde primero de forma natural a lo que dijo y luego corrige brevemente. Formato: "Ah, je vois! [respuesta natural]. Petite correction: on dit '[correcto]', pas '[incorrecto]'. [continuación]".
+3. Si el estudiante comete un error, responde primero de forma natural y luego corrige brevemente. Formato: "Ah, je vois! [respuesta natural]. Petite correction: on dit '[correcto]', pas '[incorrecto]'. [continuación]".
 4. Si el estudiante escribe en español, anímalo suavemente a intentar en francés: "Essaie de le dire en français! :)"
 5. Haz SIEMPRE una pregunta al final para mantener la conversación viva.
 6. NUNCA respondas con más de 3 frases cortas. Sé concisa.
@@ -276,222 +198,159 @@ REGLAS ESTRICTAS:
 CONTEXTO: El estudiante quiere practicar conversación básica para viajar a Francia. Empieza presentándote brevemente y preguntándole su nombre.`
     },
     categorias: [
-      {
-        id: 'tion',
-        titulo: '-ción → -tion',
-        cognados: [
-          { es: 'información', target: 'information', phrase: "J'ai besoin d'une information." },
-          { es: 'nación', target: 'nation', phrase: "La France est une nation." },
-          { es: 'educación', target: 'éducation', phrase: "L'éducation est importante." },
-          { es: 'atención', target: 'attention', phrase: "Attention au chien!" },
-          { es: 'estación', target: 'station', phrase: "La station est proche." },
-          { es: 'función', target: 'fonction', phrase: "Cette fonction ne marche pas." },
-          { es: 'acción', target: 'action', phrase: "L'action est rapide." },
-          { es: 'dirección', target: 'direction', phrase: "Je vais dans cette direction." },
-          { es: 'tradición', target: 'tradition', phrase: "C'est une tradition française." },
-          { es: 'condición', target: 'condition', phrase: "En bonne condition." },
-          { es: 'posición', target: 'position', phrase: "Je change de position." },
-          { es: 'intención', target: 'intention', phrase: "Ce n'était pas mon intention." },
-          { es: 'celebración', target: 'célébration', phrase: "Quelle belle célébration!" },
-          { es: 'aplicación', target: 'application', phrase: "J'utilise cette application." },
-          { es: 'comunicación', target: 'communication', phrase: "La communication est importante." }
-        ]
-      },
-      {
-        id: 'te',
-        titulo: '-dad → -té',
-        cognados: [
-          { es: 'ciudad', target: 'cité', phrase: "Paris est une belle cité." },
-          { es: 'universidad', target: 'université', phrase: "J'étudie à l'université." },
-          { es: 'libertad', target: 'liberté', phrase: "La liberté est précieuse." },
-          { es: 'curiosidad', target: 'curiosité', phrase: "La curiosité est une vertu." },
-          { es: 'felicidad', target: 'félicité', phrase: "Je te souhaite la félicité." },
-          { es: 'realidad', target: 'réalité', phrase: "La réalité est différente." },
-          { es: 'actividad', target: 'activité', phrase: "Quelle activité préfères-tu?" },
-          { es: 'personalidad', target: 'personnalité', phrase: "Elle a une belle personnalité." },
-          { es: 'sociedad', target: 'société', phrase: "La société change." },
-          { es: 'calidad', target: 'qualité', phrase: "Haute qualité." },
-          { es: 'dificultad', target: 'difficulté', phrase: "Quelle difficulté!" },
-          { es: 'cantidad', target: 'quantité', phrase: "Une grande quantité." },
-          { es: 'electricidad', target: 'électricité', phrase: "Pas d'électricité." },
-          { es: 'identidad', target: 'identité', phrase: "Mon identité." },
-          { es: 'capacidad', target: 'capacité', phrase: "Il a la capacité." }
-        ]
-      },
-      {
-        id: 'ble',
-        titulo: '-ble → -ble',
-        cognados: [
-          { es: 'posible', target: 'possible', phrase: "C'est possible?" },
-          { es: 'terrible', target: 'terrible', phrase: "Quelle chose terrible!" },
-          { es: 'responsable', target: 'responsable', phrase: "Tu es responsable." },
-          { es: 'increíble', target: 'incroyable', phrase: "C'est incroyable!" },
-          { es: 'probable', target: 'probable', phrase: "C'est probable." },
-          { es: 'imposible', target: 'impossible', phrase: "Impossible!" },
-          { es: 'horrible', target: 'horrible', phrase: "C'est horrible!" },
-          { es: 'visible', target: 'visible', phrase: "Pas visible." },
-          { es: 'flexible', target: 'flexible', phrase: "Un plan flexible." },
-          { es: 'amable', target: 'aimable', phrase: "Une personne aimable." },
-          { es: 'notable', target: 'notable', phrase: "Un effort notable." },
-          { es: 'estable', target: 'stable', phrase: "Une situation stable." }
-        ]
-      },
-      {
-        id: 'aire',
-        titulo: '-ario → -aire',
-        cognados: [
-          { es: 'diccionario', target: 'dictionnaire', phrase: "J'utilise le dictionnaire." },
-          { es: 'necesario', target: 'nécessaire', phrase: "C'est nécessaire." },
-          { es: 'calendario', target: 'calendrier', phrase: "Je regarde le calendrier." },
-          { es: 'salario', target: 'salaire', phrase: "Le salaire est bon." },
-          { es: 'vocabulario', target: 'vocabulaire', phrase: "Le vocabulaire français." },
-          { es: 'aniversario', target: 'anniversaire', phrase: "Bon anniversaire!" },
-          { es: 'adversario', target: 'adversaire', phrase: "Mon adversaire." },
-          { es: 'escenario', target: 'scénario', phrase: "Quel scénario!" },
-          { es: 'funcionario', target: 'fonctionnaire', phrase: "Un fonctionnaire public." },
-          { es: 'millonario', target: 'millionnaire', phrase: "Il est millionnaire." },
-          { es: 'revolucionario', target: 'révolutionnaire', phrase: "Une idée révolutionnaire." },
-          { es: 'imaginario', target: 'imaginaire', phrase: "Un ami imaginaire." }
-        ]
-      },
-      {
-        id: 'eux',
-        titulo: '-oso → -eux',
-        cognados: [
-          { es: 'famoso', target: 'fameux', phrase: "C'est fameux." },
-          { es: 'curioso', target: 'curieux', phrase: "Je suis curieux." },
-          { es: 'precioso', target: 'précieux', phrase: "Un objet précieux." },
-          { es: 'delicioso', target: 'délicieux', phrase: "Un gâteau délicieux." },
-          { es: 'peligroso', target: 'dangereux', phrase: "C'est dangereux." },
-          { es: 'numeroso', target: 'nombreux', phrase: "Un groupe nombreux." },
-          { es: 'religioso', target: 'religieux', phrase: "Un homme religieux." },
-          { es: 'misterioso', target: 'mystérieux', phrase: "Un cas mystérieux." },
-          { es: 'ambicioso', target: 'ambitieux', phrase: "Un plan ambitieux." },
-          { es: 'generoso', target: 'généreux', phrase: "Tu es généreux." },
-          { es: 'nervioso', target: 'nerveux', phrase: "Je suis nerveux." },
-          { es: 'valiente', target: 'vaillant', phrase: "Un chevalier vaillant." }
-        ]
-      },
-      {
-        id: 'al',
-        titulo: '-al → -al',
-        cognados: [
-          { es: 'animal', target: 'animal', phrase: "Un animal sauvage." },
-          { es: 'normal', target: 'normal', phrase: "C'est normal." },
-          { es: 'natural', target: 'naturel', phrase: "C'est naturel." },
-          { es: 'final', target: 'final', phrase: "Le final est beau." },
-          { es: 'personal', target: 'personnel', phrase: "Mon avis personnel." },
-          { es: 'general', target: 'général', phrase: "En général." },
-          { es: 'original', target: 'original', phrase: "Une idée originale." },
-          { es: 'cultural', target: 'culturel', phrase: "Un événement culturel." },
-          { es: 'social', target: 'social', phrase: "La vie sociale." },
-          { es: 'especial', target: 'spécial', phrase: "Un jour spécial." },
-          { es: 'comercial', target: 'commercial', phrase: "Un centre commercial." },
-          { es: 'internacional', target: 'international', phrase: "Une équipe internationale." }
-        ]
-      },
-      {
-        id: 'iste',
-        titulo: '-ista → -iste',
-        cognados: [
-          { es: 'artista', target: 'artiste', phrase: "Un grand artiste." },
-          { es: 'turista', target: 'touriste', phrase: "Je suis touriste." },
-          { es: 'pianista', target: 'pianiste', phrase: "Un pianiste célèbre." },
-          { es: 'dentista', target: 'dentiste', phrase: "Je vais chez le dentiste." },
-          { es: 'optimista', target: 'optimiste', phrase: "Je suis optimiste." },
-          { es: 'realista', target: 'réaliste', phrase: "Une approche réaliste." },
-          { es: 'socialista', target: 'socialiste', phrase: "Un parti socialiste." },
-          { es: 'capitalista', target: 'capitaliste', phrase: "Un système capitaliste." },
-          { es: 'periodista', target: 'journaliste', phrase: "Un journaliste célèbre." },
-          { es: 'futbolista', target: 'footballeur', phrase: "Un footballeur célèbre." }
-        ]
-      },
-      {
-        id: 'ent',
-        titulo: '-ente → -ent',
-        cognados: [
-          { es: 'presidente', target: 'président', phrase: "Le président parle." },
-          { es: 'cliente', target: 'client', phrase: "Le client a toujours raison." },
-          { es: 'diferente', target: 'différent', phrase: "Ils sont différents." },
-          { es: 'inteligente', target: 'intelligent', phrase: "Tu es intelligent." },
-          { es: 'paciente', target: 'patient', phrase: "Sois patient." },
-          { es: 'ingrediente', target: 'ingrédient', phrase: "Un ingrédient secret." },
-          { es: 'ambiente', target: 'environnement', phrase: "Un bel environnement." },
-          { es: 'presente', target: 'présent', phrase: "Je suis présent." },
-          { es: 'accidente', target: 'accident', phrase: "Un accident de voiture." },
-          { es: 'ausente', target: 'absent', phrase: "Aujourd'hui je suis absent." }
-        ]
-      },
-      {
-        id: 'ique',
-        titulo: '-ico → -ique',
-        cognados: [
-          { es: 'político', target: 'politique', phrase: "Un discours politique." },
-          { es: 'económico', target: 'économique', phrase: "Un problème économique." },
-          { es: 'música', target: 'musique', phrase: "J'écoute de la musique." },
-          { es: 'público', target: 'public', phrase: "Le transport public." },
-          { es: 'técnico', target: 'technique', phrase: "Un problème technique." },
-          { es: 'práctico', target: 'pratique', phrase: "Un homme pratique." },
-          { es: 'típico', target: 'typique', phrase: "Un plat typique." },
-          { es: 'magnífico', target: 'magnifique', phrase: "C'est magnifique!" },
-          { es: 'auténtico', target: 'authentique', phrase: "Un café authentique." },
-          { es: 'histórico', target: 'historique', phrase: "Un événement historique." },
-          { es: 'básico', target: 'basique', phrase: "Un concept basique." }
-        ]
-      }
+      { id: 'tion', titulo: '-ción → -tion', cognados: [
+        { es: 'información', target: 'information' }, { es: 'nación', target: 'nation' },
+        { es: 'educación', target: 'éducation' }, { es: 'atención', target: 'attention' },
+        { es: 'estación', target: 'station' }, { es: 'función', target: 'fonction' },
+        { es: 'acción', target: 'action' }, { es: 'dirección', target: 'direction' },
+        { es: 'tradición', target: 'tradition' }, { es: 'condición', target: 'condition' },
+        { es: 'posición', target: 'position' }, { es: 'intención', target: 'intention' },
+        { es: 'celebración', target: 'célébration' }, { es: 'aplicación', target: 'application' },
+        { es: 'comunicación', target: 'communication' }
+      ]},
+      { id: 'te', titulo: '-dad → -té', cognados: [
+        { es: 'ciudad', target: 'cité' }, { es: 'universidad', target: 'université' },
+        { es: 'libertad', target: 'liberté' }, { es: 'curiosidad', target: 'curiosité' },
+        { es: 'felicidad', target: 'félicité' }, { es: 'realidad', target: 'réalité' },
+        { es: 'actividad', target: 'activité' }, { es: 'personalidad', target: 'personnalité' },
+        { es: 'sociedad', target: 'société' }, { es: 'calidad', target: 'qualité' },
+        { es: 'dificultad', target: 'difficulté' }, { es: 'cantidad', target: 'quantité' },
+        { es: 'electricidad', target: 'électricité' }, { es: 'identidad', target: 'identité' },
+        { es: 'capacidad', target: 'capacité' }
+      ]},
+      { id: 'ble', titulo: '-ble → -ble', cognados: [
+        { es: 'posible', target: 'possible' }, { es: 'terrible', target: 'terrible' },
+        { es: 'responsable', target: 'responsable' }, { es: 'increíble', target: 'incroyable' },
+        { es: 'probable', target: 'probable' }, { es: 'imposible', target: 'impossible' },
+        { es: 'horrible', target: 'horrible' }, { es: 'visible', target: 'visible' },
+        { es: 'flexible', target: 'flexible' }, { es: 'amable', target: 'aimable' },
+        { es: 'notable', target: 'notable' }, { es: 'estable', target: 'stable' }
+      ]},
+      { id: 'aire', titulo: '-ario → -aire', cognados: [
+        { es: 'diccionario', target: 'dictionnaire' }, { es: 'necesario', target: 'nécessaire' },
+        { es: 'calendario', target: 'calendrier' }, { es: 'salario', target: 'salaire' },
+        { es: 'vocabulario', target: 'vocabulaire' }, { es: 'aniversario', target: 'anniversaire' },
+        { es: 'adversario', target: 'adversaire' }, { es: 'escenario', target: 'scénario' },
+        { es: 'funcionario', target: 'fonctionnaire' }, { es: 'millonario', target: 'millionnaire' },
+        { es: 'revolucionario', target: 'révolutionnaire' }, { es: 'imaginario', target: 'imaginaire' }
+      ]},
+      { id: 'eux', titulo: '-oso → -eux', cognados: [
+        { es: 'famoso', target: 'fameux' }, { es: 'curioso', target: 'curieux' },
+        { es: 'precioso', target: 'précieux' }, { es: 'delicioso', target: 'délicieux' },
+        { es: 'peligroso', target: 'dangereux' }, { es: 'numeroso', target: 'nombreux' },
+        { es: 'religioso', target: 'religieux' }, { es: 'misterioso', target: 'mystérieux' },
+        { es: 'ambicioso', target: 'ambitieux' }, { es: 'generoso', target: 'généreux' },
+        { es: 'nervioso', target: 'nerveux' }, { es: 'valiente', target: 'vaillant' }
+      ]},
+      { id: 'al', titulo: '-al → -al', cognados: [
+        { es: 'animal', target: 'animal' }, { es: 'normal', target: 'normal' },
+        { es: 'natural', target: 'naturel' }, { es: 'final', target: 'final' },
+        { es: 'personal', target: 'personnel' }, { es: 'general', target: 'général' },
+        { es: 'original', target: 'original' }, { es: 'cultural', target: 'culturel' },
+        { es: 'social', target: 'social' }, { es: 'especial', target: 'spécial' },
+        { es: 'comercial', target: 'commercial' }, { es: 'internacional', target: 'international' }
+      ]},
+      { id: 'iste', titulo: '-ista → -iste', cognados: [
+        { es: 'artista', target: 'artiste' }, { es: 'turista', target: 'touriste' },
+        { es: 'pianista', target: 'pianiste' }, { es: 'dentista', target: 'dentiste' },
+        { es: 'optimista', target: 'optimiste' }, { es: 'realista', target: 'réaliste' },
+        { es: 'socialista', target: 'socialiste' }, { es: 'capitalista', target: 'capitaliste' },
+        { es: 'periodista', target: 'journaliste' }, { es: 'futbolista', target: 'footballeur' }
+      ]},
+      { id: 'ent', titulo: '-ente → -ent', cognados: [
+        { es: 'presidente', target: 'président' }, { es: 'cliente', target: 'client' },
+        { es: 'diferente', target: 'différent' }, { es: 'inteligente', target: 'intelligent' },
+        { es: 'paciente', target: 'patient' }, { es: 'ingrediente', target: 'ingrédient' },
+        { es: 'ambiente', target: 'environnement' }, { es: 'presente', target: 'présent' },
+        { es: 'accidente', target: 'accident' }, { es: 'ausente', target: 'absent' }
+      ]},
+      { id: 'ique', titulo: '-ico → -ique', cognados: [
+        { es: 'político', target: 'politique' }, { es: 'económico', target: 'économique' },
+        { es: 'música', target: 'musique' }, { es: 'público', target: 'public' },
+        { es: 'técnico', target: 'technique' }, { es: 'práctico', target: 'pratique' },
+        { es: 'típico', target: 'typique' }, { es: 'magnífico', target: 'magnifique' },
+        { es: 'auténtico', target: 'authentique' }, { es: 'histórico', target: 'historique' },
+        { es: 'básico', target: 'basique' }
+      ]}
     ],
     trampas: [
-      { word: 'large',
-        opts: [['Largo', false], ['Ancho', true], ['Grande', false]],
-        note: 'Para "largo" en francés se usa "long".',
-        mnemonic: 'Une route "large" es una carretera ancha, no larga.',
-        phrase: 'Cette rue est très large.' },
-      { word: 'rester',
-        opts: [['Restar (matemática)', false], ['Quedarse', true], ['Descansar', false]],
-        note: 'Para "restar" se usa "soustraire".',
-        mnemonic: 'Je reste ici = me quedo aquí. "Rest" de restaurant = quedarse a comer.',
-        phrase: 'Je reste à la maison ce soir.' },
-      { word: 'attendre',
-        opts: [['Atender a alguien', false], ['Esperar', true], ['Asistir a un evento', false]],
-        note: "Para \"atender\" se usa \"s'occuper de\".",
-        mnemonic: "Attendre l'autobus = esperar el autobús. Estás 'atento' esperando.",
-        phrase: "J'attends le train." },
-      { word: 'constipé',
-        opts: [['Resfriado', false], ['Estreñido', true], ['Cansado', false]],
-        note: 'Para "resfriado" se usa "enrhumé".',
-        mnemonic: "Es lo mismo que 'constipated' en inglés: estreñido.",
-        phrase: 'Il est constipé depuis deux jours.' },
-      { word: 'éventuellement',
-        opts: [['Eventualmente, quizás', false], ['Posiblemente, si surge', true], ['Finalmente', false]],
-        note: '"Éventuellement" significa "si llega a ocurrir", no "quizás".',
-        mnemonic: 'Es un "evento" futuro posible, no una probabilidad vaga.',
-        phrase: 'Je viendrai éventuellement demain.' },
-      { word: 'réaliser',
-        opts: [['Realizar un proyecto', false], ['Darse cuenta', true], ['Hacer realidad', false]],
-        note: '"Réaliser" es darse cuenta de algo, no ejecutar.',
-        mnemonic: "J'ai réalisé mon erreur = me di cuenta de mi error.",
-        phrase: "J'ai réalisé mon erreur." },
-      { word: 'ignorer',
-        opts: [['Ignorar a alguien', false], ['No saber algo', true], ['Despreciar', false]],
-        note: '"Ignorer" es no saber; ignorar a alguien es "ne pas faire attention".',
-        mnemonic: "J'ignore la réponse = no sé la respuesta.",
-        phrase: "J'ignore la réponse." },
-      { word: 'chair',
-        opts: [['Silla', false], ['Carne', true], ['Piel', false]],
-        note: 'La silla se dice "chaise".',
-        mnemonic: 'La chair = la carne. Chaise = silla.',
-        phrase: "J'aime la chair de poulet." },
-      { word: 'pièce',
-        opts: [['Pieza de repuesto', false], ['Habitación o moneda', true], ['Pedazo', false]],
-        note: '"Pièce" es habitación o moneda, no pieza mecánica.',
-        mnemonic: 'Une pièce = una habitación o una moneda. No una pieza.',
-        phrase: 'Une pièce de deux euros.' },
-      { word: 'journée',
-        opts: [['Jornada laboral', false], ['Día completo', true], ['Viaje de un día', false]],
-        note: '"Journée" es el día como duración completa.',
-        mnemonic: 'Bonne journée! = ¡Buen día! Duración completa.',
-        phrase: 'Bonne journée!' }
+      { word: 'large', opts: [['Largo', false], ['Ancho', true], ['Grande', false]], note: 'Para "largo" se usa "long".', mnemonic: 'Une route "large" = ancha.', phrase: 'Cette rue est très large.' },
+      { word: 'rester', opts: [['Restar (matemática)', false], ['Quedarse', true], ['Descansar', false]], note: 'Para "restar" se usa "soustraire".', mnemonic: 'Je reste ici = me quedo aquí.', phrase: 'Je reste à la maison.' },
+      { word: 'attendre', opts: [['Atender a alguien', false], ['Esperar', true], ['Asistir', false]], note: 'Para "atender" se usa "s\'occuper de".', mnemonic: "Attendre l'autobus = esperar.", phrase: "J'attends le train." },
+      { word: 'constipé', opts: [['Resfriado', false], ['Estreñido', true], ['Cansado', false]], note: 'Para "resfriado" se usa "enrhumé".', mnemonic: 'Como "constipated" en inglés.', phrase: 'Il est constipé.' },
+      { word: 'éventuellement', opts: [['Eventualmente, quizás', false], ['Posiblemente, si surge', true], ['Finalmente', false]], note: 'Significa "si llega a ocurrir".', mnemonic: 'Es un evento futuro posible.', phrase: 'Je viendrai éventuellement.' },
+      { word: 'réaliser', opts: [['Realizar un proyecto', false], ['Darse cuenta', true], ['Hacer realidad', false]], note: '"Réaliser" es darse cuenta.', mnemonic: "J'ai réalisé mon erreur.", phrase: "J'ai réalisé mon erreur." },
+      { word: 'ignorer', opts: [['Ignorar a alguien', false], ['No saber algo', true], ['Despreciar', false]], note: 'Ignorar a alguien = "ne pas faire attention".', mnemonic: "J'ignore = no sé.", phrase: "J'ignore la réponse." },
+      { word: 'chair', opts: [['Silla', false], ['Carne', true], ['Piel', false]], note: 'La silla se dice "chaise".', mnemonic: 'Chair = carne. Chaise = silla.', phrase: "J'aime la chair de poulet." },
+      { word: 'pièce', opts: [['Pieza de repuesto', false], ['Habitación o moneda', true], ['Pedazo', false]], note: 'Habitación o moneda.', mnemonic: 'Une pièce = habitación o moneda.', phrase: 'Une pièce de deux euros.' },
+      { word: 'journée', opts: [['Jornada laboral', false], ['Día completo', true], ['Viaje de un día', false]], note: 'Día como duración completa.', mnemonic: 'Bonne journée! = ¡Buen día!', phrase: 'Bonne journée!' }
+    ],
+    verbos: {
+      pronombres: ['je', 'tu', 'il/elle', 'nous', 'vous', 'ils/elles'],
+      lista: [
+        { inf: 'être', es: 'ser / estar', formas: ['suis','es','est','sommes','êtes','sont'], ejemplo: 'Je suis de Panama.', ejEs: 'Soy de Panamá.' },
+        { inf: 'avoir', es: 'tener', formas: ['ai','as','a','avons','avez','ont'], ejemplo: "J'ai deux frères.", ejEs: 'Tengo dos hermanos.' },
+        { inf: 'aller', es: 'ir', formas: ['vais','vas','va','allons','allez','vont'], ejemplo: 'Je vais à Paris.', ejEs: 'Voy a París.' },
+        { inf: 'faire', es: 'hacer', formas: ['fais','fais','fait','faisons','faites','font'], ejemplo: 'Je fais du sport.', ejEs: 'Hago deporte.' },
+        { inf: 'vouloir', es: 'querer', formas: ['veux','veux','veut','voulons','voulez','veulent'], ejemplo: 'Je veux un café.', ejEs: 'Quiero un café.' },
+        { inf: 'pouvoir', es: 'poder', formas: ['peux','peux','peut','pouvons','pouvez','peuvent'], ejemplo: "Je peux t'aider?", ejEs: '¿Puedo ayudarte?' },
+        { inf: 'devoir', es: 'deber', formas: ['dois','dois','doit','devons','devez','doivent'], ejemplo: 'Je dois étudier.', ejEs: 'Debo estudiar.' },
+        { inf: 'savoir', es: 'saber', formas: ['sais','sais','sait','savons','savez','savent'], ejemplo: 'Je ne sais pas nager.', ejEs: 'No sé nadar.' },
+        { inf: 'voir', es: 'ver', formas: ['vois','vois','voit','voyons','voyez','voient'], ejemplo: 'Je vois la mer.', ejEs: 'Veo el mar.' },
+        { inf: 'manger', es: 'comer', formas: ['mange','manges','mange','mangeons','mangez','mangent'], ejemplo: 'Je mange des pâtes.', ejEs: 'Como pasta.' }
+      ]
+    },
+    construccion: [
+      { es: 'Yo soy de Panamá', palabras: ['Je','suis','de','Panama'], distractores: ['es','est','à'], traduccion: 'Je suis de Panama.' },
+      { es: 'Tú eres francés', palabras: ['Tu','es','français'], distractores: ['suis','est','Paris'], traduccion: 'Tu es français.' },
+      { es: 'Él tiene un perro', palabras: ['Il','a','un','chien'], distractores: ['ai','as','chat'], traduccion: 'Il a un chien.' },
+      { es: 'Nosotros vamos a París', palabras: ['Nous','allons','à','Paris'], distractores: ['vais','vas','Lyon'], traduccion: 'Nous allons à Paris.' },
+      { es: 'Quiero un café', palabras: ['Je','veux','un','café'], distractores: ['veut','peux','thé'], traduccion: 'Je veux un café.' },
+      { es: 'No sé nadar', palabras: ['Je','ne','sais','pas','nager'], distractores: ['sait','peux','chanter'], traduccion: 'Je ne sais pas nager.' },
+      { es: 'Veo el mar', palabras: ['Je','vois','la','mer'], distractores: ['voit','voyons','montagne'], traduccion: 'Je vois la mer.' },
+      { es: '¿Puedes ayudarme?', palabras: ['Tu','peux',"m'aider"], distractores: ['peut','peuvent','merci'], traduccion: "Tu peux m'aider?" }
+    ],
+    supervivencia: [
+      { categoria: 'Saludos', icono: '👋', frases: [
+        { es: 'Buenos días', target: 'Bonjour' },
+        { es: 'Buenas tardes/noches', target: 'Bonsoir' },
+        { es: 'Hola / Chau (informal)', target: 'Salut' },
+        { es: 'Adiós', target: 'Au revoir' },
+        { es: 'Por favor', target: "S'il vous plaît" },
+        { es: 'Gracias', target: 'Merci' },
+        { es: 'De nada', target: 'De rien' },
+        { es: 'Disculpe', target: 'Excusez-moi' }
+      ]},
+      { categoria: 'Básicos', icono: '💬', frases: [
+        { es: 'Sí / No', target: 'Oui / Non' },
+        { es: 'No entiendo', target: 'Je ne comprends pas' },
+        { es: '¿Habla español?', target: 'Parlez-vous espagnol?' },
+        { es: '¿Cómo se dice...?', target: 'Comment dit-on...?' },
+        { es: '¿Cuánto cuesta?', target: 'Combien ça coûte?' },
+        { es: '¿Dónde están los baños?', target: 'Où sont les toilettes?' }
+      ]},
+      { categoria: 'Restaurante', icono: '🍽️', frases: [
+        { es: 'Una mesa para dos', target: 'Une table pour deux' },
+        { es: 'El menú, por favor', target: "Le menu, s'il vous plaît" },
+        { es: 'Quisiera...', target: 'Je voudrais...' },
+        { es: 'La cuenta, por favor', target: "L'addition, s'il vous plaît" },
+        { es: 'Sin gluten', target: 'Sans gluten' },
+        { es: '¡Está delicioso!', target: "C'est délicieux!" }
+      ]},
+      { categoria: 'Direcciones', icono: '🧭', frases: [
+        { es: '¿Dónde está la estación?', target: 'Où est la gare?' },
+        { es: 'A la derecha', target: 'À droite' },
+        { es: 'A la izquierda', target: 'À gauche' },
+        { es: 'Todo recto', target: 'Tout droit' },
+        { es: '¿Está lejos?', target: "C'est loin?" },
+        { es: 'Estoy perdido', target: 'Je suis perdu' }
+      ]},
+      { categoria: 'Emergencias', icono: '🚨', frases: [
+        { es: '¡Socorro!', target: 'Au secours!' },
+        { es: 'Llamen a la policía', target: 'Appelez la police' },
+        { es: 'No me siento bien', target: 'Je ne me sens pas bien' },
+        { es: 'Necesito un médico', target: "J'ai besoin d'un médecin" }
+      ]}
     ]
   }
-
 };
