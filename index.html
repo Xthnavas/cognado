@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0F1B2D">
+<meta name="theme-color" content="#1A1512">
 <title>Cognados — Ya hablas más de lo que crees</title>
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-lang="it">
 
 <!-- ================= ERROR DATA.JS ================= -->
 <div class="modal" id="errorModal" role="dialog" aria-modal="true">
@@ -23,9 +23,9 @@
     <h2 id="onboardingTitle">Bienvenido a <span class="rev">Cognados</span></h2>
     <p>No empiezas de cero. Ya sabes más italiano (y francés) del que crees.</p>
     <div class="steps">
-      <div class="step"><div class="num">1</div><div class="txt"><strong>Elige una categoría</strong> de patrón y voltea sus tarjetas.</div></div>
-      <div class="step"><div class="num">2</div><div class="txt"><strong>Escucha la pronunciación</strong> tocando el altavoz 🔊.</div></div>
-      <div class="step"><div class="num">3</div><div class="txt"><strong>Resuelve las trampas</strong> (falsos amigos).</div></div>
+      <div class="step"><div class="num">1</div><div class="txt"><strong>Descubre cognados</strong> con las tarjetas y resuelve las trampas.</div></div>
+      <div class="step"><div class="num">2</div><div class="txt"><strong>Aprende los 10 verbos</strong> esenciales con su conjugación.</div></div>
+      <div class="step"><div class="num">3</div><div class="txt"><strong>Construye frases</strong> y aprende las de supervivencia para viajar.</div></div>
       <div class="step"><div class="num">4</div><div class="txt"><strong>Practica con Marco o Sophie</strong>, tus tutores de IA.</div></div>
     </div>
     <button class="btn-primary" id="startBtn">Empezar →</button>
@@ -55,6 +55,10 @@
       <button class="lang-btn active" data-lang="it" role="tab" aria-selected="true">Italiano</button>
       <button class="lang-btn" data-lang="fr" role="tab" aria-selected="false">Francés</button>
     </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema" title="Modo claro / oscuro">
+      <span class="icon-dark">☀️</span>
+      <span class="icon-light">🌙</span>
+    </button>
     <div class="stats">
       <div class="pill streak" title="Días seguidos">🔥 <span id="streakCount">0</span></div>
       <div class="pill xp">XP <span id="xpCount">0</span></div>
@@ -65,7 +69,7 @@
 <main>
   <div class="hero">
     <h1>Ya hablas <span class="rev" id="heroLang">italiano</span> sin saberlo.</h1>
-    <p>109 palabras por idioma, organizadas por patrón. Elige una categoría, practica con tu tutor de IA y descubre lo que tu cerebro ya reconoce.</p>
+    <p>Vocabulario por patrón, verbos esenciales, constructor de frases y práctica con tu tutor de IA. Todo pensado para hispanohablantes que empiezan de verdad.</p>
   </div>
 
   <div class="review-banner" id="reviewBanner" role="status">
@@ -73,6 +77,7 @@
     <button id="reviewBtn">Repasar ahora</button>
   </div>
 
+  <!-- ================= COGNADOS ================= -->
   <section id="cognados">
     <div class="section-head">
       <p class="kicker" id="catKicker">Categoría 1 de 9</p>
@@ -83,6 +88,7 @@
     <div class="grid" id="cardGrid"></div>
   </section>
 
+  <!-- ================= TRAMPAS ================= -->
   <section id="trampa">
     <div class="section-head">
       <p class="kicker">La trampa</p>
@@ -101,12 +107,70 @@
     </div>
   </section>
 
+  <!-- ================= VERBOS ESENCIALES ================= -->
+  <section id="verbos">
+    <div class="section-head">
+      <p class="kicker">Base del idioma</p>
+      <h2>Verbos esenciales</h2>
+      <p class="sub">Los 10 verbos que necesitas para formar cualquier frase. Toca cada forma para escucharla.</p>
+    </div>
+    <div class="verb-selector" id="verbSelector" role="tablist" aria-label="Verbos"></div>
+    <div class="verb-card" id="verbCard">
+      <div class="verb-header">
+        <div class="verb-inf" id="verbInf">essere</div>
+        <div class="verb-es" id="verbEs">ser / estar</div>
+      </div>
+      <div class="conj-grid" id="conjGrid"></div>
+      <div class="verb-example">
+        <div class="ex-text">
+          <div class="ex-it" id="exIt"></div>
+          <div class="ex-es" id="exEs"></div>
+        </div>
+        <button class="survival-speak" id="exSpeak" aria-label="Escuchar ejemplo">🔊</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONSTRUCTOR ================= -->
+  <section id="constructor">
+    <div class="section-head">
+      <p class="kicker">Producción real</p>
+      <h2>Construye la frase</h2>
+      <p class="sub">Toca las palabras en el orden correcto para formar la oración en <span id="builderLangName">italiano</span>.</p>
+    </div>
+    <div class="builder">
+      <div class="builder-prompt" id="builderPrompt">Yo soy de Panamá</div>
+      <div class="builder-hint">Toca las palabras para construir la frase</div>
+      <div class="builder-answer" id="builderAnswer">
+        <span class="placeholder">Tu respuesta aparecerá aquí...</span>
+      </div>
+      <div class="builder-pool" id="builderPool"></div>
+      <div class="builder-actions">
+        <button class="primary" id="builderCheck">Comprobar</button>
+        <button id="builderClear">Limpiar</button>
+        <button id="builderNext">Siguiente →</button>
+      </div>
+      <div class="builder-feedback" id="builderFeedback" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ================= SUPERVIVENCIA ================= -->
+  <section id="supervivencia">
+    <div class="section-head">
+      <p class="kicker">Para viajar</p>
+      <h2>Frases de supervivencia</h2>
+      <p class="sub">Las frases que usarás cada día. Toca 🔊 para escucharlas todas.</p>
+    </div>
+    <div class="survival-cats" id="survivalCats" role="tablist" aria-label="Categorías de supervivencia"></div>
+    <div class="survival-list" id="survivalList"></div>
+  </section>
+
   <!-- ================= TUTOR IA ================= -->
   <section id="tutor">
     <div class="section-head">
       <p class="kicker">Conversación</p>
       <h2>Habla con <span id="tutorNameHead">Marco</span></h2>
-      <p class="sub">Tu tutor de IA nativo. Practica italiano real sin miedo a equivocarte. Él te corrige con cariño.</p>
+      <p class="sub">Tu tutor de IA nativo. Practica <span id="tutorLangName">italiano</span> real sin miedo a equivocarte.</p>
     </div>
 
     <div class="chat" id="chat">
@@ -118,11 +182,8 @@
         </div>
         <button class="chat-reset" id="chatReset" aria-label="Reiniciar conversación" title="Nueva conversación">↻</button>
       </div>
-
       <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"></div>
-
       <div class="chat-starters" id="chatStarters"></div>
-
       <form class="chat-input" id="chatForm">
         <textarea
           id="chatTextarea"
@@ -142,6 +203,7 @@
     </div>
   </section>
 
+  <!-- ================= PROGRESO ================= -->
   <div class="progress-wrap">
     <div class="bar-bg" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar">
       <div class="bar-fill" id="barFill"></div>
@@ -175,17 +237,24 @@
   var trapIndex = 0;
   var trapAttempts = 0;
   var currentCat = 0;
+  var currentVerb = 0;
+  var builderIndex = 0;
+  var builderSelection = [];
+  var currentSurvivalCat = 0;
 
-  // ============ IA NATIVA (capacidad "sample", sin clave, gratis) ============
+  // ============ IA NATIVA (capacidad "sample") ============
   var sampleFn = null;
   var sampleReady = (async function(){
     try{
       sampleFn = window.claude ? await window.claude.use('sample') : null;
     }catch(e){ sampleFn = null; }
     if(!sampleFn){
-      document.getElementById('chatForm').style.display = 'none';
-      document.getElementById('chatStarters').style.display = 'none';
-      document.getElementById('chatUnavailable').style.display = 'block';
+      var cf = document.getElementById('chatForm');
+      var cs = document.getElementById('chatStarters');
+      var cu = document.getElementById('chatUnavailable');
+      if(cf) cf.style.display = 'none';
+      if(cs) cs.style.display = 'none';
+      if(cu) cu.style.display = 'block';
     }
     return sampleFn;
   })();
@@ -202,6 +271,35 @@
     return String(str)
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
       .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function shuffle(arr){
+    var a = arr.slice();
+    for(var i = a.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+
+  // ============ TEMA ============
+  function initTheme(){
+    var saved = null;
+    try{ saved = localStorage.getItem('ponte-theme'); }catch(e){}
+    var initial = saved || 'dark';
+    document.documentElement.setAttribute('data-theme', initial);
+    updateThemeColorMeta(initial);
+
+    document.getElementById('themeToggle').addEventListener('click', function(){
+      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try{ localStorage.setItem('ponte-theme', next); }catch(e){}
+      updateThemeColorMeta(next);
+    });
+  }
+  function updateThemeColorMeta(theme){
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.setAttribute('content', theme === 'dark' ? '#1A1512' : '#F5EDE0');
   }
 
   // ============ ESTADO ============
@@ -497,7 +595,214 @@
   });
 
   // ============================================================
-  //                      💬 TUTOR IA 💬
+  //                    📚 VERBOS ESENCIALES
+  // ============================================================
+  function renderVerbSelector(){
+    var wrap = document.getElementById('verbSelector');
+    wrap.innerHTML = '';
+    DATA[lang].verbos.lista.forEach(function(v, i){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'verb-pill' + (i === currentVerb ? ' active' : '');
+      btn.textContent = v.inf;
+      btn.setAttribute('role', 'tab');
+      btn.setAttribute('aria-selected', i === currentVerb ? 'true' : 'false');
+      btn.addEventListener('click', function(){
+        currentVerb = i;
+        renderVerbCard();
+        renderVerbSelector();
+      });
+      wrap.appendChild(btn);
+    });
+  }
+
+  function renderVerbCard(){
+    var v = DATA[lang].verbos.lista[currentVerb];
+    var pro = DATA[lang].verbos.pronombres;
+
+    document.getElementById('verbInf').textContent = v.inf;
+    document.getElementById('verbEs').textContent = v.es;
+    document.getElementById('exIt').textContent = v.ejemplo;
+    document.getElementById('exEs').textContent = v.ejEs;
+
+    var grid = document.getElementById('conjGrid');
+    grid.innerHTML = '';
+    v.formas.forEach(function(forma, i){
+      var row = document.createElement('div');
+      row.className = 'conj-row';
+      row.innerHTML =
+        '<span class="conj-pron">' + pro[i] + '</span>' +
+        '<span class="conj-form">' + forma + '</span>' +
+        '<button class="conj-speak" aria-label="Escuchar ' + forma + '">🔊</button>';
+      row.querySelector('.conj-speak').addEventListener('click', function(){
+        speak(forma);
+      });
+      grid.appendChild(row);
+    });
+
+    var exBtn = document.getElementById('exSpeak');
+    // reemplazamos el botón para evitar listeners duplicados
+    var newExBtn = exBtn.cloneNode(true);
+    exBtn.parentNode.replaceChild(newExBtn, exBtn);
+    newExBtn.addEventListener('click', function(){ speak(v.ejemplo); });
+  }
+
+  // ============================================================
+  //                    🔧 CONSTRUCTOR DE FRASES
+  // ============================================================
+  function renderBuilder(){
+    var ex = DATA[lang].construccion[builderIndex];
+    document.getElementById('builderPrompt').textContent = ex.es;
+    builderSelection = [];
+
+    var answer = document.getElementById('builderAnswer');
+    answer.className = 'builder-answer';
+    answer.innerHTML = '<span class="placeholder">Tu respuesta aparecerá aquí...</span>';
+
+    document.getElementById('builderFeedback').textContent = '';
+    document.getElementById('builderFeedback').className = 'builder-feedback';
+
+    var pool = document.getElementById('builderPool');
+    pool.innerHTML = '';
+
+    // Mezclamos palabras correctas + distractores, pero llevamos cuenta de cuáles son correctas
+    var allWords = [];
+    ex.palabras.forEach(function(w){ allWords.push({ text: w, ok: true }); });
+    ex.distractores.forEach(function(w){ allWords.push({ text: w, ok: false }); });
+    var shuffled = shuffle(allWords);
+
+    shuffled.forEach(function(item){
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'word-chip';
+      chip.textContent = item.text;
+      chip.dataset.ok = item.ok ? 'true' : 'false';
+      chip.addEventListener('click', function(){
+        if(chip.classList.contains('used')) return;
+        chip.classList.add('used');
+        chip.disabled = true;
+        builderSelection.push({ text: item.text, ok: item.ok, chip: chip });
+        updateBuilderAnswer();
+      });
+      pool.appendChild(chip);
+    });
+  }
+
+  function updateBuilderAnswer(){
+    var answer = document.getElementById('builderAnswer');
+    answer.innerHTML = '';
+    if(builderSelection.length === 0){
+      answer.innerHTML = '<span class="placeholder">Tu respuesta aparecerá aquí...</span>';
+      return;
+    }
+    builderSelection.forEach(function(item, i){
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'word-chip selected';
+      chip.textContent = item.text;
+      chip.setAttribute('aria-label', 'Quitar ' + item.text);
+      chip.addEventListener('click', function(){
+        // devolver al pool
+        item.chip.classList.remove('used');
+        item.chip.disabled = false;
+        builderSelection.splice(i, 1);
+        updateBuilderAnswer();
+        answer.className = 'builder-answer';
+        document.getElementById('builderFeedback').textContent = '';
+      });
+      answer.appendChild(chip);
+    });
+  }
+
+  document.getElementById('builderCheck').addEventListener('click', function(){
+    var ex = DATA[lang].construccion[builderIndex];
+    var answerEl = document.getElementById('builderAnswer');
+    var fb = document.getElementById('builderFeedback');
+
+    if(builderSelection.length === 0){
+      fb.textContent = 'Añade alguna palabra primero.';
+      fb.className = 'builder-feedback bad';
+      return;
+    }
+
+    var userText = builderSelection.map(function(x){ return x.text; }).join(' ');
+    var correctText = ex.traduccion;
+
+    // Comparamos palabra por palabra para ver si son correctas y en orden
+    var userWords = builderSelection.map(function(x){ return x.text.toLowerCase(); });
+    var correctWords = ex.palabras.map(function(w){ return w.toLowerCase(); });
+    var sameLength = userWords.length === correctWords.length;
+    var allCorrect = sameLength && userWords.every(function(w, i){ return w === correctWords[i]; });
+
+    if(allCorrect){
+      answerEl.className = 'builder-answer ok';
+      fb.textContent = '¡Perfecto! ' + correctText;
+      fb.className = 'builder-feedback ok';
+      speak(correctText);
+      state.xp += 5;
+      saveState();
+      refreshCounters();
+    } else {
+      answerEl.className = 'builder-answer bad';
+      fb.innerHTML = 'Casi. Intenta de nuevo. Pista: la frase tiene <strong>' + correctWords.length + '</strong> palabras.';
+      fb.className = 'builder-feedback bad';
+    }
+  });
+
+  document.getElementById('builderClear').addEventListener('click', function(){
+    renderBuilder();
+  });
+
+  document.getElementById('builderNext').addEventListener('click', function(){
+    builderIndex = (builderIndex + 1) % DATA[lang].construccion.length;
+    renderBuilder();
+  });
+
+  // ============================================================
+  //                    🌍 FRASES DE SUPERVIVENCIA
+  // ============================================================
+  function renderSurvivalCats(){
+    var wrap = document.getElementById('survivalCats');
+    wrap.innerHTML = '';
+    DATA[lang].supervivencia.forEach(function(cat, i){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'survival-cat' + (i === currentSurvivalCat ? ' active' : '');
+      btn.textContent = cat.icono + ' ' + cat.categoria;
+      btn.setAttribute('role', 'tab');
+      btn.setAttribute('aria-selected', i === currentSurvivalCat ? 'true' : 'false');
+      btn.addEventListener('click', function(){
+        currentSurvivalCat = i;
+        renderSurvivalCats();
+        renderSurvivalList();
+      });
+      wrap.appendChild(btn);
+    });
+  }
+
+  function renderSurvivalList(){
+    var list = document.getElementById('survivalList');
+    list.innerHTML = '';
+    var cat = DATA[lang].supervivencia[currentSurvivalCat];
+
+    cat.frases.forEach(function(f){
+      var item = document.createElement('div');
+      item.className = 'survival-item';
+      item.innerHTML =
+        '<div class="survival-text">' +
+          '<div class="survival-es">' + escapeHTML(f.es) + '</div>' +
+          '<div class="survival-target">' + escapeHTML(f.target) + '</div>' +
+        '</div>' +
+        '<button class="survival-speak" aria-label="Escuchar ' + escapeHTML(f.target) + '">🔊</button>';
+      item.querySelector('.survival-speak').addEventListener('click', function(){
+        speak(f.target);
+      });
+      list.appendChild(item);
+    });
+  }
+
+  // ============================================================
+  //                      💬 TUTOR IA
   // ============================================================
   var chatMessagesEl = document.getElementById('chatMessages');
   var chatStartersEl = document.getElementById('chatStarters');
@@ -533,7 +838,8 @@
     document.getElementById('chatName').textContent = tutor.name;
     document.getElementById('chatStatus').textContent = tutor.status;
     chatTextareaEl.placeholder = lang === 'it' ? 'Scrivi in italiano...' : 'Écris en français...';
-    document.getElementById('chatAvatar').setAttribute('aria-hidden', 'true');
+    document.getElementById('tutorLangName').textContent = DATA[lang].label;
+    document.getElementById('builderLangName').textContent = DATA[lang].label;
   }
 
   function renderStarters(){
@@ -575,15 +881,12 @@
       speakBtn.setAttribute('aria-label', 'Escuchar mensaje');
       speakBtn.type = 'button';
       speakBtn.textContent = '🔊';
-      speakBtn.addEventListener('click', function(){
-        speak(text);
-      });
+      speakBtn.addEventListener('click', function(){ speak(text); });
       wrap.appendChild(speakBtn);
     }
 
     chatMessagesEl.appendChild(wrap);
     scrollChatToBottom();
-    return bubble;
   }
 
   function scrollChatToBottom(){
@@ -607,7 +910,6 @@
     t.innerHTML = '<div class="bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>';
     chatMessagesEl.appendChild(t);
     scrollChatToBottom();
-    return t.querySelector('.bubble');
   }
 
   function hideTyping(){
@@ -648,7 +950,6 @@
     isChatLoading = true;
     chatSendEl.disabled = true;
 
-    var typingBubble = null;
     var typingShown = false;
 
     callAI(chatHistory)
@@ -685,13 +986,11 @@
         chatTextareaEl.focus();
       });
 
-    // Muestra "escribiendo..." solo si la respuesta tarda un poco (evita parpadeo)
     setTimeout(function(){
-      if(isChatLoading){ typingBubble = showTyping(); typingShown = true; }
+      if(isChatLoading){ showTyping(); typingShown = true; }
     }, 300);
   }
 
-  // ============ LLAMADA A LA IA NATIVA (capacidad sample) ============
   async function callAI(history){
     await sampleReady;
     if(!sampleFn){
@@ -707,7 +1006,6 @@
     return result.text;
   }
 
-  // ============ RESET DEL CHAT ============
   chatResetEl.addEventListener('click', function(){
     if(!confirm(lang === 'it' ? 'Vuoi iniziare una nuova conversazione?' : 'Veux-tu commencer une nouvelle conversation?')) return;
     chatHistory = [{ role: 'model', text: DATA[lang].tutor.greeting }];
@@ -777,15 +1075,26 @@
   // ============ RENDER GENERAL ============
   function renderAll(){
     loadState();
+    document.body.setAttribute('data-lang', lang);
     document.getElementById('logoLang').textContent = DATA[lang].label;
     document.getElementById('heroLang').textContent = DATA[lang].label;
     document.documentElement.lang = 'es';
     trapIndex = 0;
+    currentVerb = 0;
+    builderIndex = 0;
+    currentSurvivalCat = 0;
+
     renderCatTabs();
     renderCards();
     renderTrap(trapIndex);
     refreshCounters();
     refreshReviewBanner();
+
+    renderVerbSelector();
+    renderVerbCard();
+    renderBuilder();
+    renderSurvivalCats();
+    renderSurvivalList();
 
     chatHistory = loadChat();
     renderChatHeader();
@@ -818,6 +1127,7 @@
   });
 
   // ============ INIT ============
+  initTheme();
   renderAll();
 })();
 </script>
