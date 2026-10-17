@@ -9,55 +9,58 @@
 </head>
 <body data-lang="it">
 
-<!-- ================= ERROR DATA.JS ================= -->
 <div class="modal" id="errorModal" role="dialog" aria-modal="true">
-  <div class="modal-card">
-    <h2>⚠️ Falta <span class="rev">data.js</span></h2>
-    <p>El archivo de contenido no se cargó. Asegúrate de tener <code>data.js</code> en la <strong>misma carpeta</strong> que <code>index.html</code>.</p>
-  </div>
+  <div class="modal-card"><h2>⚠️ Falta <span class="rev">data.js</span></h2><p>Asegúrate de tener <code>data.js</code> en la misma carpeta.</p></div>
 </div>
 
-<!-- ================= ONBOARDING ================= -->
-<div class="modal" id="onboarding" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle">
+<div class="modal" id="onboarding" role="dialog" aria-modal="true">
   <div class="modal-card">
     <h2 id="onboardingTitle">Bienvenido a <span class="rev">Cognados</span></h2>
-    <p>No empiezas de cero. Ya sabes más italiano (y francés) del que crees.</p>
+    <p>Elige tu nivel (A1 o A2) arriba y descubre lo que ya sabes.</p>
     <div class="steps">
-      <div class="step"><div class="num">1</div><div class="txt"><strong>Descubre cognados</strong> con las tarjetas y resuelve las trampas.</div></div>
-      <div class="step"><div class="num">2</div><div class="txt"><strong>Aprende los 10 verbos</strong> esenciales con su conjugación.</div></div>
-      <div class="step"><div class="num">3</div><div class="txt"><strong>Construye frases</strong> y aprende las de supervivencia para viajar.</div></div>
-      <div class="step"><div class="num">4</div><div class="txt"><strong>Practica con Marco o Sophie</strong>, tus tutores de IA.</div></div>
+      <div class="step"><div class="num">1</div><div class="txt"><strong>Juega al Repaso Rápido</strong> para ganar XP extra.</div></div>
+      <div class="step"><div class="num">2</div><div class="txt"><strong>Estudia el vocabulario</strong> y los verbos.</div></div>
+      <div class="step"><div class="num">3</div><div class="txt"><strong>Practica con tu tutor IA</strong>.</div></div>
     </div>
     <button class="btn-primary" id="startBtn">Empezar →</button>
   </div>
 </div>
 
-<!-- ================= CELEBRACIÓN ================= -->
-<div class="modal" id="celebration" role="dialog" aria-modal="true" aria-labelledby="celebrationTitle">
+<div class="modal" id="celebration" role="dialog" aria-modal="true">
   <div class="modal-card">
     <h2 id="celebrationTitle">¡Bravissimo! 🎉</h2>
     <p>Has completado la lección de <span id="celebLang">italiano</span>.</p>
     <div class="celebration-stats">
       <div class="stat"><div class="value" id="celebXP">0</div><div class="label">XP total</div></div>
       <div class="stat"><div class="value" id="celebStreak">1</div><div class="label">días seguidos</div></div>
-      <div class="stat"><div class="value" id="celebCards">0</div><div class="label">pasos</div></div>
     </div>
     <button class="btn-primary" id="celebrateClose">Seguir practicando</button>
     <button class="btn-secondary" id="resetBtn">Reiniciar progreso</button>
   </div>
 </div>
 
-<!-- ================= HEADER ================= -->
+<!-- MODAL DEL JUEGO RÁPIDO -->
+<div class="game-modal" id="gameModal">
+  <div class="game-card" id="gameCard">
+    <div class="game-progress" id="gameProgress">Pregunta 1 de 10</div>
+    <div class="game-question" id="gameQuestion">Cargando...</div>
+    <div class="game-options" id="gameOptions"></div>
+  </div>
+</div>
+
 <header>
   <div class="logo">Cognados<em id="logoLang">italiano</em></div>
   <div class="head-right">
-    <div class="lang-toggle" id="langToggle" role="tablist" aria-label="Selecciona idioma">
-      <button class="lang-btn active" data-lang="it" role="tab" aria-selected="true">Italiano</button>
-      <button class="lang-btn" data-lang="fr" role="tab" aria-selected="false">Francés</button>
+    <div class="level-selector" id="levelSelector" role="tablist">
+      <button class="level-btn active" data-level="a1">A1</button>
+      <button class="level-btn" data-level="a2">A2</button>
     </div>
-    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema" title="Modo claro / oscuro">
-      <span class="icon-dark">☀️</span>
-      <span class="icon-light">🌙</span>
+    <div class="lang-toggle" id="langToggle" role="tablist">
+      <button class="lang-btn active" data-lang="it">🇮🇹</button>
+      <button class="lang-btn" data-lang="fr">🇫🇷</button>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+      <span class="icon-dark">☀️</span><span class="icon-light">🌙</span>
     </button>
     <div class="stats">
       <div class="pill streak" title="Días seguidos">🔥 <span id="streakCount">0</span></div>
@@ -68,57 +71,72 @@
 
 <main>
   <div class="hero">
-    <h1>Ya hablas <span class="rev" id="heroLang">italiano</span> sin saberlo.</h1>
-    <p>Vocabulario por patrón, verbos esenciales, constructor de frases y práctica con tu tutor de IA. Todo pensado para hispanohablantes que empiezan de verdad.</p>
+    <h1>Estás en el nivel <span class="rev" id="heroLevel">A1</span> de <span class="rev" id="heroLang">italiano</span>.</h1>
+    <p id="heroDesc">Lo esencial para sobrevivir y presentarte.</p>
   </div>
 
+  <button class="quick-review-btn" id="btnQuickReview">
+    ⚡ Jugar Repaso Rápido (3 min)
+  </button>
+
   <div class="review-banner" id="reviewBanner" role="status">
-    <p>🔁 Tienes <strong id="reviewCount">0</strong> elementos pendientes de repaso.</p>
+    <p>🔁 Tienes <strong id="reviewCount">0</strong> elementos pendientes.</p>
     <button id="reviewBtn">Repasar ahora</button>
   </div>
 
-  <!-- ================= COGNADOS ================= -->
+  <!-- VOCABULARIO ESENCIAL -->
+  <section id="vocabulario">
+    <div class="section-head">
+      <p class="kicker">Lo básico</p>
+      <h2>Vocabulario esencial</h2>
+      <p class="sub">Números, días y palabras del día a día. Toca cada una para escucharla.</p>
+    </div>
+    <div class="vocab-cats" id="vocabCats" role="tablist"></div>
+    <div class="vocab-grid" id="vocabGrid"></div>
+  </section>
+
+  <!-- COGNADOS -->
   <section id="cognados">
     <div class="section-head">
-      <p class="kicker" id="catKicker">Categoría 1 de 9</p>
+      <p class="kicker" id="catKicker">Categoría 1</p>
       <h2 id="catTitle">-ción → -zione</h2>
-      <p class="sub" id="catSub">15 palabras comparten este patrón.</p>
+      <p class="sub" id="catSub">Palabras que ya sabes.</p>
     </div>
-    <div class="cat-tabs" id="catTabs" role="tablist" aria-label="Categorías"></div>
+    <div class="cat-tabs" id="catTabs" role="tablist"></div>
     <div class="grid" id="cardGrid"></div>
   </section>
 
-  <!-- ================= TRAMPAS ================= -->
+  <!-- TRAMPAS -->
   <section id="trampa">
     <div class="section-head">
       <p class="kicker">La trampa</p>
-      <h2>No todo es lo que parece</h2>
-      <p class="sub">Falsos amigos que te van a engañar. Adivina qué significan de verdad.</p>
+      <h2>Falsos amigos</h2>
+      <p class="sub">Adivina qué significan de verdad.</p>
     </div>
     <div class="trap">
       <div class="trap-top">
         <div class="tword" id="trapWord"></div>
-        <button class="speak-btn" id="trapSpeak" aria-label="Escuchar pronunciación">🔊</button>
+        <button class="speak-btn" id="trapSpeak">🔊</button>
       </div>
       <p class="prompt" id="trapPrompt"></p>
       <div class="opts" id="trapOpts"></div>
-      <div class="feedback" id="trapFeedback" role="status" aria-live="polite"></div>
-      <button class="next-btn" id="nextTrap">Siguiente trampa →</button>
+      <div class="feedback" id="trapFeedback" role="status"></div>
+      <button class="next-btn" id="nextTrap">Siguiente →</button>
     </div>
   </section>
 
-  <!-- ================= VERBOS ESENCIALES ================= -->
+  <!-- VERBOS -->
   <section id="verbos">
     <div class="section-head">
       <p class="kicker">Base del idioma</p>
       <h2>Verbos esenciales</h2>
-      <p class="sub">Los 10 verbos que necesitas para formar cualquier frase. Toca cada forma para escucharla.</p>
+      <p class="sub">Los verbos que necesitas para formar cualquier frase.</p>
     </div>
-    <div class="verb-selector" id="verbSelector" role="tablist" aria-label="Verbos"></div>
+    <div class="verb-selector" id="verbSelector"></div>
     <div class="verb-card" id="verbCard">
       <div class="verb-header">
-        <div class="verb-inf" id="verbInf">essere</div>
-        <div class="verb-es" id="verbEs">ser / estar</div>
+        <div class="verb-inf" id="verbInf"></div>
+        <div class="verb-es" id="verbEs"></div>
       </div>
       <div class="conj-grid" id="conjGrid"></div>
       <div class="verb-example">
@@ -126,1007 +144,530 @@
           <div class="ex-it" id="exIt"></div>
           <div class="ex-es" id="exEs"></div>
         </div>
-        <button class="survival-speak" id="exSpeak" aria-label="Escuchar ejemplo">🔊</button>
+        <button class="survival-speak" id="exSpeak">🔊</button>
       </div>
     </div>
   </section>
 
-  <!-- ================= CONSTRUCTOR ================= -->
+  <!-- CONSTRUCTOR -->
   <section id="constructor">
     <div class="section-head">
       <p class="kicker">Producción real</p>
       <h2>Construye la frase</h2>
-      <p class="sub">Toca las palabras en el orden correcto para formar la oración en <span id="builderLangName">italiano</span>.</p>
+      <p class="sub">Toca las palabras en el orden correcto.</p>
     </div>
     <div class="builder">
-      <div class="builder-prompt" id="builderPrompt">Yo soy de Panamá</div>
+      <div class="builder-prompt" id="builderPrompt"></div>
       <div class="builder-hint">Toca las palabras para construir la frase</div>
-      <div class="builder-answer" id="builderAnswer">
-        <span class="placeholder">Tu respuesta aparecerá aquí...</span>
-      </div>
+      <div class="builder-answer" id="builderAnswer"></div>
       <div class="builder-pool" id="builderPool"></div>
       <div class="builder-actions">
         <button class="primary" id="builderCheck">Comprobar</button>
         <button id="builderClear">Limpiar</button>
         <button id="builderNext">Siguiente →</button>
       </div>
-      <div class="builder-feedback" id="builderFeedback" role="status" aria-live="polite"></div>
+      <div class="builder-feedback" id="builderFeedback" role="status"></div>
     </div>
   </section>
 
-  <!-- ================= SUPERVIVENCIA ================= -->
+  <!-- SUPERVIVENCIA -->
   <section id="supervivencia">
     <div class="section-head">
       <p class="kicker">Para viajar</p>
       <h2>Frases de supervivencia</h2>
-      <p class="sub">Las frases que usarás cada día. Toca 🔊 para escucharlas todas.</p>
+      <p class="sub">Las frases que usarás cada día.</p>
     </div>
-    <div class="survival-cats" id="survivalCats" role="tablist" aria-label="Categorías de supervivencia"></div>
+    <div class="survival-cats" id="survivalCats"></div>
     <div class="survival-list" id="survivalList"></div>
   </section>
 
-  <!-- ================= TUTOR IA ================= -->
+  <!-- TUTOR IA -->
   <section id="tutor">
     <div class="section-head">
       <p class="kicker">Conversación</p>
       <h2>Habla con <span id="tutorNameHead">Marco</span></h2>
-      <p class="sub">Tu tutor de IA nativo. Practica <span id="tutorLangName">italiano</span> real sin miedo a equivocarte.</p>
+      <p class="sub">Tu tutor de IA nativo.</p>
     </div>
-
     <div class="chat" id="chat">
       <div class="chat-header">
-        <div class="chat-avatar" id="chatAvatar">👨‍🍳</div>
+        <div class="chat-avatar" id="chatAvatar"></div>
         <div class="chat-who">
-          <div class="chat-name" id="chatName">Marco</div>
-          <div class="chat-status" id="chatStatus">Tutor nativo · Roma</div>
+          <div class="chat-name" id="chatName"></div>
+          <div class="chat-status" id="chatStatus"></div>
         </div>
-        <button class="chat-reset" id="chatReset" aria-label="Reiniciar conversación" title="Nueva conversación">↻</button>
+        <button class="chat-reset" id="chatReset" title="Nueva conversación">↻</button>
       </div>
-      <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"></div>
+      <div class="chat-messages" id="chatMessages" role="log"></div>
       <div class="chat-starters" id="chatStarters"></div>
       <form class="chat-input" id="chatForm">
-        <textarea
-          id="chatTextarea"
-          placeholder="Escribe en italiano..."
-          rows="1"
-          maxlength="500"
-          autocomplete="off"
-          aria-label="Escribe tu mensaje"
-        ></textarea>
-        <button type="submit" id="chatSend" aria-label="Enviar mensaje">
-          <span class="send-icon">➤</span>
-        </button>
+        <textarea id="chatTextarea" placeholder="Escribe..." rows="1"></textarea>
+        <button type="submit" id="chatSend">➤</button>
       </form>
-      <p class="chat-unavailable" id="chatUnavailable" style="display:none; padding:0 1rem 0.9rem; font-size:0.82rem; opacity:0.7;">
-        Esta práctica funciona cuando abres la página dentro de la app de Claude.
-      </p>
     </div>
   </section>
 
-  <!-- ================= PROGRESO ================= -->
   <div class="progress-wrap">
-    <div class="bar-bg" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar">
-      <div class="bar-fill" id="barFill"></div>
-    </div>
+    <div class="bar-bg" role="progressbar" id="progressBar"><div class="bar-fill" id="barFill"></div></div>
     <div class="progress-meta">
-      <span id="progressLabel">0 / 0 pasos completados</span>
+      <span id="progressLabel">0 / 0 pasos</span>
       <span id="progressBreakdown"></span>
     </div>
   </div>
 </main>
 
-<footer>
-  <p><strong>Cognados</strong> · aprende italiano y francés desde el español que ya tienes.</p>
-  <p>Hecho por Jorge Navas.</p>
-</footer>
+<footer><p><strong>Cognados</strong> · aprende desde el español que ya tienes.</p></footer>
 
 <script src="data.js"></script>
-
 <script>
 (function(){
   'use strict';
 
-  if(!window.PONTE_DATA){
-    document.getElementById('errorModal').classList.add('show');
-    return;
-  }
+  if(!window.PONTE_DATA){ document.getElementById('errorModal').classList.add('show'); return; }
 
   var DATA = window.PONTE_DATA;
   var lang = 'it';
+  var currentLevel = 'a1';
   var state = null;
-  var trapIndex = 0;
-  var trapAttempts = 0;
-  var currentCat = 0;
-  var currentVerb = 0;
-  var builderIndex = 0;
-  var builderSelection = [];
-  var currentSurvivalCat = 0;
+  var trapIndex = 0, currentCat = 0, currentVerb = 0, builderIndex = 0, builderSelection = [];
+  var currentSurvivalCat = 0, currentVocabCat = 0;
 
-  // ============ IA NATIVA (capacidad "sample") ============
-  var sampleFn = null;
-  var sampleReady = (async function(){
-    try{
-      sampleFn = window.claude ? await window.claude.use('sample') : null;
-    }catch(e){ sampleFn = null; }
-    if(!sampleFn){
-      var cf = document.getElementById('chatForm');
-      var cs = document.getElementById('chatStarters');
-      var cu = document.getElementById('chatUnavailable');
-      if(cf) cf.style.display = 'none';
-      if(cs) cs.style.display = 'none';
-      if(cu) cu.style.display = 'block';
+  // ============ CONFIGURACIÓN DE IA (VERCEL) ============
+  // Hacemos fetch a nuestro backend serverless (/api/chat)
+  async function callAI(history) {
+    var payload = {
+      systemPrompt: DATA[lang].tutor.systemPrompt,
+      history: history.map(function(m){ return { role: m.role === 'user' ? 'user' : 'model', text: m.text }; })
+    };
+    var res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('Error de servidor');
+    var data = await res.json();
+    return data.text;
+  }
+
+  function getLevelData(){ return DATA[lang].levels[currentLevel]; }
+  function escapeHTML(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+
+  // ============ GAME JUICE: SONIDOS Y CONFETI ============
+  var audioCtx = null;
+  function playSound(type) {
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      var osc = audioCtx.createOscillator(); var gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      if (type === 'success') {
+        osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+      } else {
+        osc.type = 'triangle'; osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+      }
+    } catch (e) {}
+  }
+
+  function fireConfetti() {
+    var colors = ['#E07856', '#E8B860', '#8FA68E', '#7BA8D9', '#F5EBDC'];
+    for (var i = 0; i < 50; i++) {
+      var c = document.createElement('div'); c.className = 'confetti';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      c.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      c.style.animationDelay = Math.random() * 0.5 + 's';
+      document.body.appendChild(c);
+      setTimeout(function(el) { el.remove(); }, 4000, c);
     }
-    return sampleFn;
-  })();
-
-  // ============ UTILIDADES ============
-  function countAllCards(){
-    var n = 0;
-    DATA[lang].categorias.forEach(function(c){ n += c.cognados.length; });
-    return n;
-  }
-  function countAllTraps(){ return DATA[lang].trampas.length; }
-
-  function escapeHTML(str){
-    return String(str)
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
 
-  function shuffle(arr){
-    var a = arr.slice();
-    for(var i = a.length - 1; i > 0; i--){
-      var j = Math.floor(Math.random() * (i + 1));
-      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
-    }
-    return a;
-  }
+  // ============ LÓGICA DEL JUEGO RÁPIDO ============
+  var gameQuestions = [], gameIndex = 0, gameScore = 0;
 
-  // ============ TEMA ============
-  function initTheme(){
-    var saved = null;
-    try{ saved = localStorage.getItem('ponte-theme'); }catch(e){}
-    var initial = saved || 'dark';
-    document.documentElement.setAttribute('data-theme', initial);
-    updateThemeColorMeta(initial);
+  document.getElementById('btnQuickReview').onclick = function() {
+    generateGameQuestions();
+    if(gameQuestions.length === 0) return alert('Completa algunas lecciones primero.');
+    gameIndex = 0; gameScore = 0;
+    document.getElementById('gameModal').classList.add('show');
+    renderGameQuestion();
+  };
 
-    document.getElementById('themeToggle').addEventListener('click', function(){
-      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      try{ localStorage.setItem('ponte-theme', next); }catch(e){}
-      updateThemeColorMeta(next);
+  function generateGameQuestions() {
+    gameQuestions = [];
+    var lvl = getLevelData();
+    lvl.categorias.forEach(function(cat) {
+      cat.cognados.forEach(function(c) {
+        var fake = cat.cognados[Math.floor(Math.random()*cat.cognados.length)].target;
+        if (fake === c.target) fake = "opción falsa";
+        gameQuestions.push({ q: "¿Cómo se dice '" + c.es + "'?", a: c.target, opts: [c.target, fake, "opción falsa 2"] });
+      });
+    });
+    lvl.verbos.lista.forEach(function(v) {
+      var idx = Math.floor(Math.random()*6);
+      gameQuestions.push({
+        q: "Verbo " + v.inf + " (" + v.es + "):<br>¿Cuál es la forma para '" + lvl.verbos.pronombres[idx].it + "'?",
+        a: v.formas[idx], opts: [v.formas[idx], v.formas[(idx+1)%6], v.formas[(idx+2)%6]]
+      });
+    });
+    gameQuestions = shuffle(gameQuestions).slice(0, 10);
+    gameQuestions.forEach(function(q) {
+      q.opts = shuffle(q.opts.filter(function(o, i, arr){ return arr.indexOf(o) === i; }));
+      while(q.opts.length < 3) q.opts.push("---");
+      if(q.opts.indexOf(q.a) === -1) q.opts[0] = q.a;
+      q.opts = shuffle(q.opts);
     });
   }
-  function updateThemeColorMeta(theme){
-    var meta = document.querySelector('meta[name="theme-color"]');
-    if(meta) meta.setAttribute('content', theme === 'dark' ? '#1A1512' : '#F5EDE0');
-  }
 
-  // ============ ESTADO ============
-  function defaultState(){
-    return { xp: 0, done: 0, cards: {}, traps: {}, lastVisit: null, streak: 0 };
-  }
-
-  function loadState(){
-    try{
-      var saved = JSON.parse(localStorage.getItem('ponte-v3-' + lang));
-      state = Object.assign(defaultState(), saved || {});
-      if(!state.cards) state.cards = {};
-      if(!state.traps) state.traps = {};
-    }catch(e){ state = defaultState(); }
-    updateStreak();
-  }
-
-  function saveState(){
-    try{ localStorage.setItem('ponte-v3-' + lang, JSON.stringify(state)); }catch(e){}
-  }
-
-  function updateStreak(){
-    var today = new Date().toISOString().slice(0,10);
-    if(!state.lastVisit){ state.streak = 1; state.lastVisit = today; return; }
-    if(state.lastVisit === today) return;
-    var last = new Date(state.lastVisit + 'T00:00:00');
-    var now  = new Date(today + 'T00:00:00');
-    var diff = Math.round((now - last) / 86400000);
-    if(diff === 1) state.streak = (state.streak || 0) + 1;
-    else if(diff > 1) state.streak = 1;
-    state.lastVisit = today;
-    saveState();
-  }
-
-  // ============ AUDIO ============
-  var ttsAvailable = 'speechSynthesis' in window;
-  var voicesLoaded = false;
-  var availableVoices = [];
-
-  function loadVoices(){
-    if(!ttsAvailable) return;
-    availableVoices = window.speechSynthesis.getVoices();
-    voicesLoaded = availableVoices.length > 0;
-  }
-  if(ttsAvailable){
-    loadVoices();
-    if(typeof window.speechSynthesis.onvoiceschanged !== 'undefined'){
-      window.speechSynthesis.onvoiceschanged = loadVoices;
+  function renderGameQuestion() {
+    if (gameIndex >= gameQuestions.length) {
+      fireConfetti(); playSound('success');
+      document.getElementById('gameCard').innerHTML = 
+        '<h2 style="color:var(--accent); font-family:var(--font-display); font-size:2rem;">¡Bravissimo! 🎉</h2>' +
+        '<p style="margin:1rem 0; font-size:1.2rem;">Has acertado ' + gameScore + ' de ' + gameQuestions.length + '</p>' +
+        '<p style="opacity:0.7; margin-bottom:1.5rem;">Has ganado +' + (gameScore * 5) + ' XP extra</p>' +
+        '<button class="btn-primary" onclick="document.getElementById(\'gameModal\').classList.remove(\'show\'); location.reload();">Volver al inicio</button>';
+      state.xp += (gameScore * 5); saveState(); return;
     }
+    var q = gameQuestions[gameIndex];
+    document.getElementById('gameProgress').textContent = 'Pregunta ' + (gameIndex + 1) + ' de ' + gameQuestions.length;
+    document.getElementById('gameQuestion').innerHTML = q.q;
+    var optsEl = document.getElementById('gameOptions'); optsEl.innerHTML = '';
+    q.opts.forEach(function(opt) {
+      var btn = document.createElement('button'); btn.className = 'game-opt'; btn.textContent = opt;
+      btn.onclick = function() {
+        Array.prototype.forEach.call(optsEl.children, function(b){ b.disabled = true; });
+        if (opt === q.a) { btn.classList.add('correct'); playSound('success'); gameScore++; }
+        else {
+          btn.classList.add('wrong'); playSound('error');
+          Array.prototype.forEach.call(optsEl.children, function(b){ if(b.textContent === q.a) b.classList.add('correct'); });
+        }
+        setTimeout(function() { gameIndex++; renderGameQuestion(); }, 1200);
+      };
+      optsEl.appendChild(btn);
+    });
   }
-  function pickVoice(langCode){
-    if(!voicesLoaded) loadVoices();
-    var exact = availableVoices.filter(function(v){ return v.lang === langCode; });
-    if(exact.length) return exact[0];
-    var shortLang = langCode.split('-')[0];
-    var loose = availableVoices.filter(function(v){ return v.lang && v.lang.indexOf(shortLang) === 0; });
-    return loose[0] || null;
+
+  // ============ AUDIO TTS ============
+  var ttsAvailable = 'speechSynthesis' in window, availableVoices = [];
+  if(ttsAvailable){
+    availableVoices = window.speechSynthesis.getVoices();
+    window.speechSynthesis.onvoiceschanged = function(){ availableVoices = window.speechSynthesis.getVoices(); };
   }
   function speak(text){
     if(!ttsAvailable) return;
     try{
       window.speechSynthesis.cancel();
-      var u = new SpeechSynthesisUtterance(text);
-      u.lang = DATA[lang].voice;
-      u.rate = 0.9;
-      var v = pickVoice(u.lang);
+      var u = new SpeechSynthesisUtterance(text); u.lang = DATA[lang].voice; u.rate = 0.9;
+      var v = availableVoices.find(function(v){ return v.lang === u.lang; }) || availableVoices.find(function(v){ return v.lang.indexOf(lang) === 0; });
       if(v) u.voice = v;
       window.speechSynthesis.speak(u);
     }catch(e){}
   }
 
-  // ============ PROGRESO ============
+  // ============ ESTADO Y TEMA ============
+  function initTheme(){
+    var saved = null; try{ saved = localStorage.getItem('ponte-theme'); }catch(e){}
+    document.documentElement.setAttribute('data-theme', saved || 'dark');
+    document.getElementById('themeToggle').onclick = function(){
+      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try{ localStorage.setItem('ponte-theme', next); }catch(e){}
+    };
+  }
+
+  function defaultState(){ return { xp: 0, done: 0, cards: {}, traps: {}, lastVisit: null, streak: 0 }; }
+  function loadState(){
+    try{ var saved = JSON.parse(localStorage.getItem('ponte-v3-' + lang)); state = Object.assign(defaultState(), saved || {}); if(!state.cards) state.cards = {}; if(!state.traps) state.traps = {}; }catch(e){ state = defaultState(); }
+    updateStreak();
+  }
+  function saveState(){ try{ localStorage.setItem('ponte-v3-' + lang, JSON.stringify(state)); }catch(e){} }
+  function updateStreak(){
+    var today = new Date().toISOString().slice(0,10);
+    if(!state.lastVisit){ state.streak = 1; state.lastVisit = today; return; }
+    if(state.lastVisit === today) return;
+    var diff = Math.round((new Date(today) - new Date(state.lastVisit)) / 86400000);
+    state.streak = diff === 1 ? (state.streak || 0) + 1 : 1;
+    state.lastVisit = today; saveState();
+  }
+
   function totalDone(){
-    var c = 0, t = 0;
-    DATA[lang].categorias.forEach(function(cat){
-      cat.cognados.forEach(function(_, i){
-        var key = 'c-' + cat.id + '-' + i;
-        if(state.cards[key] && state.cards[key].done) c++;
-      });
-    });
-    for(var k in state.traps) if(state.traps[k].done) t++;
+    var c = 0, t = 0, lvl = getLevelData();
+    lvl.categorias.forEach(function(cat){ cat.cognados.forEach(function(_, i){ var k = currentLevel+'-c-'+cat.id+'-'+i; if(state.cards[k] && state.cards[k].done) c++; }); });
+    for(var k in state.traps) if(k.indexOf(currentLevel+'-')===0 && state.traps[k].done) t++;
     return { cards: c, traps: t, total: c + t };
   }
 
   function refreshCounters(){
     var d = totalDone();
-    var totalCards = countAllCards();
-    var totalTraps = countAllTraps();
+    var totalCards = getLevelData().categorias.reduce(function(n,c){return n+c.cognados.length;},0);
+    var totalTraps = getLevelData().trampas.length;
     var totalSteps = totalCards + totalTraps;
-
     document.getElementById('xpCount').textContent = state.xp;
     document.getElementById('streakCount').textContent = state.streak || 0;
-    document.getElementById('progressLabel').textContent = d.total + ' / ' + totalSteps + ' pasos completados';
+    document.getElementById('progressLabel').textContent = d.total + ' / ' + totalSteps + ' pasos';
     document.getElementById('progressBreakdown').textContent = 'Cognados ' + d.cards + '/' + totalCards + ' · Trampas ' + d.traps + '/' + totalTraps;
-    var pct = Math.round((d.total / totalSteps) * 100);
+    var pct = totalSteps > 0 ? Math.round((d.total / totalSteps) * 100) : 0;
     document.getElementById('barFill').style.width = pct + '%';
-    document.getElementById('progressBar').setAttribute('aria-valuenow', pct);
-    return d;
   }
 
   function addCardDone(catId, idx){
-    var key = 'c-' + catId + '-' + idx;
-    if(state.cards[key] && state.cards[key].done) return false;
+    var key = currentLevel+'-c-'+catId+'-'+idx;
+    if(state.cards[key] && state.cards[key].done) return;
     state.cards[key] = { done: true, interval: 1, nextReview: Date.now() + 86400000 };
-    state.xp += 10;
-    state.done = (state.done || 0) + 1;
-    saveState();
-    return true;
+    state.xp += 10; state.done = (state.done || 0) + 1; saveState();
   }
-
-  function addTrapDone(idx, wasCorrect){
-    var key = 't' + idx;
-    if(state.traps[key] && state.traps[key].done) return false;
-    var interval = wasCorrect ? 2 : 1;
+  function addTrapDone(idx, ok){
+    var key = currentLevel+'-t'+idx;
+    if(state.traps[key] && state.traps[key].done) return;
+    var interval = ok ? 2 : 1;
     state.traps[key] = { done: true, interval: interval, nextReview: Date.now() + interval*86400000 };
-    state.xp += wasCorrect ? 15 : 5;
-    state.done = (state.done || 0) + 1;
-    saveState();
-    return true;
+    state.xp += ok ? 15 : 5; state.done = (state.done || 0) + 1; saveState();
   }
 
-  // ============ RENDER CATEGORÍAS ============
-  function renderCatTabs(){
-    var tabs = document.getElementById('catTabs');
-    tabs.innerHTML = '';
-    DATA[lang].categorias.forEach(function(cat, i){
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'cat-tab' + (i === currentCat ? ' active' : '');
-      btn.setAttribute('role', 'tab');
-      btn.setAttribute('aria-selected', i === currentCat ? 'true' : 'false');
-      btn.textContent = cat.titulo;
-
-      var allDone = cat.cognados.every(function(_, idx){
-        var k = 'c-' + cat.id + '-' + idx;
-        return state.cards[k] && state.cards[k].done;
-      });
-      if(allDone) btn.classList.add('done');
-
-      btn.addEventListener('click', function(){
-        currentCat = i;
-        renderAll();
-        document.getElementById('cognados').scrollIntoView({behavior: 'smooth', block: 'start'});
-      });
-      tabs.appendChild(btn);
+  // ============ RENDERS ============
+  function renderVocabCats(){
+    var wrap = document.getElementById('vocabCats'); wrap.innerHTML = '';
+    getLevelData().vocabulario_esencial.forEach(function(v, i){
+      var btn = document.createElement('button'); btn.className = 'survival-cat' + (i === currentVocabCat ? ' active' : ''); btn.textContent = v.icon + ' ' + v.cat;
+      btn.onclick = function(){ currentVocabCat = i; renderVocabCats(); renderVocabList(); };
+      wrap.appendChild(btn);
     });
   }
-
-  // ============ RENDER TARJETAS ============
-  function renderCards(){
-    var grid = document.getElementById('cardGrid');
-    grid.innerHTML = '';
-    var cat = DATA[lang].categorias[currentCat];
-
-    document.getElementById('catKicker').textContent = 'Categoría ' + (currentCat + 1) + ' de ' + DATA[lang].categorias.length;
-    document.getElementById('catTitle').textContent = cat.titulo;
-    document.getElementById('catSub').textContent = cat.cognados.length + ' palabras comparten este patrón.';
-
-    cat.cognados.forEach(function(pair, i){
-      var key = 'c-' + cat.id + '-' + i;
-      var isDone = state.cards[key] && state.cards[key].done;
-
-      var card = document.createElement('div');
-      card.className = 'card' + (isDone ? ' flipped done' : '');
-      card.setAttribute('role', 'button');
-      card.setAttribute('tabindex', '0');
-      card.setAttribute('aria-label', 'Tarjeta: ' + pair.es + ' en ' + DATA[lang].label);
-      card.setAttribute('aria-pressed', isDone ? 'true' : 'false');
-
-      card.innerHTML =
-        '<span class="check" aria-hidden="true">✓</span>' +
-        '<div class="face front">' +
-          '<div class="es">Español</div>' +
-          '<div class="es-word">' + pair.es + '</div>' +
-          '<div class="hint">¿en ' + DATA[lang].label + '?</div>' +
-        '</div>' +
-        '<div class="face back">' +
-          '<div class="word">' + pair.target + '</div>' +
-          '<div class="pattern">' + cat.titulo + '</div>' +
-        '</div>' +
-        '<span class="speak-mini" role="button" aria-label="Escuchar ' + pair.target + '" tabindex="-1">🔊</span>';
-
-      function flip(){
-        var justFlipped = !card.classList.contains('flipped');
-        card.classList.toggle('flipped');
-        card.setAttribute('aria-pressed', card.classList.contains('flipped') ? 'true' : 'false');
-        if(justFlipped){
-          addCardDone(cat.id, i);
-          card.classList.add('done');
-          speak(pair.target);
-          renderCatTabs();
-          checkComplete();
-          refreshCounters();
-        }
-      }
-
-      card.addEventListener('click', function(e){
-        if(e.target.classList.contains('speak-mini')){
-          e.stopPropagation();
-          speak(pair.target);
-          return;
-        }
-        flip();
-      });
-
-      card.addEventListener('keydown', function(e){
-        if(e.key === 'Enter' || e.key === ' '){
-          e.preventDefault();
-          flip();
-        }
-      });
-
+  function renderVocabList(){
+    var grid = document.getElementById('vocabGrid'); grid.innerHTML = '';
+    getLevelData().vocabulario_esencial[currentVocabCat].items.forEach(function(item){
+      var card = document.createElement('div'); card.className = 'survival-item';
+      card.innerHTML = '<div class="survival-text"><div class="survival-es">' + escapeHTML(item.es) + '</div><div class="survival-target">' + escapeHTML(item.target) + '</div></div><button class="survival-speak">🔊</button>';
+      card.querySelector('.survival-speak').onclick = function(){ speak(item.target); };
       grid.appendChild(card);
     });
   }
 
-  // ============ RENDER TRAMPAS ============
-  var trapWordEl = document.getElementById('trapWord');
-  var trapPromptEl = document.getElementById('trapPrompt');
-  var trapOptsEl = document.getElementById('trapOpts');
-  var trapFeedbackEl = document.getElementById('trapFeedback');
-  var nextTrapBtn = document.getElementById('nextTrap');
-  var trapSpeakBtn = document.getElementById('trapSpeak');
-
-  function renderTrap(idx){
-    trapAttempts = 0;
-    var t = DATA[lang].trampas[idx];
-    trapWordEl.textContent = t.word;
-    trapPromptEl.textContent = 'En ' + DATA[lang].label + ', "' + t.word + '" significa...';
-    trapFeedbackEl.innerHTML = '';
-    nextTrapBtn.style.display = 'none';
-
-    trapOptsEl.innerHTML = '';
-    var opts = t.opts.slice().sort(function(){ return Math.random() - 0.5; });
-    opts.forEach(function(o){
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'opt';
-      btn.textContent = o[0];
-      if(o[1]) btn.dataset.correct = 'true';
-      btn.addEventListener('click', function(){ handleAnswer(btn, o[1], t); });
-      trapOptsEl.appendChild(btn);
+  function renderCatTabs(){
+    var tabs = document.getElementById('catTabs'); tabs.innerHTML = '';
+    getLevelData().categorias.forEach(function(cat, i){
+      var btn = document.createElement('button'); btn.className = 'cat-tab' + (i === currentCat ? ' active' : ''); btn.textContent = cat.titulo;
+      var allDone = cat.cognados.every(function(_, idx){ var k = currentLevel+'-c-'+cat.id+'-'+idx; return state.cards[k] && state.cards[k].done; });
+      if(allDone) btn.classList.add('done');
+      btn.onclick = function(){ currentCat = i; renderAll(); document.getElementById('cognados').scrollIntoView({behavior: 'smooth'}); };
+      tabs.appendChild(btn);
+    });
+  }
+  function renderCards(){
+    var grid = document.getElementById('cardGrid'); grid.innerHTML = '';
+    var cat = getLevelData().categorias[currentCat];
+    document.getElementById('catKicker').textContent = 'Categoría ' + (currentCat + 1) + ' de ' + getLevelData().categorias.length;
+    document.getElementById('catTitle').textContent = cat.titulo;
+    document.getElementById('catSub').textContent = cat.cognados.length + ' palabras comparten este patrón.';
+    cat.cognados.forEach(function(pair, i){
+      var key = currentLevel+'-c-'+cat.id+'-'+i;
+      var isDone = state.cards[key] && state.cards[key].done;
+      var card = document.createElement('div'); card.className = 'card' + (isDone ? ' flipped done' : '');
+      card.innerHTML = '<span class="check">✓</span><div class="face front"><div class="es">Español</div><div class="es-word">' + pair.es + '</div><div class="hint">¿en ' + DATA[lang].label + '?</div></div><div class="face back"><div class="word">' + pair.target + '</div><div class="pattern">' + cat.titulo + '</div></div><span class="speak-mini">🔊</span>';
+      card.onclick = function(e){
+        if(e.target.classList.contains('speak-mini')){ e.stopPropagation(); speak(pair.target); return; }
+        var just = !card.classList.contains('flipped');
+        card.classList.toggle('flipped');
+        if(just){ addCardDone(cat.id, i); card.classList.add('done'); speak(pair.target); renderCatTabs(); refreshCounters(); }
+      };
+      grid.appendChild(card);
     });
   }
 
-  function handleAnswer(btn, isCorrect, t){
-    if(btn.disabled) return;
-    trapAttempts++;
-
-    if(isCorrect){
-      btn.classList.add('correct');
-      Array.prototype.forEach.call(trapOptsEl.children, function(b){ b.disabled = true; });
-      showFeedback(t, true);
-      addTrapDone(trapIndex, trapAttempts === 1);
-      nextTrapBtn.style.display = 'inline-block';
-      nextTrapBtn.textContent = (trapIndex < DATA[lang].trampas.length - 1) ? 'Siguiente trampa →' : 'Volver al inicio →';
-      checkComplete();
-      refreshCounters();
-    } else {
-      btn.classList.add('wrong');
-      Array.prototype.forEach.call(trapOptsEl.children, function(b){
-        b.disabled = true;
-        if(b.dataset.correct === 'true') b.classList.add('correct');
-      });
-      showFeedback(t, false);
-      addTrapDone(trapIndex, false);
-      nextTrapBtn.style.display = 'inline-block';
-      nextTrapBtn.textContent = (trapIndex < DATA[lang].trampas.length - 1) ? 'Siguiente trampa →' : 'Volver al inicio →';
-      checkComplete();
-      refreshCounters();
-    }
+  function renderTrap(idx){
+    var t = getLevelData().trampas[idx]; if(!t) return;
+    document.getElementById('trapWord').textContent = t.word;
+    document.getElementById('trapPrompt').textContent = 'En ' + DATA[lang].label + ', "' + t.word + '" significa...';
+    document.getElementById('trapFeedback').innerHTML = '';
+    document.getElementById('nextTrap').style.display = 'none';
+    var optsEl = document.getElementById('trapOpts'); optsEl.innerHTML = '';
+    t.opts.sort(function(){return Math.random()-0.5;}).forEach(function(o){
+      var btn = document.createElement('button'); btn.className = 'opt'; btn.textContent = o[0];
+      btn.onclick = function(){
+        Array.prototype.forEach.call(optsEl.children, function(b){ b.disabled = true; });
+        if(o[1]){ btn.classList.add('correct'); addTrapDone(idx, true); } else { btn.classList.add('wrong'); addTrapDone(idx, false); }
+        document.getElementById('trapFeedback').innerHTML = '<strong>'+(o[1]?'¡Exacto!':'Casi.')+'</strong> ' + escapeHTML(t.note) + '<span class="mnemonic">💡 ' + escapeHTML(t.mnemonic) + '</span>';
+        document.getElementById('nextTrap').style.display = 'inline-block';
+        refreshCounters();
+      };
+      optsEl.appendChild(btn);
+    });
+    document.getElementById('trapSpeak').onclick = function(){ speak(t.word); };
   }
 
-  function showFeedback(t, isCorrect){
-    var head = isCorrect ? '<strong>¡Exacto!</strong> ' : '<strong>Casi.</strong> ';
-    trapFeedbackEl.innerHTML =
-      head + escapeHTML(t.note) +
-      '<span class="mnemonic">💡 ' + escapeHTML(t.mnemonic) + '</span>' +
-      '<span class="phrase">Ejemplo: <em>' + escapeHTML(t.phrase) + '</em>' +
-      '<button class="speak-inline" aria-label="Escuchar ejemplo">🔊</button></span>';
-    var inlineSpeak = trapFeedbackEl.querySelector('.speak-inline');
-    if(inlineSpeak) inlineSpeak.addEventListener('click', function(){ speak(t.phrase); });
-    if(isCorrect) speak(t.word);
-  }
-
-  nextTrapBtn.addEventListener('click', function(){
-    trapIndex = (trapIndex + 1) % DATA[lang].trampas.length;
-    renderTrap(trapIndex);
-  });
-
-  trapSpeakBtn.addEventListener('click', function(){
-    speak(DATA[lang].trampas[trapIndex].word);
-  });
-
-  // ============================================================
-  //                    📚 VERBOS ESENCIALES
-  // ============================================================
   function renderVerbSelector(){
-    var wrap = document.getElementById('verbSelector');
-    wrap.innerHTML = '';
-    DATA[lang].verbos.lista.forEach(function(v, i){
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'verb-pill' + (i === currentVerb ? ' active' : '');
-      btn.textContent = v.inf;
-      btn.setAttribute('role', 'tab');
-      btn.setAttribute('aria-selected', i === currentVerb ? 'true' : 'false');
-      btn.addEventListener('click', function(){
-        currentVerb = i;
-        renderVerbCard();
-        renderVerbSelector();
-      });
+    var wrap = document.getElementById('verbSelector'); wrap.innerHTML = '';
+    getLevelData().verbos.lista.forEach(function(v, i){
+      var btn = document.createElement('button'); btn.className = 'verb-pill' + (i === currentVerb ? ' active' : ''); btn.textContent = v.inf;
+      btn.onclick = function(){ currentVerb = i; renderVerbSelector(); renderVerbCard(); };
       wrap.appendChild(btn);
     });
   }
-
   function renderVerbCard(){
-    var v = DATA[lang].verbos.lista[currentVerb];
-    var pro = DATA[lang].verbos.pronombres;
-
+    var v = getLevelData().verbos.lista[currentVerb]; if(!v) return;
     document.getElementById('verbInf').textContent = v.inf;
     document.getElementById('verbEs').textContent = v.es;
     document.getElementById('exIt').textContent = v.ejemplo;
     document.getElementById('exEs').textContent = v.ejEs;
-
-    var grid = document.getElementById('conjGrid');
-    grid.innerHTML = '';
+    var grid = document.getElementById('conjGrid'); grid.innerHTML = '';
     v.formas.forEach(function(forma, i){
-      var row = document.createElement('div');
-      row.className = 'conj-row';
-      row.innerHTML =
-  '<span class="conj-pron">' + pro[i].it + ' <em>(' + pro[i].es + ')</em></span>' +
-  '<span class="conj-form">' + forma + '</span>' +
-  '<button class="conj-speak" aria-label="Escuchar ' + forma + '">🔊</button>';
-      row.querySelector('.conj-speak').addEventListener('click', function(){
-        speak(forma);
-      });
+      var pro = getLevelData().verbos.pronombres[i];
+      var row = document.createElement('div'); row.className = 'conj-row';
+      row.innerHTML = '<span class="conj-pron">'+pro.it+' <em>('+pro.es+')</em></span><span class="conj-form">'+forma+'</span><button class="conj-speak">🔊</button>';
+      row.querySelector('.conj-speak').onclick = function(){ speak(forma); };
       grid.appendChild(row);
     });
-
-    var exBtn = document.getElementById('exSpeak');
-    // reemplazamos el botón para evitar listeners duplicados
-    var newExBtn = exBtn.cloneNode(true);
-    exBtn.parentNode.replaceChild(newExBtn, exBtn);
-    newExBtn.addEventListener('click', function(){ speak(v.ejemplo); });
+    document.getElementById('exSpeak').onclick = function(){ speak(v.ejemplo); };
   }
 
-  // ============================================================
-  //                    🔧 CONSTRUCTOR DE FRASES
-  // ============================================================
   function renderBuilder(){
-    var ex = DATA[lang].construccion[builderIndex];
+    var ex = getLevelData().construccion[builderIndex]; if(!ex) return;
     document.getElementById('builderPrompt').textContent = ex.es;
     builderSelection = [];
-
-    var answer = document.getElementById('builderAnswer');
-    answer.className = 'builder-answer';
-    answer.innerHTML = '<span class="placeholder">Tu respuesta aparecerá aquí...</span>';
-
+    var ans = document.getElementById('builderAnswer'); ans.className = 'builder-answer'; ans.innerHTML = '<span class="placeholder">Tu respuesta aquí...</span>';
     document.getElementById('builderFeedback').textContent = '';
-    document.getElementById('builderFeedback').className = 'builder-feedback';
-
-    var pool = document.getElementById('builderPool');
-    pool.innerHTML = '';
-
-    // Mezclamos palabras correctas + distractores, pero llevamos cuenta de cuáles son correctas
-    var allWords = [];
-    ex.palabras.forEach(function(w){ allWords.push({ text: w, ok: true }); });
-    ex.distractores.forEach(function(w){ allWords.push({ text: w, ok: false }); });
-    var shuffled = shuffle(allWords);
-
-    shuffled.forEach(function(item){
-      var chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = 'word-chip';
-      chip.textContent = item.text;
-      chip.dataset.ok = item.ok ? 'true' : 'false';
-      chip.addEventListener('click', function(){
-        if(chip.classList.contains('used')) return;
-        chip.classList.add('used');
-        chip.disabled = true;
-        builderSelection.push({ text: item.text, ok: item.ok, chip: chip });
-        updateBuilderAnswer();
-      });
+    var pool = document.getElementById('builderPool'); pool.innerHTML = '';
+    var all = []; ex.palabras.forEach(function(w){ all.push({text:w, ok:true}); }); ex.distractores.forEach(function(w){ all.push({text:w, ok:false}); });
+    shuffle(all).forEach(function(item){
+      var chip = document.createElement('button'); chip.className = 'word-chip'; chip.textContent = item.text;
+      chip.onclick = function(){
+        chip.classList.add('used'); chip.disabled = true;
+        builderSelection.push({text:item.text, chip:chip});
+        var a = document.getElementById('builderAnswer'); a.innerHTML = '';
+        builderSelection.forEach(function(it, idx){
+          var c = document.createElement('button'); c.className = 'word-chip selected'; c.textContent = it.text;
+          c.onclick = function(){ it.chip.classList.remove('used'); it.chip.disabled = false; builderSelection.splice(idx,1); renderBuilderAns(); };
+          a.appendChild(c);
+        });
+        if(builderSelection.length===0) a.innerHTML = '<span class="placeholder">Tu respuesta aquí...</span>';
+      };
       pool.appendChild(chip);
     });
   }
-
-  function updateBuilderAnswer(){
-    var answer = document.getElementById('builderAnswer');
-    answer.innerHTML = '';
-    if(builderSelection.length === 0){
-      answer.innerHTML = '<span class="placeholder">Tu respuesta aparecerá aquí...</span>';
-      return;
-    }
-    builderSelection.forEach(function(item, i){
-      var chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = 'word-chip selected';
-      chip.textContent = item.text;
-      chip.setAttribute('aria-label', 'Quitar ' + item.text);
-      chip.addEventListener('click', function(){
-        // devolver al pool
-        item.chip.classList.remove('used');
-        item.chip.disabled = false;
-        builderSelection.splice(i, 1);
-        updateBuilderAnswer();
-        answer.className = 'builder-answer';
-        document.getElementById('builderFeedback').textContent = '';
-      });
-      answer.appendChild(chip);
+  function renderBuilderAns(){
+    var a = document.getElementById('builderAnswer'); a.innerHTML = '';
+    builderSelection.forEach(function(it, idx){
+      var c = document.createElement('button'); c.className = 'word-chip selected'; c.textContent = it.text;
+      c.onclick = function(){ it.chip.classList.remove('used'); it.chip.disabled = false; builderSelection.splice(idx,1); renderBuilderAns(); };
+      a.appendChild(c);
     });
+    if(builderSelection.length===0) a.innerHTML = '<span class="placeholder">Tu respuesta aquí...</span>';
   }
-
-  document.getElementById('builderCheck').addEventListener('click', function(){
-    var ex = DATA[lang].construccion[builderIndex];
-    var answerEl = document.getElementById('builderAnswer');
+  document.getElementById('builderCheck').onclick = function(){
+    var ex = getLevelData().construccion[builderIndex];
+    var user = builderSelection.map(function(x){return x.text.toLowerCase();}).join(' ');
+    var correct = ex.palabras.join(' ').toLowerCase();
     var fb = document.getElementById('builderFeedback');
+    if(user === correct){ fb.textContent = '¡Perfecto!'; fb.className = 'builder-feedback ok'; speak(ex.traduccion); state.xp += 5; saveState(); refreshCounters(); playSound('success'); }
+    else { fb.textContent = 'Casi... inténtalo de nuevo.'; fb.className = 'builder-feedback bad'; playSound('error'); }
+  };
+  document.getElementById('builderClear').onclick = renderBuilder;
+  document.getElementById('builderNext').onclick = function(){ builderIndex = (builderIndex+1) % getLevelData().construccion.length; renderBuilder(); };
 
-    if(builderSelection.length === 0){
-      fb.textContent = 'Añade alguna palabra primero.';
-      fb.className = 'builder-feedback bad';
-      return;
-    }
-
-    var userText = builderSelection.map(function(x){ return x.text; }).join(' ');
-    var correctText = ex.traduccion;
-
-    // Comparamos palabra por palabra para ver si son correctas y en orden
-    var userWords = builderSelection.map(function(x){ return x.text.toLowerCase(); });
-    var correctWords = ex.palabras.map(function(w){ return w.toLowerCase(); });
-    var sameLength = userWords.length === correctWords.length;
-    var allCorrect = sameLength && userWords.every(function(w, i){ return w === correctWords[i]; });
-
-    if(allCorrect){
-      answerEl.className = 'builder-answer ok';
-      fb.textContent = '¡Perfecto! ' + correctText;
-      fb.className = 'builder-feedback ok';
-      speak(correctText);
-      state.xp += 5;
-      saveState();
-      refreshCounters();
-    } else {
-      answerEl.className = 'builder-answer bad';
-      fb.innerHTML = 'Casi. Intenta de nuevo. Pista: la frase tiene <strong>' + correctWords.length + '</strong> palabras.';
-      fb.className = 'builder-feedback bad';
-    }
-  });
-
-  document.getElementById('builderClear').addEventListener('click', function(){
-    renderBuilder();
-  });
-
-  document.getElementById('builderNext').addEventListener('click', function(){
-    builderIndex = (builderIndex + 1) % DATA[lang].construccion.length;
-    renderBuilder();
-  });
-
-  // ============================================================
-  //                    🌍 FRASES DE SUPERVIVENCIA
-  // ============================================================
   function renderSurvivalCats(){
-    var wrap = document.getElementById('survivalCats');
-    wrap.innerHTML = '';
-    DATA[lang].supervivencia.forEach(function(cat, i){
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'survival-cat' + (i === currentSurvivalCat ? ' active' : '');
-      btn.textContent = cat.icono + ' ' + cat.categoria;
-      btn.setAttribute('role', 'tab');
-      btn.setAttribute('aria-selected', i === currentSurvivalCat ? 'true' : 'false');
-      btn.addEventListener('click', function(){
-        currentSurvivalCat = i;
-        renderSurvivalCats();
-        renderSurvivalList();
-      });
-      wrap.appendChild(btn);
+    var wrap = document.getElementById('survivalCats'); wrap.innerHTML = '';
+    getLevelData().supervivencia.forEach(function(cat, i){
+      var b = document.createElement('button'); b.className = 'survival-cat' + (i===currentSurvivalCat?' active':''); b.textContent = cat.icono+' '+cat.categoria;
+      b.onclick = function(){ currentSurvivalCat = i; renderSurvivalCats(); renderSurvivalList(); };
+      wrap.appendChild(b);
     });
   }
-
   function renderSurvivalList(){
-    var list = document.getElementById('survivalList');
-    list.innerHTML = '';
-    var cat = DATA[lang].supervivencia[currentSurvivalCat];
-
-    cat.frases.forEach(function(f){
-      var item = document.createElement('div');
-      item.className = 'survival-item';
-      item.innerHTML =
-        '<div class="survival-text">' +
-          '<div class="survival-es">' + escapeHTML(f.es) + '</div>' +
-          '<div class="survival-target">' + escapeHTML(f.target) + '</div>' +
-        '</div>' +
-        '<button class="survival-speak" aria-label="Escuchar ' + escapeHTML(f.target) + '">🔊</button>';
-      item.querySelector('.survival-speak').addEventListener('click', function(){
-        speak(f.target);
-      });
-      list.appendChild(item);
+    var list = document.getElementById('survivalList'); list.innerHTML = '';
+    getLevelData().supervivencia[currentSurvivalCat].frases.forEach(function(f){
+      var d = document.createElement('div'); d.className = 'survival-item';
+      d.innerHTML = '<div class="survival-text"><div class="survival-es">'+escapeHTML(f.es)+'</div><div class="survival-target">'+escapeHTML(f.target)+'</div></div><button class="survival-speak">🔊</button>';
+      d.querySelector('.survival-speak').onclick = function(){ speak(f.target); };
+      list.appendChild(d);
     });
   }
 
-  // ============================================================
-  //                      💬 TUTOR IA
-  // ============================================================
-  var chatMessagesEl = document.getElementById('chatMessages');
-  var chatStartersEl = document.getElementById('chatStarters');
-  var chatFormEl = document.getElementById('chatForm');
-  var chatTextareaEl = document.getElementById('chatTextarea');
-  var chatSendEl = document.getElementById('chatSend');
-  var chatResetEl = document.getElementById('chatReset');
-  var isChatLoading = false;
-
-  function chatStorageKey(){ return 'ponte-chat-' + lang; }
-
-  function loadChat(){
-    try{
-      var saved = JSON.parse(localStorage.getItem(chatStorageKey()) || 'null');
-      if(Array.isArray(saved) && saved.length) return saved;
-    }catch(e){}
-    return [{ role: 'model', text: DATA[lang].tutor.greeting }];
-  }
-
-  function saveChat(history){
-    try{
-      var trimmed = history.slice(-30);
-      localStorage.setItem(chatStorageKey(), JSON.stringify(trimmed));
-    }catch(e){}
-  }
-
-  var chatHistory = loadChat();
-
+  // ============ TUTOR IA ============
+  var chatHistory = [];
   function renderChatHeader(){
-    var tutor = DATA[lang].tutor;
-    document.getElementById('tutorNameHead').textContent = tutor.name;
-    document.getElementById('chatAvatar').textContent = tutor.avatar;
-    document.getElementById('chatName').textContent = tutor.name;
-    document.getElementById('chatStatus').textContent = tutor.status;
-    chatTextareaEl.placeholder = lang === 'it' ? 'Scrivi in italiano...' : 'Écris en français...';
-    document.getElementById('tutorLangName').textContent = DATA[lang].label;
-    document.getElementById('builderLangName').textContent = DATA[lang].label;
+    var t = DATA[lang].tutor;
+    document.getElementById('tutorNameHead').textContent = t.name;
+    document.getElementById('chatAvatar').textContent = t.avatar;
+    document.getElementById('chatName').textContent = t.name;
+    document.getElementById('chatStatus').textContent = t.status;
+    document.getElementById('chatTextarea').placeholder = 'Escribe en ' + DATA[lang].label + '...';
   }
-
-  function renderStarters(){
-    chatStartersEl.innerHTML = '';
-    if(!sampleFn) return;
-    var tutor = DATA[lang].tutor;
-    var onlyGreeting = chatHistory.length <= 1;
-    if(!onlyGreeting){ chatStartersEl.style.display = 'none'; return; }
-    chatStartersEl.style.display = 'flex';
-    tutor.starters.forEach(function(s){
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'starter';
-      b.textContent = s;
-      b.addEventListener('click', function(){
-        chatTextareaEl.value = s;
-        autoResizeTextarea();
-        chatTextareaEl.focus();
-      });
-      chatStartersEl.appendChild(b);
-    });
-  }
-
-  function addMessage(role, text, opts){
-    opts = opts || {};
-    var wrap = document.createElement('div');
-    wrap.className = 'msg msg-' + role;
-    if(opts.error) wrap.classList.add('msg-error');
-
-    var bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    bubble.innerHTML = escapeHTML(text).replace(/\n/g, '<br>');
-
-    wrap.appendChild(bubble);
-
-    if(role === 'model' && !opts.error && text.length > 1){
-      var speakBtn = document.createElement('button');
-      speakBtn.className = 'msg-speak';
-      speakBtn.setAttribute('aria-label', 'Escuchar mensaje');
-      speakBtn.type = 'button';
-      speakBtn.textContent = '🔊';
-      speakBtn.addEventListener('click', function(){ speak(text); });
-      wrap.appendChild(speakBtn);
-    }
-
-    chatMessagesEl.appendChild(wrap);
-    scrollChatToBottom();
-  }
-
-  function scrollChatToBottom(){
-    requestAnimationFrame(function(){
-      chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
-    });
-  }
-
   function renderChat(){
-    chatMessagesEl.innerHTML = '';
+    var msgs = document.getElementById('chatMessages'); msgs.innerHTML = '';
+    if(chatHistory.length === 0) chatHistory.push({role:'model', text:DATA[lang].tutor.greeting});
     chatHistory.forEach(function(m){
-      addMessage(m.role, m.text, m.error ? { error: true } : {});
+      var w = document.createElement('div'); w.className = 'msg msg-'+m.role;
+      w.innerHTML = '<div class="bubble">'+escapeHTML(m.text)+'</div>';
+      msgs.appendChild(w);
     });
-    renderStarters();
+    msgs.scrollTop = msgs.scrollHeight;
   }
-
-  function showTyping(){
-    var t = document.createElement('div');
-    t.className = 'msg msg-model typing';
-    t.id = 'typingIndicator';
-    t.innerHTML = '<div class="bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>';
-    chatMessagesEl.appendChild(t);
-    scrollChatToBottom();
-  }
-
-  function hideTyping(){
-    var t = document.getElementById('typingIndicator');
-    if(t) t.remove();
-  }
-
-  function autoResizeTextarea(){
-    chatTextareaEl.style.height = 'auto';
-    chatTextareaEl.style.height = Math.min(chatTextareaEl.scrollHeight, 120) + 'px';
-  }
-
-  chatTextareaEl.addEventListener('input', autoResizeTextarea);
-
-  chatTextareaEl.addEventListener('keydown', function(e){
-    if(e.key === 'Enter' && !e.shiftKey){
-      e.preventDefault();
-      chatFormEl.dispatchEvent(new Event('submit', { cancelable: true }));
-    }
-  });
-
-  chatFormEl.addEventListener('submit', function(e){
+  document.getElementById('chatForm').onsubmit = async function(e){
     e.preventDefault();
-    var text = chatTextareaEl.value.trim();
-    if(!text || isChatLoading) return;
-    sendMessage(text);
-    chatTextareaEl.value = '';
-    autoResizeTextarea();
-  });
-
-  function sendMessage(text){
-    var userMsg = { role: 'user', text: text };
-    chatHistory.push(userMsg);
-    addMessage('user', text);
-    saveChat(chatHistory);
-    renderStarters();
-
-    isChatLoading = true;
-    chatSendEl.disabled = true;
-
-    var typingShown = false;
-
-    callAI(chatHistory)
-      .then(function(reply){
-        if(typingShown) hideTyping();
-        var cleanReply = (reply || '').trim();
-        if(!cleanReply){
-          cleanReply = lang === 'it' ? 'Scusa, non ho capito. Puoi ripetere?' : "Désolée, je n'ai pas compris. Tu peux répéter?";
-        }
-        var modelMsg = { role: 'model', text: cleanReply };
-        chatHistory.push(modelMsg);
-        addMessage('model', cleanReply);
-        speak(cleanReply.replace(/\[.*?\]/g, '').trim());
-        saveChat(chatHistory);
-      })
-      .catch(function(err){
-        if(typingShown) hideTyping();
-        var errorMsg;
-        if(err && err.code === 'not_granted'){
-          errorMsg = 'Necesitas permitir el uso de Claude en esta página para practicar con ' + DATA[lang].tutor.name + '.';
-        } else if(err && err.code === 'rate_limited'){
-          errorMsg = 'Vas muy rápido. Espera un momento y vuelve a intentar.';
-        } else {
-          errorMsg = lang === 'it'
-            ? '⚠️ Connessione interrotta. Riprova tra poco.'
-            : '⚠️ Connexion interrompue. Réessaie dans un instant.';
-        }
-        addMessage('model', errorMsg, { error: true });
-        console.error('Sample error:', err);
-      })
-      .then(function(){
-        isChatLoading = false;
-        chatSendEl.disabled = false;
-        chatTextareaEl.focus();
-      });
-
-    setTimeout(function(){
-      if(isChatLoading){ showTyping(); typingShown = true; }
-    }, 300);
-  }
-
-  async function callAI(history){
-    await sampleReady;
-    if(!sampleFn){
-      var e = new Error('sample no disponible');
-      e.code = 'not_granted';
-      throw e;
+    var txt = document.getElementById('chatTextarea').value.trim(); if(!txt) return;
+    document.getElementById('chatTextarea').value = '';
+    chatHistory.push({role:'user', text:txt}); renderChat();
+    var msgs = document.getElementById('chatMessages');
+    var typing = document.createElement('div'); typing.className = 'msg msg-model typing'; typing.id = 'typing'; typing.innerHTML = '<div class="bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>';
+    msgs.appendChild(typing); msgs.scrollTop = msgs.scrollHeight;
+    try{
+      var resText = await callAI(chatHistory);
+      document.getElementById('typing').remove();
+      chatHistory.push({role:'model', text:resText}); renderChat(); speak(resText);
+    }catch(err){
+      document.getElementById('typing').remove();
+      chatHistory.push({role:'model', text:'⚠️ Error de conexión.'}); renderChat();
     }
-    var turns = [{ role: 'user', content: DATA[lang].tutor.systemPrompt }];
-    history.forEach(function(m){
-      turns.push({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text });
-    });
-    var result = await sampleFn(turns, { cache: false });
-    return result.text;
-  }
+  };
+  document.getElementById('chatReset').onclick = function(){
+    if(!confirm('¿Reiniciar conversación?')) return;
+    chatHistory = [{role:'model', text:DATA[lang].tutor.greeting}]; renderChat();
+  };
 
-  chatResetEl.addEventListener('click', function(){
-    if(!confirm(lang === 'it' ? 'Vuoi iniziare una nuova conversazione?' : 'Veux-tu commencer une nouvelle conversation?')) return;
-    chatHistory = [{ role: 'model', text: DATA[lang].tutor.greeting }];
-    saveChat(chatHistory);
-    renderChat();
-  });
-
-  // ============ CELEBRACIÓN ============
-  function checkComplete(){
-    var d = totalDone();
-    var totalSteps = countAllCards() + countAllTraps();
-    if(d.total >= totalSteps){
-      var key = 'celebrated-' + lang;
-      if(sessionStorage.getItem(key)) return;
-      sessionStorage.setItem(key, '1');
-      setTimeout(showCelebration, 700);
-    }
-  }
-
-  function showCelebration(){
-    document.getElementById('celebLang').textContent = DATA[lang].label;
-    document.getElementById('celebXP').textContent = state.xp;
-    document.getElementById('celebStreak').textContent = state.streak || 1;
-    document.getElementById('celebCards').textContent = countAllCards() + countAllTraps();
-    document.getElementById('celebration').classList.add('show');
-  }
-
-  document.getElementById('celebrateClose').addEventListener('click', function(){
-    document.getElementById('celebration').classList.remove('show');
-  });
-
-  document.getElementById('resetBtn').addEventListener('click', function(){
-    if(confirm('¿Seguro que quieres reiniciar el progreso de este idioma?')){
-      state = defaultState();
-      updateStreak();
-      saveState();
-      sessionStorage.removeItem('celebrated-' + lang);
-      document.getElementById('celebration').classList.remove('show');
-      renderAll();
-    }
-  });
-
-  // ============ REVIEW (SRS) ============
-  function refreshReviewBanner(){
-    var now = Date.now();
-    var due = 0;
-    for(var k in state.cards) if(state.cards[k].done && state.cards[k].nextReview <= now) due++;
-    for(var k2 in state.traps) if(state.traps[k2].done && state.traps[k2].nextReview <= now) due++;
-    var banner = document.getElementById('reviewBanner');
-    if(due > 0){
-      document.getElementById('reviewCount').textContent = due;
-      banner.classList.add('show');
-    } else {
-      banner.classList.remove('show');
-    }
-  }
-
-  document.getElementById('reviewBtn').addEventListener('click', function(){
-    var now = Date.now();
-    for(var k in state.cards) if(state.cards[k].nextReview <= now) delete state.cards[k];
-    for(var k2 in state.traps) if(state.traps[k2].nextReview <= now) delete state.traps[k2];
-    saveState();
-    renderAll();
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  });
-
-  // ============ RENDER GENERAL ============
+  // ============ MASTER RENDER ============
   function renderAll(){
     loadState();
     document.body.setAttribute('data-lang', lang);
     document.getElementById('logoLang').textContent = DATA[lang].label;
     document.getElementById('heroLang').textContent = DATA[lang].label;
-    document.documentElement.lang = 'es';
-    trapIndex = 0;
-    currentVerb = 0;
-    builderIndex = 0;
-    currentSurvivalCat = 0;
-
-    renderCatTabs();
-    renderCards();
-    renderTrap(trapIndex);
-    refreshCounters();
-    refreshReviewBanner();
-
-    renderVerbSelector();
-    renderVerbCard();
+    document.getElementById('heroLevel').textContent = currentLevel.toUpperCase();
+    document.getElementById('heroDesc').textContent = getLevelData().desc;
+    
+    trapIndex = 0; currentCat = 0; currentVerb = 0; builderIndex = 0; currentSurvivalCat = 0; currentVocabCat = 0;
+    
+    renderVocabCats(); renderVocabList();
+    renderCatTabs(); renderCards(); renderTrap(0);
+    renderVerbSelector(); renderVerbCard();
     renderBuilder();
-    renderSurvivalCats();
-    renderSurvivalList();
-
-    chatHistory = loadChat();
-    renderChatHeader();
-    renderChat();
+    renderSurvivalCats(); renderSurvivalList();
+    refreshCounters();
+    renderChatHeader(); renderChat();
   }
 
-  // ============ TOGGLE IDIOMA ============
-  document.getElementById('langToggle').addEventListener('click', function(e){
-    var btn = e.target.closest('.lang-btn');
-    if(!btn) return;
-    var newLang = btn.getAttribute('data-lang');
-    if(newLang === lang) return;
-    lang = newLang;
-    currentCat = 0;
-    Array.prototype.forEach.call(document.querySelectorAll('.lang-btn'), function(b){
-      var active = b.getAttribute('data-lang') === lang;
-      b.classList.toggle('active', active);
-      b.setAttribute('aria-selected', active ? 'true' : 'false');
-    });
+  document.getElementById('langToggle').onclick = function(e){
+    var btn = e.target.closest('.lang-btn'); if(!btn) return;
+    var nl = btn.getAttribute('data-lang'); if(nl === lang) return;
+    lang = nl;
+    Array.prototype.forEach.call(document.querySelectorAll('.lang-btn'), function(b){ b.classList.toggle('active', b.getAttribute('data-lang') === lang); });
+    chatHistory = []; renderAll();
+  };
+
+  document.getElementById('levelSelector').onclick = function(e){
+    var btn = e.target.closest('.level-btn'); if(!btn) return;
+    var nl = btn.getAttribute('data-level'); if(nl === currentLevel) return;
+    currentLevel = nl;
+    Array.prototype.forEach.call(document.querySelectorAll('.level-btn'), function(b){ b.classList.toggle('active', b.getAttribute('data-level') === currentLevel); });
     renderAll();
-  });
+  };
 
-  // ============ ONBOARDING ============
-  if(!localStorage.getItem('ponte-onboarding-seen')){
-    document.getElementById('onboarding').classList.add('show');
-  }
-  document.getElementById('startBtn').addEventListener('click', function(){
-    document.getElementById('onboarding').classList.remove('show');
-    try{ localStorage.setItem('ponte-onboarding-seen', '1'); }catch(e){}
-  });
+  if(!localStorage.getItem('ponte-onboarding-seen')) document.getElementById('onboarding').classList.add('show');
+  document.getElementById('startBtn').onclick = function(){ document.getElementById('onboarding').classList.remove('show'); try{ localStorage.setItem('ponte-onboarding-seen','1'); }catch(e){} };
 
-  // ============ INIT ============
   initTheme();
   renderAll();
 })();
