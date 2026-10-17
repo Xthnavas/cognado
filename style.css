@@ -462,9 +462,10 @@ section{margin-top:3.5rem;}
   grid-template-columns: 1fr;
   gap: 0.5rem;
 }
+
 .conj-row{
   display: grid;
-  grid-template-columns: 1fr 2fr auto;
+  grid-template-columns: 1.4fr 1.8fr auto;
   align-items: center;
   gap: 0.75rem;
   padding: 0.65rem 0.9rem;
@@ -481,6 +482,14 @@ section{margin-top:3.5rem;}
   font-size: 0.85rem;
   opacity: 0.65;
   font-weight: 600;
+}
+.conj-pron em{
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-left: 0.15rem;
+
 }
 .conj-form{
   font-family: var(--font-display);
@@ -1051,4 +1060,55 @@ footer{
 @media (prefers-reduced-motion: reduce){
   *{transition: none !important; animation: none !important;}
   html{scroll-behavior:auto;}
+}
+/* ============ SELECTOR DE NIVEL ============ */
+.level-selector {
+  display: flex; background: var(--surface-2); border-radius: 999px; padding: 3px; border: 1px solid var(--line); margin-right: 0.5rem;
+}
+.level-btn {
+  border: none; background: transparent; color: var(--text); font-size: 0.82rem; font-weight: 700; padding: 0.35rem 0.7rem; border-radius: 999px; cursor: pointer; opacity: 0.6; transition: all 0.2s;
+}
+.level-btn.active { background: var(--accent); color: var(--bg); opacity: 1; }
+
+/* ============ VOCABULARIO ESENCIAL ============ */
+.vocab-cats { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; margin-bottom: 1rem; scrollbar-width: thin; }
+.vocab-cats::-webkit-scrollbar { height: 6px; }
+.vocab-cats::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.6rem; }
+
+/* ============ GAME JUICE ============ */
+@keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+.animate-pop { animation: pop 0.3s ease-in-out; }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+.animate-shake { animation: shake 0.3s ease-in-out; }
+
+.quick-review-btn {
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%;
+  background: linear-gradient(135deg, var(--accent), var(--gold)); color: var(--bg);
+  border: none; padding: 1rem; border-radius: var(--radius-lg); font-size: 1.1rem; font-weight: 800; cursor: pointer; margin-top: 2rem;
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--accent) 40%, transparent);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.quick-review-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 6px 20px color-mix(in srgb, var(--accent) 60%, transparent); }
+
+/* Modal de Juego */
+.game-modal { position: fixed; inset: 0; z-index: 200; background: var(--bg); display: none; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
+.game-modal.show { display: flex; }
+.game-card { background: var(--surface); border: 2px solid var(--accent); border-radius: 20px; padding: 2rem; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+.game-progress { font-size: 0.9rem; color: var(--accent); font-weight: bold; margin-bottom: 1rem; }
+.game-question { font-size: 1.5rem; font-family: var(--font-display); margin-bottom: 1.5rem; color: var(--text); }
+.game-options { display: flex; flex-direction: column; gap: 0.8rem; }
+.game-opt { padding: 1rem; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2); color: var(--text); font-size: 1.1rem; cursor: pointer; transition: all 0.2s; }
+.game-opt:hover { border-color: var(--accent); transform: scale(1.02); }
+.game-opt.correct { background: var(--success); color: white; border-color: var(--success); }
+.game-opt.wrong { background: var(--danger); color: white; border-color: var(--danger); }
+
+/* Confeti */
+.confetti { position: fixed; width: 10px; height: 10px; background-color: #f00; top: -10px; z-index: 999; pointer-events: none; animation: fall 3s linear forwards; }
+@keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
+
+@media (max-width: 520px) {
+  .level-selector { margin-right: 0; }
+  .head-right { gap: 0.3rem; }
+  .level-btn { padding: 0.3rem 0.55rem; font-size: 0.75rem; }
 }
