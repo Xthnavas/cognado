@@ -9,6 +9,7 @@
 </head>
 <body data-lang="it">
 
+<!-- MODALES -->
 <div class="modal" id="errorModal" role="dialog" aria-modal="true">
   <div class="modal-card"><h2>⚠️ Falta <span class="rev">data.js</span></h2><p>Asegúrate de tener <code>data.js</code> en la misma carpeta.</p></div>
 </div>
@@ -16,7 +17,7 @@
 <div class="modal" id="onboarding" role="dialog" aria-modal="true">
   <div class="modal-card">
     <h2 id="onboardingTitle">Bienvenido a <span class="rev">Cognados</span></h2>
-    <p>Elige tu nivel (A1 o A2) arriba y descubre lo que ya sabes.</p>
+    <p>Elige tu nivel (A1 a C2) arriba y descubre lo que ya sabes.</p>
     <div class="steps">
       <div class="step"><div class="num">1</div><div class="txt"><strong>Juega al Repaso Rápido</strong> para ganar XP extra.</div></div>
       <div class="step"><div class="num">2</div><div class="txt"><strong>Estudia el vocabulario</strong> y los verbos.</div></div>
@@ -39,7 +40,6 @@
   </div>
 </div>
 
-<!-- MODAL DEL JUEGO RÁPIDO -->
 <div class="game-modal" id="gameModal">
   <div class="game-card" id="gameCard">
     <div class="game-progress" id="gameProgress">Pregunta 1 de 10</div>
@@ -48,13 +48,18 @@
   </div>
 </div>
 
+<!-- HEADER -->
 <header>
   <div class="logo">Cognados<em id="logoLang">italiano</em></div>
   <div class="head-right">
-    <div class="level-selector" id="levelSelector" role="tablist">
-      <button class="level-btn active" data-level="a1">A1</button>
-      <button class="level-btn" data-level="a2">A2</button>
-    </div>
+    <select id="levelSelector" class="level-select" aria-label="Selecciona nivel">
+      <option value="a1">A1 · Principiante</option>
+      <option value="a2">A2 · Básico</option>
+      <option value="b1">B1 · Intermedio</option>
+      <option value="b2">B2 · Intermedio Alto</option>
+      <option value="c1">C1 · Avanzado</option>
+      <option value="c2">C2 · Maestría</option>
+    </select>
     <div class="lang-toggle" id="langToggle" role="tablist">
       <button class="lang-btn active" data-lang="it">🇮🇹</button>
       <button class="lang-btn" data-lang="fr">🇫🇷</button>
@@ -84,7 +89,7 @@
     <button id="reviewBtn">Repasar ahora</button>
   </div>
 
-  <!-- VOCABULARIO ESENCIAL -->
+  <!-- VOCABULARIO -->
   <section id="vocabulario">
     <div class="section-head">
       <p class="kicker">Lo básico</p>
@@ -199,6 +204,11 @@
       </div>
       <div class="chat-messages" id="chatMessages" role="log"></div>
       <div class="chat-starters" id="chatStarters"></div>
+      
+      <div style="padding: 0 1rem 0.5rem; font-size: 0.75rem; opacity: 0.6; text-align: center;">
+        ⚠️ La IA tiene un límite diario. Por favor, úsala con moderación.
+      </div>
+
       <form class="chat-input" id="chatForm">
         <textarea id="chatTextarea" placeholder="Escribe..." rows="1"></textarea>
         <button type="submit" id="chatSend">➤</button>
@@ -235,7 +245,6 @@
   var currentSurvivalCat = 0, currentVocabCat = 0;
 
   // ============ CONFIGURACIÓN DE IA (VERCEL) ============
-  // Hacemos fetch a nuestro backend serverless (/api/chat)
   async function callAI(history) {
     var payload = {
       systemPrompt: DATA[lang].tutor.systemPrompt,
@@ -246,7 +255,10 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    if (!res.ok) throw new Error('Error de servidor');
+    if (!res.ok) {
+      if (res.status === 429) throw new Error('RATE_LIMIT');
+      throw new Error('SERVER_ERROR');
+    }
     var data = await res.json();
     return data.text;
   }
@@ -489,15 +501,26 @@
     document.getElementById('trapFeedback').innerHTML = '';
     document.getElementById('nextTrap').style.display = 'none';
     var optsEl = document.getElementById('trapOpts'); optsEl.innerHTML = '';
-    t.opts.sort(function(){return Math.random()-0.5;}).forEach(function(o){
+    var opts = t.opts.slice().sort(function(){return Math.random()-0.5;});
+    opts.forEach(function(o){
       var btn = document.createElement('button'); btn.className = 'opt'; btn.textContent = o[0];
       btn.onclick = function(){
         Array.prototype.forEach.call(optsEl.children, function(b){ b.disabled = true; });
-        if(o[1]){ btn.classList.add('correct'); addTrapDone(idx, true); } else { btn.classList.add('wrong'); addTrapDone(idx, false); }
+        if(o[1]){ 
+          btn.classList.add('correct'); 
+          addTrapDone(idx, true); 
+          playSound('success'); 
+        } else { 
+          btn.classList.add('wrong'); 
+          addTrapDone(idx, false); 
+          playSound('error'); 
+          Array.prototype.forEach.call(optsEl.children, function(b){ if(b.dataset.correct === 'true') b.classList.add('correct'); });
+        }
         document.getElementById('trapFeedback').innerHTML = '<strong>'+(o[1]?'¡Exacto!':'Casi.')+'</strong> ' + escapeHTML(t.note) + '<span class="mnemonic">💡 ' + escapeHTML(t.mnemonic) + '</span>';
         document.getElementById('nextTrap').style.display = 'inline-block';
         refreshCounters();
       };
+      if(o[1]) btn.dataset.correct = 'true';
       optsEl.appendChild(btn);
     });
     document.getElementById('trapSpeak').onclick = function(){ speak(t.word); };
@@ -615,16 +638,25 @@
     var txt = document.getElementById('chatTextarea').value.trim(); if(!txt) return;
     document.getElementById('chatTextarea').value = '';
     chatHistory.push({role:'user', text:txt}); renderChat();
+    
     var msgs = document.getElementById('chatMessages');
     var typing = document.createElement('div'); typing.className = 'msg msg-model typing'; typing.id = 'typing'; typing.innerHTML = '<div class="bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>';
     msgs.appendChild(typing); msgs.scrollTop = msgs.scrollHeight;
+    
     try{
       var resText = await callAI(chatHistory);
       document.getElementById('typing').remove();
       chatHistory.push({role:'model', text:resText}); renderChat(); speak(resText);
     }catch(err){
       document.getElementById('typing').remove();
-      chatHistory.push({role:'model', text:'⚠️ Error de conexión.'}); renderChat();
+      var errorMsg;
+      if (err.message === 'RATE_LIMIT') {
+        errorMsg = '⚠️ He alcanzado mi límite de respuestas por hoy. ¡Vuelve mañana para seguir practicando conmigo! Mientras tanto, puedes usar las tarjetas y los verbos.';
+      } else {
+        errorMsg = '⚠️ Error de conexión. Por favor, inténtalo de nuevo más tarde.';
+      }
+      chatHistory.push({role:'model', text: errorMsg}); 
+      renderChat();
     }
   };
   document.getElementById('chatReset').onclick = function(){
@@ -660,12 +692,13 @@
     chatHistory = []; renderAll();
   };
 
-  document.getElementById('levelSelector').onclick = function(e){
-    var btn = e.target.closest('.level-btn'); if(!btn) return;
-    var nl = btn.getAttribute('data-level'); if(nl === currentLevel) return;
+  // ACTUALIZADO PARA MANEJAR EL SELECTOR DROPDOWN
+  document.getElementById('levelSelector').onchange = function(e){
+    var nl = e.target.value; 
+    if(nl === currentLevel) return;
     currentLevel = nl;
-    Array.prototype.forEach.call(document.querySelectorAll('.level-btn'), function(b){ b.classList.toggle('active', b.getAttribute('data-level') === currentLevel); });
     renderAll();
+    window.scrollTo({top: 0, behavior: 'smooth'});
   };
 
   if(!localStorage.getItem('ponte-onboarding-seen')) document.getElementById('onboarding').classList.add('show');
