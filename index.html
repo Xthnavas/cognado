@@ -9,7 +9,6 @@
 </head>
 <body data-lang="it">
 
-<!-- MODALES -->
 <div class="modal" id="errorModal" role="dialog" aria-modal="true">
   <div class="modal-card"><h2>⚠️ Falta <span class="rev">data.js</span></h2><p>Asegúrate de tener <code>data.js</code> en la misma carpeta.</p></div>
 </div>
@@ -21,7 +20,9 @@
     <div class="steps">
       <div class="step"><div class="num">1</div><div class="txt"><strong>Juega al Repaso Rápido</strong> para ganar XP extra.</div></div>
       <div class="step"><div class="num">2</div><div class="txt"><strong>Estudia el vocabulario</strong> y los verbos.</div></div>
-      <div class="step"><div class="num">3</div><div class="txt"><strong>Practica con tu tutor IA</strong>.</div></div>
+      <div class="step"><div class="num">3</div><div class="txt"><strong>🎙️ Modo Habla</strong> — practica tu pronunciación.</div></div>
+      <div class="step"><div class="num">4</div><div class="txt"><strong>📖 Lee historias</strong> interactivas en el idioma.</div></div>
+      <div class="step"><div class="num">5</div><div class="txt"><strong>🏆 Desbloquea logros</strong> mientras aprendes.</div></div>
     </div>
     <button class="btn-primary" id="startBtn">Empezar →</button>
   </div>
@@ -45,10 +46,48 @@
     <div class="game-progress" id="gameProgress">Pregunta 1 de 10</div>
     <div class="game-question" id="gameQuestion">Cargando...</div>
     <div class="game-options" id="gameOptions"></div>
+    </div>
+</div>
+
+<div class="game-modal" id="speechModal">
+  <div class="game-card" id="speechCard">
+    <div class="speech-close" id="speechClose">✕</div>
+    <div class="speech-header">
+      <div class="speech-emoji">🎙️</div>
+      <h2>Modo Habla</h2>
+      <p class="speech-desc">Practica tu pronunciación. Toca el micrófono y di la frase.</p>
+    </div>
+    <div class="speech-phrase-box">
+      <div class="speech-label">Di esta frase:</div>
+      <div class="speech-target" id="speechTarget">Cargando...</div>
+      <div class="speech-translation" id="speechTranslation"></div>
+    </div>
+    <button class="mic-btn" id="micBtn" type="button">
+      <span class="mic-icon" id="micIcon">🎙️</span>
+      <span class="mic-pulse" id="micPulse"></span>
+    </button>
+    <div class="speech-status" id="speechStatus">Toca el micrófono para empezar</div>
+    <div class="speech-result" id="speechResult"></div>
+    <div class="speech-actions">
+      <button class="btn-secondary" id="speechSkip" type="button">Saltar →</button>
+      <button class="btn-secondary" id="speechListen" type="button">🔊 Escuchar</button>
+    </div>
+    <div class="speech-score">
+      <span>Aciertos: <strong id="speechScore">0</strong></span>
+      <span>de <strong id="speechTotal">0</strong></span>
+    </div>
   </div>
 </div>
 
-<!-- HEADER -->
+<div class="modal" id="achievementsModal" role="dialog" aria-modal="true">
+  <div class="modal-card achievements-card">
+    <h2>🏆 Logros</h2>
+    <p>Tu colección de medallas y logros.</p>
+    <div class="achievements-grid" id="achievementsGrid"></div>
+    <button class="btn-primary" id="achievementsClose">Cerrar</button>
+  </div>
+</div>
+
 <header>
   <div class="logo">Cognados<em id="logoLang">italiano</em></div>
   <div class="head-right">
@@ -84,12 +123,29 @@
     ⚡ Jugar Repaso Rápido (3 min)
   </button>
 
+  <div class="feature-btns">
+    <button class="feature-btn speech-feature-btn" id="btnSpeechMode" type="button">
+      <span class="feature-icon">🎙️</span>
+      <span class="feature-text">Modo Habla</span>
+      <span class="feature-badge">Nuevo</span>
+    </button>
+    <button class="feature-btn achievements-feature-btn" id="btnAchievements" type="button">
+      <span class="feature-icon">🏆</span>
+      <span class="feature-text">Logros</span>
+      <span class="feature-badge" id="achievementsBadge">0</span>
+    </button>
+    <button class="feature-btn story-feature-btn" id="btnStoryMode" type="button">
+      <span class="feature-icon">📖</span>
+      <span class="feature-text">Modo Historia</span>
+      <span class="feature-badge">Nuevo</span>
+    </button>
+  </div>
+
   <div class="review-banner" id="reviewBanner" role="status">
     <p>🔁 Tienes <strong id="reviewCount">0</strong> elementos pendientes.</p>
     <button id="reviewBtn">Repasar ahora</button>
   </div>
 
-  <!-- VOCABULARIO -->
   <section id="vocabulario">
     <div class="section-head">
       <p class="kicker">Lo básico</p>
@@ -100,7 +156,6 @@
     <div class="vocab-grid" id="vocabGrid"></div>
   </section>
 
-  <!-- COGNADOS -->
   <section id="cognados">
     <div class="section-head">
       <p class="kicker" id="catKicker">Categoría 1</p>
@@ -111,7 +166,6 @@
     <div class="grid" id="cardGrid"></div>
   </section>
 
-  <!-- TRAMPAS -->
   <section id="trampa">
     <div class="section-head">
       <p class="kicker">La trampa</p>
@@ -121,16 +175,15 @@
     <div class="trap">
       <div class="trap-top">
         <div class="tword" id="trapWord"></div>
-        <button class="speak-btn" id="trapSpeak">🔊</button>
+        <button class="speak-btn" id="trapSpeak" type="button">🔊</button>
       </div>
       <p class="prompt" id="trapPrompt"></p>
       <div class="opts" id="trapOpts"></div>
       <div class="feedback" id="trapFeedback" role="status"></div>
-      <button class="next-btn" id="nextTrap">Siguiente →</button>
+      <button class="next-btn" id="nextTrap" type="button">Siguiente →</button>
     </div>
   </section>
 
-  <!-- VERBOS -->
   <section id="verbos">
     <div class="section-head">
       <p class="kicker">Base del idioma</p>
@@ -149,12 +202,11 @@
           <div class="ex-it" id="exIt"></div>
           <div class="ex-es" id="exEs"></div>
         </div>
-        <button class="survival-speak" id="exSpeak">🔊</button>
+        <button class="survival-speak" id="exSpeak" type="button">🔊</button>
       </div>
     </div>
   </section>
 
-  <!-- CONSTRUCTOR -->
   <section id="constructor">
     <div class="section-head">
       <p class="kicker">Producción real</p>
@@ -167,15 +219,14 @@
       <div class="builder-answer" id="builderAnswer"></div>
       <div class="builder-pool" id="builderPool"></div>
       <div class="builder-actions">
-        <button class="primary" id="builderCheck">Comprobar</button>
-        <button id="builderClear">Limpiar</button>
-        <button id="builderNext">Siguiente →</button>
+        <button class="primary" id="builderCheck" type="button">Comprobar</button>
+        <button id="builderClear" type="button">Limpiar</button>
+        <button id="builderNext" type="button">Siguiente →</button>
       </div>
       <div class="builder-feedback" id="builderFeedback" role="status"></div>
     </div>
   </section>
 
-  <!-- SUPERVIVENCIA -->
   <section id="supervivencia">
     <div class="section-head">
       <p class="kicker">Para viajar</p>
@@ -186,7 +237,6 @@
     <div class="survival-list" id="survivalList"></div>
   </section>
 
-  <!-- TUTOR IA -->
   <section id="tutor">
     <div class="section-head">
       <p class="kicker">Conversación</p>
@@ -200,7 +250,7 @@
           <div class="chat-name" id="chatName"></div>
           <div class="chat-status" id="chatStatus"></div>
         </div>
-        <button class="chat-reset" id="chatReset" title="Nueva conversación">↻</button>
+        <button class="chat-reset" id="chatReset" title="Nueva conversación" type="button">↻</button>
       </div>
       <div class="chat-messages" id="chatMessages" role="log"></div>
       <div class="chat-starters" id="chatStarters"></div>
@@ -213,6 +263,29 @@
         <textarea id="chatTextarea" placeholder="Escribe..." rows="1"></textarea>
         <button type="submit" id="chatSend">➤</button>
       </form>
+    </div>
+  </section>
+
+  <section id="historia">
+    <div class="section-head">
+      <p class="kicker">Lectura interactiva</p>
+      <h2>📖 Modo Historia</h2>
+      <p class="sub">Lee historias cortas y responde preguntas de comprensión.</p>
+    </div>
+    <div class="story-container" id="storyContainer">
+      <div class="story-nav" id="storyNav"></div>
+      <div class="story-card" id="storyCard">
+        <div class="story-header">
+          <span class="story-difficulty" id="storyDifficulty">A1</span>
+          <span class="story-title" id="storyTitle">Cargando...</span>
+        </div>
+        <div class="story-body" id="storyBody"></div>
+        <div class="story-vocab" id="storyVocab"></div>
+        <div class="story-questions" id="storyQuestions"></div>
+        <div class="story-actions">
+          <button class="btn-primary" id="storyNext" type="button">Siguiente historia →</button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -244,7 +317,6 @@
   var trapIndex = 0, currentCat = 0, currentVerb = 0, builderIndex = 0, builderSelection = [];
   var currentSurvivalCat = 0, currentVocabCat = 0;
 
-  // ============ CONFIGURACIÓN DE IA (VERCEL) ============
   async function callAI(history) {
     var payload = {
       systemPrompt: DATA[lang].tutor.systemPrompt,
@@ -267,7 +339,7 @@
   function escapeHTML(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
   function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t;} return a; }
 
-  // ============ GAME JUICE: SONIDOS Y CONFETI ============
+  // GAME JUICE
   var audioCtx = null;
   function playSound(type) {
     try {
@@ -301,7 +373,7 @@
     }
   }
 
-  // ============ LÓGICA DEL JUEGO RÁPIDO ============
+  // LOGICA DEL JUEGO
   var gameQuestions = [], gameIndex = 0, gameScore = 0;
 
   document.getElementById('btnQuickReview').onclick = function() {
@@ -312,32 +384,59 @@
     renderGameQuestion();
   };
 
-  function generateGameQuestions() {
+   function generateGameQuestions() {
     gameQuestions = [];
     var lvl = getLevelData();
+    
+    // 1. Creamos un "pozo" (pool) con todas las palabras del nivel actual
+    var allWords = [];
+    lvl.categorias.forEach(function(cat) {
+      cat.cognados.forEach(function(c) { allWords.push(c.target); });
+    });
+    lvl.vocabulario_esencial.forEach(function(vocabCat) {
+      vocabCat.items.forEach(function(item) { allWords.push(item.target); });
+    });
+
+    // 2. Generamos las preguntas de vocabulario
     lvl.categorias.forEach(function(cat) {
       cat.cognados.forEach(function(c) {
-        var fake = cat.cognados[Math.floor(Math.random()*cat.cognados.length)].target;
-        if (fake === c.target) fake = "opción falsa";
-        gameQuestions.push({ q: "¿Cómo se dice '" + c.es + "'?", a: c.target, opts: [c.target, fake, "opción falsa 2"] });
+        // Filtramos para no usar la respuesta correcta como distractor
+        var availableDistractors = allWords.filter(function(w) { return w !== c.target; });
+        var shuffledDistractors = shuffle(availableDistractors);
+        
+        // Tomamos 2 palabras aleatorias del nivel como distractores reales
+        var opt1 = shuffledDistractors[0] || "palabra";
+        var opt2 = shuffledDistractors[1] || "frase";
+        
+        gameQuestions.push({ 
+          q: "¿Cómo se dice '" + c.es + "'?", 
+          a: c.target, 
+          opts: [c.target, opt1, opt2] 
+        });
       });
     });
+
+    // 3. Generamos las preguntas de verbos
     lvl.verbos.lista.forEach(function(v) {
       var idx = Math.floor(Math.random()*6);
       gameQuestions.push({
         q: "Verbo " + v.inf + " (" + v.es + "):<br>¿Cuál es la forma para '" + lvl.verbos.pronombres[idx].it + "'?",
-        a: v.formas[idx], opts: [v.formas[idx], v.formas[(idx+1)%6], v.formas[(idx+2)%6]]
+        a: v.formas[idx], 
+        opts: [v.formas[idx], v.formas[(idx+1)%6], v.formas[(idx+2)%6]]
       });
     });
+
+    // 4. Mezclamos todo y tomamos 10 preguntas
     gameQuestions = shuffle(gameQuestions).slice(0, 10);
+    
+    // 5. Aseguramos que siempre haya 3 opciones válidas y mezcladas
     gameQuestions.forEach(function(q) {
       q.opts = shuffle(q.opts.filter(function(o, i, arr){ return arr.indexOf(o) === i; }));
-      while(q.opts.length < 3) q.opts.push("---");
+      while(q.opts.length < 3) q.opts.push("..."); // Relleno de seguridad extremo
       if(q.opts.indexOf(q.a) === -1) q.opts[0] = q.a;
       q.opts = shuffle(q.opts);
     });
   }
-
   function renderGameQuestion() {
     if (gameIndex >= gameQuestions.length) {
       fireConfetti(); playSound('success');
@@ -353,7 +452,7 @@
     document.getElementById('gameQuestion').innerHTML = q.q;
     var optsEl = document.getElementById('gameOptions'); optsEl.innerHTML = '';
     q.opts.forEach(function(opt) {
-      var btn = document.createElement('button'); btn.className = 'game-opt'; btn.textContent = opt;
+      var btn = document.createElement('button'); btn.className = 'game-opt'; btn.textContent = opt; btn.type = 'button';
       btn.onclick = function() {
         Array.prototype.forEach.call(optsEl.children, function(b){ b.disabled = true; });
         if (opt === q.a) { btn.classList.add('correct'); playSound('success'); gameScore++; }
@@ -367,7 +466,7 @@
     });
   }
 
-  // ============ AUDIO TTS ============
+  // AUDIO TTS
   var ttsAvailable = 'speechSynthesis' in window, availableVoices = [];
   if(ttsAvailable){
     availableVoices = window.speechSynthesis.getVoices();
@@ -384,7 +483,7 @@
     }catch(e){}
   }
 
-  // ============ ESTADO Y TEMA ============
+  // ESTADO Y TEMA
   function initTheme(){
     var saved = null; try{ saved = localStorage.getItem('ponte-theme'); }catch(e){}
     document.documentElement.setAttribute('data-theme', saved || 'dark');
@@ -444,11 +543,11 @@
     state.xp += ok ? 15 : 5; state.done = (state.done || 0) + 1; saveState();
   }
 
-  // ============ RENDERS ============
+  // RENDERS
   function renderVocabCats(){
     var wrap = document.getElementById('vocabCats'); wrap.innerHTML = '';
     getLevelData().vocabulario_esencial.forEach(function(v, i){
-      var btn = document.createElement('button'); btn.className = 'survival-cat' + (i === currentVocabCat ? ' active' : ''); btn.textContent = v.icon + ' ' + v.cat;
+      var btn = document.createElement('button'); btn.className = 'survival-cat' + (i === currentVocabCat ? ' active' : ''); btn.textContent = v.icon + ' ' + v.cat; btn.type = 'button';
       btn.onclick = function(){ currentVocabCat = i; renderVocabCats(); renderVocabList(); };
       wrap.appendChild(btn);
     });
@@ -457,7 +556,7 @@
     var grid = document.getElementById('vocabGrid'); grid.innerHTML = '';
     getLevelData().vocabulario_esencial[currentVocabCat].items.forEach(function(item){
       var card = document.createElement('div'); card.className = 'survival-item';
-      card.innerHTML = '<div class="survival-text"><div class="survival-es">' + escapeHTML(item.es) + '</div><div class="survival-target">' + escapeHTML(item.target) + '</div></div><button class="survival-speak">🔊</button>';
+      card.innerHTML = '<div class="survival-text"><div class="survival-es">' + escapeHTML(item.es) + '</div><div class="survival-target">' + escapeHTML(item.target) + '</div></div><button class="survival-speak" type="button">🔊</button>';
       card.querySelector('.survival-speak').onclick = function(){ speak(item.target); };
       grid.appendChild(card);
     });
@@ -466,10 +565,15 @@
   function renderCatTabs(){
     var tabs = document.getElementById('catTabs'); tabs.innerHTML = '';
     getLevelData().categorias.forEach(function(cat, i){
-      var btn = document.createElement('button'); btn.className = 'cat-tab' + (i === currentCat ? ' active' : ''); btn.textContent = cat.titulo;
+      var btn = document.createElement('button'); btn.className = 'cat-tab' + (i === currentCat ? ' active' : ''); btn.textContent = cat.titulo; btn.type = 'button';
       var allDone = cat.cognados.every(function(_, idx){ var k = currentLevel+'-c-'+cat.id+'-'+idx; return state.cards[k] && state.cards[k].done; });
       if(allDone) btn.classList.add('done');
-      btn.onclick = function(){ currentCat = i; renderAll(); document.getElementById('cognados').scrollIntoView({behavior: 'smooth'}); };
+      btn.onclick = function(){
+  currentCat = i;
+  renderCatTabs();
+  renderCards();
+  document.getElementById('cognados').scrollIntoView({behavior: 'smooth'});
+};
       tabs.appendChild(btn);
     });
   }
@@ -483,7 +587,7 @@
       var key = currentLevel+'-c-'+cat.id+'-'+i;
       var isDone = state.cards[key] && state.cards[key].done;
       var card = document.createElement('div'); card.className = 'card' + (isDone ? ' flipped done' : '');
-      card.innerHTML = '<span class="check">✓</span><div class="face front"><div class="es">Español</div><div class="es-word">' + pair.es + '</div><div class="hint">¿en ' + DATA[lang].label + '?</div></div><div class="face back"><div class="word">' + pair.target + '</div><div class="pattern">' + cat.titulo + '</div></div><span class="speak-mini">🔊</span>';
+      card.innerHTML = '<span class="check">✓</span><div class="face front"><div class="es">Español</div><div class="es-word">' + pair.es + '</div><div class="hint">¿en ' + DATA[lang].label + '?</div></div><div class="face back"><div class="word">' + pair.target + '</div><div class="pattern">' + cat.titulo + '</div></div><span class="speak-mini" type="button">🔊</span>';
       card.onclick = function(e){
         if(e.target.classList.contains('speak-mini')){ e.stopPropagation(); speak(pair.target); return; }
         var just = !card.classList.contains('flipped');
@@ -494,42 +598,44 @@
     });
   }
 
+  // TRAMPAS (BUG ARREGLADO)
   function renderTrap(idx){
     var t = getLevelData().trampas[idx]; if(!t) return;
     document.getElementById('trapWord').textContent = t.word;
     document.getElementById('trapPrompt').textContent = 'En ' + DATA[lang].label + ', "' + t.word + '" significa...';
     document.getElementById('trapFeedback').innerHTML = '';
-    document.getElementById('nextTrap').style.display = 'none';
+    var nextBtn = document.getElementById('nextTrap');
+    nextBtn.style.display = 'none';
+    
     var optsEl = document.getElementById('trapOpts'); optsEl.innerHTML = '';
     var opts = t.opts.slice().sort(function(){return Math.random()-0.5;});
+    
     opts.forEach(function(o){
-      var btn = document.createElement('button'); btn.className = 'opt'; btn.textContent = o[0];
+      var btn = document.createElement('button'); btn.className = 'opt'; btn.textContent = o[0]; btn.type = 'button';
       btn.onclick = function(){
         Array.prototype.forEach.call(optsEl.children, function(b){ b.disabled = true; });
-        if(o[1]){ 
-          btn.classList.add('correct'); 
-          addTrapDone(idx, true); 
-          playSound('success'); 
-        } else { 
-          btn.classList.add('wrong'); 
-          addTrapDone(idx, false); 
-          playSound('error'); 
-          Array.prototype.forEach.call(optsEl.children, function(b){ if(b.dataset.correct === 'true') b.classList.add('correct'); });
-        }
+        if(o[1]){ btn.classList.add('correct'); addTrapDone(idx, true); playSound('success'); } 
+        else { btn.classList.add('wrong'); addTrapDone(idx, false); playSound('error'); Array.prototype.forEach.call(optsEl.children, function(b){ if(b.dataset.correct === 'true') b.classList.add('correct'); }); }
         document.getElementById('trapFeedback').innerHTML = '<strong>'+(o[1]?'¡Exacto!':'Casi.')+'</strong> ' + escapeHTML(t.note) + '<span class="mnemonic">💡 ' + escapeHTML(t.mnemonic) + '</span>';
-        document.getElementById('nextTrap').style.display = 'inline-block';
+        nextBtn.style.display = 'inline-block';
+        nextBtn.textContent = (idx < getLevelData().trampas.length - 1) ? 'Siguiente trampa →' : 'Volver al inicio →';
         refreshCounters();
       };
       if(o[1]) btn.dataset.correct = 'true';
       optsEl.appendChild(btn);
     });
+    
+    nextBtn.onclick = function(){
+      trapIndex = (trapIndex + 1) % getLevelData().trampas.length;
+      renderTrap(trapIndex);
+    };
     document.getElementById('trapSpeak').onclick = function(){ speak(t.word); };
   }
 
   function renderVerbSelector(){
     var wrap = document.getElementById('verbSelector'); wrap.innerHTML = '';
     getLevelData().verbos.lista.forEach(function(v, i){
-      var btn = document.createElement('button'); btn.className = 'verb-pill' + (i === currentVerb ? ' active' : ''); btn.textContent = v.inf;
+      var btn = document.createElement('button'); btn.className = 'verb-pill' + (i === currentVerb ? ' active' : ''); btn.textContent = v.inf; btn.type = 'button';
       btn.onclick = function(){ currentVerb = i; renderVerbSelector(); renderVerbCard(); };
       wrap.appendChild(btn);
     });
@@ -544,7 +650,7 @@
     v.formas.forEach(function(forma, i){
       var pro = getLevelData().verbos.pronombres[i];
       var row = document.createElement('div'); row.className = 'conj-row';
-      row.innerHTML = '<span class="conj-pron">'+pro.it+' <em>('+pro.es+')</em></span><span class="conj-form">'+forma+'</span><button class="conj-speak">🔊</button>';
+      row.innerHTML = '<span class="conj-pron">'+pro.it+' <em>('+pro.es+')</em></span><span class="conj-form">'+forma+'</span><button class="conj-speak" type="button">🔊</button>';
       row.querySelector('.conj-speak').onclick = function(){ speak(forma); };
       grid.appendChild(row);
     });
@@ -560,13 +666,13 @@
     var pool = document.getElementById('builderPool'); pool.innerHTML = '';
     var all = []; ex.palabras.forEach(function(w){ all.push({text:w, ok:true}); }); ex.distractores.forEach(function(w){ all.push({text:w, ok:false}); });
     shuffle(all).forEach(function(item){
-      var chip = document.createElement('button'); chip.className = 'word-chip'; chip.textContent = item.text;
+      var chip = document.createElement('button'); chip.className = 'word-chip'; chip.textContent = item.text; chip.type = 'button';
       chip.onclick = function(){
         chip.classList.add('used'); chip.disabled = true;
         builderSelection.push({text:item.text, chip:chip});
         var a = document.getElementById('builderAnswer'); a.innerHTML = '';
         builderSelection.forEach(function(it, idx){
-          var c = document.createElement('button'); c.className = 'word-chip selected'; c.textContent = it.text;
+          var c = document.createElement('button'); c.className = 'word-chip selected'; c.textContent = it.text; c.type = 'button';
           c.onclick = function(){ it.chip.classList.remove('used'); it.chip.disabled = false; builderSelection.splice(idx,1); renderBuilderAns(); };
           a.appendChild(c);
         });
@@ -578,7 +684,7 @@
   function renderBuilderAns(){
     var a = document.getElementById('builderAnswer'); a.innerHTML = '';
     builderSelection.forEach(function(it, idx){
-      var c = document.createElement('button'); c.className = 'word-chip selected'; c.textContent = it.text;
+      var c = document.createElement('button'); c.className = 'word-chip selected'; c.textContent = it.text; c.type = 'button';
       c.onclick = function(){ it.chip.classList.remove('used'); it.chip.disabled = false; builderSelection.splice(idx,1); renderBuilderAns(); };
       a.appendChild(c);
     });
@@ -598,7 +704,7 @@
   function renderSurvivalCats(){
     var wrap = document.getElementById('survivalCats'); wrap.innerHTML = '';
     getLevelData().supervivencia.forEach(function(cat, i){
-      var b = document.createElement('button'); b.className = 'survival-cat' + (i===currentSurvivalCat?' active':''); b.textContent = cat.icono+' '+cat.categoria;
+      var b = document.createElement('button'); b.className = 'survival-cat' + (i===currentSurvivalCat?' active':''); b.textContent = cat.icono+' '+cat.categoria; b.type = 'button';
       b.onclick = function(){ currentSurvivalCat = i; renderSurvivalCats(); renderSurvivalList(); };
       wrap.appendChild(b);
     });
@@ -607,13 +713,12 @@
     var list = document.getElementById('survivalList'); list.innerHTML = '';
     getLevelData().supervivencia[currentSurvivalCat].frases.forEach(function(f){
       var d = document.createElement('div'); d.className = 'survival-item';
-      d.innerHTML = '<div class="survival-text"><div class="survival-es">'+escapeHTML(f.es)+'</div><div class="survival-target">'+escapeHTML(f.target)+'</div></div><button class="survival-speak">🔊</button>';
+      d.innerHTML = '<div class="survival-text"><div class="survival-es">'+escapeHTML(f.es)+'</div><div class="survival-target">'+escapeHTML(f.target)+'</div></div><button class="survival-speak" type="button">🔊</button>';
       d.querySelector('.survival-speak').onclick = function(){ speak(f.target); };
       list.appendChild(d);
     });
   }
 
-  // ============ TUTOR IA ============
   var chatHistory = [];
   function renderChatHeader(){
     var t = DATA[lang].tutor;
@@ -649,14 +754,8 @@
       chatHistory.push({role:'model', text:resText}); renderChat(); speak(resText);
     }catch(err){
       document.getElementById('typing').remove();
-      var errorMsg;
-      if (err.message === 'RATE_LIMIT') {
-        errorMsg = '⚠️ He alcanzado mi límite de respuestas por hoy. ¡Vuelve mañana para seguir practicando conmigo! Mientras tanto, puedes usar las tarjetas y los verbos.';
-      } else {
-        errorMsg = '⚠️ Error de conexión. Por favor, inténtalo de nuevo más tarde.';
-      }
-      chatHistory.push({role:'model', text: errorMsg}); 
-      renderChat();
+      var errorMsg = err.message === 'RATE_LIMIT' ? '⚠️ He alcanzado mi límite de respuestas por hoy. ¡Vuelve mañana!' : '⚠️ Error de conexión.';
+      chatHistory.push({role:'model', text: errorMsg}); renderChat();
     }
   };
   document.getElementById('chatReset').onclick = function(){
@@ -664,9 +763,509 @@
     chatHistory = [{role:'model', text:DATA[lang].tutor.greeting}]; renderChat();
   };
 
-  // ============ MASTER RENDER ============
+  // ============================================================
+  //  SPEECH MODE (Modo Habla 🎙️)
+  // ============================================================
+  var speechPhrases = [], speechIndex = 0, speechCorrect = 0, speechTotal = 0;
+  var recognition = null, isRecording = false;
+
+  function getSpeechPhrases() {
+    var lvl = getLevelData();
+    var phrases = [];
+    // From survival phrases
+    lvl.supervivencia.forEach(function(cat) {
+      cat.frases.forEach(function(f) {
+        phrases.push({ target: f.target, es: f.es });
+      });
+    });
+    // From vocabulary
+    lvl.vocabulario_esencial.forEach(function(cat) {
+      cat.items.forEach(function(item) {
+        phrases.push({ target: item.target, es: item.es });
+      });
+    });
+    return shuffle(phrases).slice(0, 15);
+  }
+
+  function openSpeechMode() {
+    speechPhrases = getSpeechPhrases();
+    if (speechPhrases.length === 0) return alert('No hay frases disponibles.');
+    speechIndex = 0; speechCorrect = 0; speechTotal = 0;
+    document.getElementById('speechModal').classList.add('show');
+    renderSpeechPhrase();
+  }
+
+  function renderSpeechPhrase() {
+    if (speechIndex >= speechPhrases.length) {
+      // Show results
+      fireConfetti(); playSound('success');
+      var pct = speechTotal > 0 ? Math.round((speechCorrect / speechTotal) * 100) : 0;
+      document.getElementById('speechCard').innerHTML =
+        '<div class="speech-close" id="speechCloseEnd">✕</div>' +
+        '<div class="speech-emoji">🎉</div>' +
+        '<h2 style="font-family:var(--font-display); font-size:1.8rem; margin:0.5rem 0;">¡Increíble!</h2>' +
+        '<p style="opacity:0.8; margin-bottom:1rem;">Has practicado tu pronunciación</p>' +
+        '<div class="celebration-stats">' +
+          '<div class="stat"><div class="value">' + speechCorrect + '/' + speechTotal + '</div><div class="label">aciertos</div></div>' +
+          '<div class="stat"><div class="value">' + pct + '%</div><div class="label">precisión</div></div>' +
+        '</div>' +
+        '<p style="font-size:0.85rem; opacity:0.65; margin:1rem 0;">+' + (speechCorrect * 8) + ' XP ganados</p>' +
+        '<button class="btn-primary" onclick="document.getElementById(\'speechModal\').classList.remove(\'show\'); location.reload();">Volver</button>';
+      document.getElementById('speechCloseEnd').onclick = function() {
+        document.getElementById('speechModal').classList.remove('show'); location.reload();
+      };
+      state.xp += (speechCorrect * 8); saveState();
+      checkAchievements();
+      return;
+    }
+    var p = speechPhrases[speechIndex];
+    document.getElementById('speechTarget').textContent = p.target;
+    document.getElementById('speechTranslation').textContent = p.es;
+    document.getElementById('speechStatus').textContent = 'Toca el micrófono para empezar';
+    document.getElementById('speechStatus').className = 'speech-status';
+    document.getElementById('speechResult').innerHTML = '';
+    document.getElementById('speechScore').textContent = speechCorrect;
+    document.getElementById('speechTotal').textContent = speechTotal;
+    document.getElementById('micBtn').classList.remove('recording');
+  }
+
+  function normalizeSpeech(text) {
+    return text.toLowerCase().replace(/[.,!?¿¡;:'"…\-]/g, '').replace(/\s+/g, ' ').trim();
+  }
+
+  function compareSpeech(heard, expected) {
+    var h = normalizeSpeech(heard);
+    var e = normalizeSpeech(expected);
+    if (h === e) return 1;
+    // Fuzzy: check if most words match
+    var hWords = h.split(' ');
+    var eWords = e.split(' ');
+    var matches = 0;
+    eWords.forEach(function(w) { if (hWords.indexOf(w) !== -1) matches++; });
+    return eWords.length > 0 ? matches / eWords.length : 0;
+  }
+
+  document.getElementById('micBtn').onclick = function() {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      document.getElementById('speechStatus').textContent = '⚠️ Tu navegador no soporta reconocimiento de voz.';
+      return;
+    }
+    if (isRecording && recognition) {
+      recognition.stop();
+      return;
+    }
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SR();
+    recognition.lang = DATA[lang].voice;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 3;
+
+    recognition.onstart = function() {
+      isRecording = true;
+      document.getElementById('micBtn').classList.add('recording');
+      document.getElementById('speechStatus').textContent = '🎤 Escuchando...';
+      document.getElementById('speechStatus').className = 'speech-status listening';
+    };
+
+    recognition.onresult = function(event) {
+      var results = event.results[0];
+      var bestMatch = 0;
+      var bestText = '';
+      for (var i = 0; i < results.length; i++) {
+        var score = compareSpeech(results[i].transcript, speechPhrases[speechIndex].target);
+        if (score > bestMatch) { bestMatch = score; bestText = results[i].transcript; }
+      }
+      speechTotal++;
+      var resultEl = document.getElementById('speechResult');
+      if (bestMatch >= 0.7) {
+        speechCorrect++;
+        resultEl.innerHTML = '<div class="result-correct">✅ ¡Perfecto! "' + escapeHTML(bestText) + '"</div>';
+        playSound('success');
+        state.xp += 3; saveState();
+      } else {
+        resultEl.innerHTML = '<div class="result-wrong">❌ Casi...<span class="heard">Escuché: "' + escapeHTML(bestText) + '"</span></div>';
+        playSound('error');
+      }
+      document.getElementById('speechScore').textContent = speechCorrect;
+      document.getElementById('speechTotal').textContent = speechTotal;
+      setTimeout(function() { speechIndex++; renderSpeechPhrase(); }, 2000);
+    };
+
+    recognition.onerror = function(event) {
+      isRecording = false;
+      document.getElementById('micBtn').classList.remove('recording');
+      if (event.error === 'no-speech') {
+        document.getElementById('speechStatus').textContent = 'No escuché nada. Intenta de nuevo.';
+      } else {
+        document.getElementById('speechStatus').textContent = '⚠️ Error: ' + event.error;
+      }
+      document.getElementById('speechStatus').className = 'speech-status';
+    };
+
+    recognition.onend = function() {
+      isRecording = false;
+      document.getElementById('micBtn').classList.remove('recording');
+      document.getElementById('speechStatus').className = 'speech-status';
+      if (document.getElementById('speechStatus').textContent === '🎤 Escuchando...') {
+        document.getElementById('speechStatus').textContent = 'Toca el micrófono para empezar';
+      }
+    };
+
+    recognition.start();
+  };
+
+  document.getElementById('speechClose').onclick = function() {
+    if (recognition) try { recognition.stop(); } catch(e) {}
+    document.getElementById('speechModal').classList.remove('show');
+  };
+  document.getElementById('speechSkip').onclick = function() {
+    speechTotal++;
+    speechIndex++;
+    renderSpeechPhrase();
+  };
+  document.getElementById('speechListen').onclick = function() {
+    if (speechPhrases[speechIndex]) speak(speechPhrases[speechIndex].target);
+  };
+  document.getElementById('btnSpeechMode').onclick = openSpeechMode;
+
+  // ============================================================
+  //  ACHIEVEMENTS (Logros 🏆)
+  // ============================================================
+  var ACHIEVEMENTS = [
+    { id: 'first_card', icon: '🌟', name: 'Primera Carta', desc: 'Voltea tu primera tarjeta de cognado.', check: function() { return (state.done || 0) >= 1; } },
+    { id: 'ten_cards', icon: '🃏', name: '10 Cognados', desc: 'Aprende 10 cognados.', check: function() { return Object.keys(state.cards || {}).filter(function(k){ return state.cards[k].done; }).length >= 10; } },
+    { id: 'fifty_cards', icon: '🎴', name: 'Coleccionista', desc: 'Aprende 50 cognados.', check: function() { return Object.keys(state.cards || {}).filter(function(k){ return state.cards[k].done; }).length >= 50; } },
+    { id: 'first_trap', icon: '🪤', name: 'Cazatrampas', desc: 'Resuelve tu primera trampa.', check: function() { return Object.keys(state.traps || {}).length >= 1; } },
+    { id: 'five_traps', icon: '🛡️', name: 'Resistente', desc: 'Resuelve 5 trampas.', check: function() { return Object.keys(state.traps || {}).filter(function(k){ return state.traps[k].done; }).length >= 5; } },
+    { id: 'xp_50', icon: '⭐', name: 'Aprendiz', desc: 'Acumula 50 XP.', check: function() { return (state.xp || 0) >= 50; } },
+    { id: 'xp_200', icon: '💫', name: 'Estudiante', desc: 'Acumula 200 XP.', check: function() { return (state.xp || 0) >= 200; } },
+    { id: 'xp_500', icon: '🔥', name: 'Maestro', desc: 'Acumula 500 XP.', check: function() { return (state.xp || 0) >= 500; } },
+    { id: 'streak_3', icon: '📅', name: '3 días seguidos', desc: 'Mantén una racha de 3 días.', check: function() { return (state.streak || 0) >= 3; } },
+    { id: 'streak_7', icon: '🗓️', name: 'Semana perfecta', desc: 'Mantén una racha de 7 días.', check: function() { return (state.streak || 0) >= 7; } },
+    { id: 'story_1', icon: '📖', name: 'Lector', desc: 'Completa tu primera historia.', check: function() { return (state.storiesCompleted || 0) >= 1; } },
+    { id: 'speech_1', icon: '🎙️', name: 'Hablante', desc: 'Completa una sesión de Modo Habla.', check: function() { return (state.speechSessions || 0) >= 1; } }
+  ];
+
+  function getUnlockedAchievements() {
+    if (!state.achievements) state.achievements = {};
+    var count = 0;
+    ACHIEVEMENTS.forEach(function(a) {
+      if (a.check()) {
+        if (!state.achievements[a.id]) {
+          state.achievements[a.id] = Date.now();
+          showAchievementToast(a);
+          count++;
+        }
+      }
+    });
+    if (count > 0) saveState();
+    return state.achievements;
+  }
+
+  function checkAchievements() {
+    getUnlockedAchievements();
+    updateAchievementBadge();
+  }
+
+  function updateAchievementBadge() {
+    var unlocked = state.achievements ? Object.keys(state.achievements).length : 0;
+    document.getElementById('achievementsBadge').textContent = unlocked + '/' + ACHIEVEMENTS.length;
+  }
+
+  function showAchievementToast(achievement) {
+    var toast = document.createElement('div');
+    toast.className = 'achievement-toast';
+    toast.innerHTML = '<span class="achievement-toast-icon">' + achievement.icon + '</span><div class="achievement-toast-text"><strong>¡Logro desbloqueado!</strong>' + escapeHTML(achievement.name) + '</div>';
+    document.body.appendChild(toast);
+    playSound('success');
+    setTimeout(function() {
+      toast.classList.add('leaving');
+      setTimeout(function() { toast.remove(); }, 500);
+    }, 3500);
+  }
+
+  function renderAchievements() {
+    var grid = document.getElementById('achievementsGrid');
+    grid.innerHTML = '';
+    var unlocked = state.achievements || {};
+    ACHIEVEMENTS.forEach(function(a) {
+      var isUnlocked = !!unlocked[a.id];
+      var item = document.createElement('div');
+      item.className = 'achievement-item ' + (isUnlocked ? 'unlocked' : 'locked');
+      item.innerHTML =
+        (isUnlocked ? '<span class="achievement-check">✓</span>' : '') +
+        '<span class="achievement-icon">' + a.icon + '</span>' +
+        '<div class="achievement-name">' + escapeHTML(a.name) + '</div>' +
+        '<div class="achievement-desc">' + escapeHTML(a.desc) + '</div>';
+      grid.appendChild(item);
+    });
+  }
+
+  document.getElementById('btnAchievements').onclick = function() {
+    checkAchievements();
+    renderAchievements();
+    document.getElementById('achievementsModal').classList.add('show');
+  };
+  document.getElementById('achievementsClose').onclick = function() {
+    document.getElementById('achievementsModal').classList.remove('show');
+  };
+
+  // ============================================================
+  //  STORY MODE (Modo Historia 📖)
+  // ============================================================
+  var STORIES = {
+    it: [
+      {
+        id: 'caffe', title: 'Un caffè a Roma', difficulty: 'A1',
+        body: [
+          'Marco va al <hl data-es="bar">bar</hl> ogni <hl data-es="mañana">mattina</hl>.',
+          'Lui <hl data-es="pide">ordina</hl> un <hl data-es="café">caffè</hl> e un <hl data-es="cruasán">cornetto</hl>.',
+          'Il barista dice: "<hl data-es="Buenos días">Buongiorno</hl>, Marco!"',
+          'Marco <hl data-es="responde">risponde</hl>: "Buongiorno! Un caffè, <hl data-es="por favor">per favore</hl>."',
+          'Il caffè è <hl data-es="bueno">buono</hl>. Marco è <hl data-es="feliz">felice</hl>.'
+        ],
+        vocab: [
+          { target: 'bar', es: 'bar/cafetería' },
+          { target: 'mattina', es: 'mañana' },
+          { target: 'caffè', es: 'café' },
+          { target: 'cornetto', es: 'cruasán' },
+          { target: 'buono', es: 'bueno' }
+        ],
+        questions: [
+          { q: '¿Adónde va Marco cada mañana?', opts: [['Al bar', true], ['Al parque', false], ['Al trabajo', false]] },
+          { q: '¿Qué ordena Marco?', opts: [['Un caffè e un cornetto', true], ['Una pizza', false], ['Un gelato', false]] },
+          { q: '¿Cómo está Marco?', opts: [['Felice (feliz)', true], ['Triste', false], ['Arrabbiato (enojado)', false]] }
+        ]
+      },
+      {
+        id: 'viaggio', title: 'Il viaggio a Firenze', difficulty: 'A2',
+        body: [
+          'Laura <hl data-es="quiere">vuole</hl> <hl data-es="visitar">visitare</hl> Firenze.',
+          'Lei <hl data-es="compra">compra</hl> un <hl data-es="billete">biglietto</hl> del treno.',
+          'Il <hl data-es="viaje">viaggio</hl> dura due <hl data-es="horas">ore</hl>.',
+          'A Firenze, Laura <hl data-es="ve">vede</hl> il <hl data-es="Duomo">Duomo</hl> e il Ponte Vecchio.',
+          'Lei <hl data-es="toma fotos">fa delle foto</hl> e <hl data-es="come">mangia</hl> un gelato.',
+          '"Firenze è <hl data-es="bellissima">bellissima</hl>!" dice Laura.'
+        ],
+        vocab: [
+          { target: 'visitare', es: 'visitar' },
+          { target: 'biglietto', es: 'billete' },
+          { target: 'viaggio', es: 'viaje' },
+          { target: 'ore', es: 'horas' },
+          { target: 'bellissima', es: 'bellísima' }
+        ],
+        questions: [
+          { q: '¿Adónde quiere ir Laura?', opts: [['A Firenze', true], ['A Roma', false], ['A Venezia', false]] },
+          { q: '¿Cuánto dura el viaje?', opts: [['Due ore (2 horas)', true], ['Una hora', false], ['Tre ore', false]] },
+          { q: '¿Qué come Laura en Firenze?', opts: [['Un gelato', true], ['Una pizza', false], ['Un cornetto', false]] }
+        ]
+      },
+      {
+        id: 'mercato', title: 'Al mercato', difficulty: 'B1',
+        body: [
+          'Ogni <hl data-es="sábado">sabato</hl>, la <hl data-es="familia">famiglia</hl> Rossi va al <hl data-es="mercado">mercato</hl>.',
+          'La <hl data-es="madre">mamma</hl> compra la <hl data-es="fruta">frutta</hl>: mele, arance e <hl data-es="fresas">fragole</hl>.',
+          'Il papà <hl data-es="elige">sceglie</hl> il <hl data-es="pescado fresco">pesce fresco</hl>.',
+          'I bambini <hl data-es="quieren">vogliono</hl> <hl data-es="siempre">sempre</hl> la <hl data-es="pizza">pizza</hl>.',
+          '"<hl data-es="Hoy">Oggi</hl> <hl data-es="cocino">cucino</hl> io!" dice il papà.',
+          'La <hl data-es="cena">cena</hl> è <hl data-es="deliciosa">deliziosa</hl>.'
+        ],
+        vocab: [
+          { target: 'mercato', es: 'mercado' },
+          { target: 'frutta', es: 'fruta' },
+          { target: 'fragole', es: 'fresas' },
+          { target: 'pesce fresco', es: 'pescado fresco' },
+          { target: 'deliziosa', es: 'deliciosa' }
+        ],
+        questions: [
+          { q: '¿Cuándo va la familia al mercado?', opts: [['Ogni sabato', true], ['Ogni domenica', false], ['Ogni lunedì', false]] },
+          { q: '¿Quién cocina hoy?', opts: [['Il papà', true], ['La mamma', false], ['I bambini', false]] },
+          { q: '¿Qué quieren siempre los niños?', opts: [['La pizza', true], ['Il pesce', false], ['La frutta', false]] }
+        ]
+      }
+    ],
+    fr: [
+      {
+        id: 'cafe_paris', title: 'Un café à Paris', difficulty: 'A1',
+        body: [
+          'Sophie va au <hl data-es="café">café</hl> <hl data-es="cada">chaque</hl> <hl data-es="mañana">matin</hl>.',
+          'Elle <hl data-es="pide">commande</hl> un <hl data-es="café">café</hl> et un <hl data-es="cruasán">croissant</hl>.',
+          'Le serveur dit: "<hl data-es="Buenos días">Bonjour</hl>, Sophie!"',
+          'Sophie <hl data-es="responde">répond</hl>: "Bonjour! Un café, <hl data-es="por favor">s\'il vous plaît</hl>."',
+          'Le café est <hl data-es="bueno">bon</hl>. Sophie est <hl data-es="contenta">contente</hl>.'
+        ],
+        vocab: [
+          { target: 'café', es: 'café' },
+          { target: 'matin', es: 'mañana' },
+          { target: 'croissant', es: 'cruasán' },
+          { target: 'bon', es: 'bueno' },
+          { target: 'contente', es: 'contenta' }
+        ],
+        questions: [
+          { q: '¿Adónde va Sophie cada mañana?', opts: [['Au café', true], ['Au parc', false], ['Au travail', false]] },
+          { q: '¿Qué pide Sophie?', opts: [['Un café et un croissant', true], ['Une pizza', false], ['Un jus d\'orange', false]] },
+          { q: '¿Cómo se siente Sophie?', opts: [['Contente (contenta)', true], ['Triste', false], ['Fatiguée (cansada)', false]] }
+        ]
+      },
+      {
+        id: 'voyage_lyon', title: 'Le voyage à Lyon', difficulty: 'A2',
+        body: [
+          'Pierre <hl data-es="quiere">veut</hl> <hl data-es="visitar">visiter</hl> Lyon.',
+          'Il <hl data-es="compra">achète</hl> un <hl data-es="billete">billet</hl> de train.',
+          'Le <hl data-es="viaje">voyage</hl> <hl data-es="dura">dure</hl> deux <hl data-es="horas">heures</hl>.',
+          'À Lyon, Pierre <hl data-es="ve">voit</hl> la basilique et le <hl data-es="viejo">vieux</hl> Lyon.',
+          'Il <hl data-es="come">mange</hl> dans un <hl data-es="restaurante">restaurant</hl> <hl data-es="típico">typique</hl>.',
+          '"Lyon est <hl data-es="magnífica">magnifique</hl>!" dit Pierre.'
+        ],
+        vocab: [
+          { target: 'visiter', es: 'visitar' },
+          { target: 'billet', es: 'billete' },
+          { target: 'voyage', es: 'viaje' },
+          { target: 'heures', es: 'horas' },
+          { target: 'magnifique', es: 'magnífica' }
+        ],
+        questions: [
+          { q: '¿Adónde quiere ir Pierre?', opts: [['À Lyon', true], ['À Paris', false], ['À Marseille', false]] },
+          { q: '¿Cuánto dura el viaje?', opts: [['Deux heures (2 horas)', true], ['Une heure', false], ['Trois heures', false]] },
+          { q: '¿Qué dice Pierre sobre Lyon?', opts: [['Magnifique', true], ['Terrible', false], ['Ennuyeuse (aburrida)', false]] }
+        ]
+      },
+      {
+        id: 'marche', title: 'Au marché', difficulty: 'B1',
+        body: [
+          '<hl data-es="Cada">Chaque</hl> <hl data-es="domingo">dimanche</hl>, la <hl data-es="familia">famille</hl> Dupont va au <hl data-es="mercado">marché</hl>.',
+          'La <hl data-es="madre">mère</hl> <hl data-es="compra">achète</hl> des <hl data-es="frutas">fruits</hl>: des <hl data-es="manzanas">pommes</hl>, des oranges et des <hl data-es="fresas">fraises</hl>.',
+          'Le <hl data-es="padre">père</hl> <hl data-es="elige">choisit</hl> le <hl data-es="pescado fresco">poisson frais</hl>.',
+          'Les <hl data-es="niños">enfants</hl> <hl data-es="quieren">veulent</hl> <hl data-es="siempre">toujours</hl> des <hl data-es="crêpes">crêpes</hl>.',
+          '"<hl data-es="Hoy">Aujourd\'hui</hl>, je <hl data-es="cocino">cuisine</hl>!" dit le père.',
+          'Le <hl data-es="almuerzo">déjeuner</hl> est <hl data-es="delicioso">délicieux</hl>.'
+        ],
+        vocab: [
+          { target: 'marché', es: 'mercado' },
+          { target: 'fruits', es: 'frutas' },
+          { target: 'fraises', es: 'fresas' },
+          { target: 'poisson frais', es: 'pescado fresco' },
+          { target: 'délicieux', es: 'delicioso' }
+        ],
+        questions: [
+          { q: '¿Cuándo va la familia al mercado?', opts: [['Chaque dimanche', true], ['Chaque samedi', false], ['Chaque lundi', false]] },
+          { q: '¿Quién cocina hoy?', opts: [['Le père', true], ['La mère', false], ['Les enfants', false]] },
+          { q: '¿Qué quieren siempre los niños?', opts: [['Des crêpes', true], ['Du poisson', false], ['Des fruits', false]] }
+        ]
+      }
+    ]
+  };
+
+  var currentStoryIndex = 0;
+  var storyCompletedSet = {};
+
+  function getStories() { return STORIES[lang] || []; }
+
+  function renderStoryNav() {
+    var nav = document.getElementById('storyNav');
+    nav.innerHTML = '';
+    var stories = getStories();
+    stories.forEach(function(s, i) {
+      var btn = document.createElement('button');
+      btn.className = 'story-nav-btn' + (i === currentStoryIndex ? ' active' : '');
+      if (storyCompletedSet[lang + '-' + s.id]) btn.classList.add('completed');
+      btn.textContent = s.title;
+      btn.type = 'button';
+      btn.onclick = function() { currentStoryIndex = i; renderStoryNav(); renderStory(); };
+      nav.appendChild(btn);
+    });
+  }
+
+  function renderStory() {
+    var stories = getStories();
+    if (!stories.length) {
+      document.getElementById('storyCard').innerHTML = '<p style="opacity:0.6; text-align:center; padding:2rem;">No hay historias disponibles para este idioma.</p>';
+      return;
+    }
+    var s = stories[currentStoryIndex];
+    document.getElementById('storyDifficulty').textContent = s.difficulty;
+    document.getElementById('storyTitle').textContent = s.title;
+
+    // Body with highlights
+    var bodyHtml = '';
+    s.body.forEach(function(line) {
+      var parsed = line.replace(/<hl data-es="([^"]+)">([^<]+)<\/hl>/g, '<span class="story-highlight" title="$1">$2</span>');
+      bodyHtml += '<p class="paragraph">' + parsed + '</p>';
+    });
+    document.getElementById('storyBody').innerHTML = bodyHtml;
+
+    // Vocabulary chips
+    var vocabHtml = '';
+    s.vocab.forEach(function(v) {
+      vocabHtml += '<span class="story-vocab-chip"><span class="vocab-target">' + escapeHTML(v.target) + '</span> <span class="vocab-es">= ' + escapeHTML(v.es) + '</span></span>';
+    });
+    document.getElementById('storyVocab').innerHTML = vocabHtml;
+
+    // Questions
+    var qEl = document.getElementById('storyQuestions');
+    qEl.innerHTML = '';
+    var answeredCount = 0;
+    s.questions.forEach(function(question, qi) {
+      var block = document.createElement('div');
+      block.className = 'story-question-block';
+      block.innerHTML = '<div class="story-question-text">' + (qi + 1) + '. ' + escapeHTML(question.q) + '</div><div class="story-options" id="storyOpts' + qi + '"></div>';
+      qEl.appendChild(block);
+      var optsEl = block.querySelector('.story-options');
+      var shuffledOpts = shuffle(question.opts.slice());
+      shuffledOpts.forEach(function(opt) {
+        var btn = document.createElement('button');
+        btn.className = 'story-opt';
+        btn.textContent = opt[0];
+        btn.type = 'button';
+        btn.onclick = function() {
+          Array.prototype.forEach.call(optsEl.children, function(b) { b.disabled = true; });
+          if (opt[1]) {
+            btn.classList.add('correct');
+            playSound('success');
+            state.xp += 5; saveState(); refreshCounters();
+          } else {
+            btn.classList.add('wrong');
+            playSound('error');
+            Array.prototype.forEach.call(optsEl.children, function(b) {
+              if (b.textContent === question.opts.find(function(o){ return o[1]; })[0]) b.classList.add('correct');
+            });
+          }
+          answeredCount++;
+          if (answeredCount >= s.questions.length) {
+            storyCompletedSet[lang + '-' + s.id] = true;
+            if (!state.storiesCompleted) state.storiesCompleted = 0;
+            state.storiesCompleted++;
+            saveState();
+            renderStoryNav();
+            checkAchievements();
+          }
+        };
+        if (opt[1]) btn.dataset.correct = 'true';
+        optsEl.appendChild(btn);
+      });
+    });
+  }
+
+  document.getElementById('storyNext').onclick = function() {
+    var stories = getStories();
+    currentStoryIndex = (currentStoryIndex + 1) % stories.length;
+    renderStoryNav();
+    renderStory();
+    document.getElementById('historia').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  document.getElementById('btnStoryMode').onclick = function() {
+    document.getElementById('historia').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // ============================================================
+  //  RENDER ALL (updated with new features)
+  // ============================================================
   function renderAll(){
     loadState();
+    if (!state.achievements) state.achievements = {};
+    if (!state.storiesCompleted) state.storiesCompleted = 0;
+    if (!state.speechSessions) state.speechSessions = 0;
     document.body.setAttribute('data-lang', lang);
     document.getElementById('logoLang').textContent = DATA[lang].label;
     document.getElementById('heroLang').textContent = DATA[lang].label;
@@ -674,14 +1273,18 @@
     document.getElementById('heroDesc').textContent = getLevelData().desc;
     
     trapIndex = 0; currentCat = 0; currentVerb = 0; builderIndex = 0; currentSurvivalCat = 0; currentVocabCat = 0;
+    currentStoryIndex = 0;
     
     renderVocabCats(); renderVocabList();
     renderCatTabs(); renderCards(); renderTrap(0);
     renderVerbSelector(); renderVerbCard();
     renderBuilder();
     renderSurvivalCats(); renderSurvivalList();
+    renderStoryNav(); renderStory();
     refreshCounters();
     renderChatHeader(); renderChat();
+    checkAchievements();
+    updateAchievementBadge();
   }
 
   document.getElementById('langToggle').onclick = function(e){
@@ -692,7 +1295,6 @@
     chatHistory = []; renderAll();
   };
 
-  // ACTUALIZADO PARA MANEJAR EL SELECTOR DROPDOWN
   document.getElementById('levelSelector').onchange = function(e){
     var nl = e.target.value; 
     if(nl === currentLevel) return;
