@@ -831,3 +831,662 @@ footer{ text-align:center; opacity:0.55; font-size:0.8rem; padding:2rem 5vw; lin
   *{transition: none !important; animation: none !important;}
   html{scroll-behavior:auto;}
 }
+/* ============ BOTONES DE CATEGORÍA (MEJORADOS) ============ */
+.survival-cat {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.survival-cat:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.survival-cat.active {
+  background: linear-gradient(135deg, var(--accent), var(--gold));
+  color: var(--bg);
+  border-color: transparent;
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--accent) 40%, transparent);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   FEATURE BUTTONS (Habla, Logros, Historia)
+   ============================================================ */
+.feature-btns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+.feature-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 1rem 0.6rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.feature-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+  border-radius: inherit;
+}
+.speech-feature-btn::before { background: linear-gradient(135deg, rgba(224,120,86,0.15), rgba(232,184,96,0.08)); }
+.achievements-feature-btn::before { background: linear-gradient(135deg, rgba(232,184,96,0.15), rgba(224,120,86,0.08)); }
+.story-feature-btn::before { background: linear-gradient(135deg, rgba(143,166,142,0.15), rgba(123,168,217,0.08)); }
+.feature-btn:hover::before { opacity: 1; }
+.feature-btn:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+.feature-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}
+.feature-text {
+  font-size: 0.82rem;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+}
+.feature-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: linear-gradient(135deg, var(--accent), var(--gold));
+  color: var(--bg);
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  z-index: 2;
+}
+
+@media (max-width: 420px) {
+  .feature-btns { gap: 0.4rem; }
+  .feature-btn { padding: 0.75rem 0.4rem; }
+  .feature-icon { font-size: 1.3rem; }
+  .feature-text { font-size: 0.72rem; }
+}
+
+/* ============================================================
+   SPEECH MODE (Modo Habla 🎙️)
+   ============================================================ */
+#speechModal {
+  background: var(--bg);
+}
+#speechCard {
+  position: relative;
+  max-width: 440px;
+  text-align: center;
+}
+.speech-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+  z-index: 5;
+}
+.speech-close:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+.speech-header {
+  margin-bottom: 1.5rem;
+}
+.speech-emoji {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.speech-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+.speech-desc {
+  font-size: 0.88rem;
+  opacity: 0.7;
+}
+.speech-phrase-box {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent), color-mix(in srgb, var(--gold) 8%, transparent));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+.speech-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.speech-target {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--accent);
+  line-height: 1.3;
+  font-weight: 600;
+}
+.speech-translation {
+  font-size: 0.85rem;
+  opacity: 0.65;
+  margin-top: 0.4rem;
+  font-style: italic;
+}
+
+/* Mic Button */
+.mic-btn {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--accent), var(--gold));
+  color: var(--bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.mic-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 28px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.mic-btn.recording {
+  animation: micPulse 1.5s ease-in-out infinite;
+}
+.mic-icon {
+  font-size: 2rem;
+  position: relative;
+  z-index: 2;
+}
+.mic-pulse {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  opacity: 0;
+  pointer-events: none;
+}
+.mic-btn.recording .mic-pulse {
+  animation: pulseRing 1.5s ease-out infinite;
+}
+@keyframes micPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+@keyframes pulseRing {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.speech-status {
+  font-size: 0.88rem;
+  opacity: 0.7;
+  margin-bottom: 0.8rem;
+  min-height: 1.3em;
+}
+.speech-status.listening {
+  color: var(--accent);
+  opacity: 1;
+  font-weight: 600;
+  animation: blink 1s infinite;
+}
+@keyframes blink {
+  50% { opacity: 0.5; }
+}
+
+.speech-result {
+  min-height: 3.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.speech-result .result-correct {
+  color: var(--success);
+  font-weight: 600;
+  padding: 0.6rem;
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--success) 30%, transparent);
+}
+.speech-result .result-wrong {
+  color: var(--danger);
+  padding: 0.6rem;
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent);
+}
+.speech-result .result-wrong .heard {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.82rem;
+  opacity: 0.8;
+}
+
+.speech-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.speech-actions .btn-secondary {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 40px;
+}
+.speech-actions .btn-secondary:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.speech-score {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  font-size: 0.82rem;
+  opacity: 0.65;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--line);
+}
+.speech-score strong {
+  color: var(--accent);
+}
+
+/* ============================================================
+   ACHIEVEMENTS (Logros 🏆)
+   ============================================================ */
+.achievements-card {
+  max-width: 560px !important;
+  text-align: left !important;
+}
+.achievements-card h2 {
+  text-align: center;
+}
+.achievements-card > p {
+  text-align: center;
+}
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.7rem;
+  margin: 1.2rem 0;
+  max-height: 55vh;
+  overflow-y: auto;
+  padding-right: 0.3rem;
+}
+.achievements-grid::-webkit-scrollbar { width: 5px; }
+.achievements-grid::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+
+.achievement-item {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.9rem 0.7rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.achievement-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, color-mix(in srgb, var(--gold) 8%, transparent));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.achievement-item.unlocked {
+  border-color: var(--gold);
+}
+.achievement-item.unlocked::before {
+  opacity: 1;
+}
+.achievement-item.unlocked:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--gold) 25%, transparent);
+}
+.achievement-item.locked {
+  opacity: 0.45;
+  filter: grayscale(0.6);
+}
+
+.achievement-icon {
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+.achievement-item.unlocked .achievement-icon {
+  animation: achievePop 0.5s ease;
+}
+@keyframes achievePop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3) rotate(10deg); }
+  100% { transform: scale(1); }
+}
+.achievement-name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+  position: relative;
+  z-index: 1;
+}
+.achievement-desc {
+  font-size: 0.68rem;
+  opacity: 0.6;
+  line-height: 1.3;
+  position: relative;
+  z-index: 1;
+}
+.achievement-item.unlocked .achievement-name {
+  color: var(--gold);
+}
+.achievement-check {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 800;
+  z-index: 3;
+}
+
+/* ============================================================
+   STORY MODE (Modo Historia 📖)
+   ============================================================ */
+.story-container {
+  margin-top: 0.5rem;
+}
+.story-nav {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.6rem;
+  margin-bottom: 1rem;
+  scrollbar-width: thin;
+}
+.story-nav::-webkit-scrollbar { height: 6px; }
+.story-nav::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+.story-nav-btn {
+  flex-shrink: 0;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+  white-space: nowrap;
+  min-height: 38px;
+}
+.story-nav-btn:hover { border-color: var(--accent); }
+.story-nav-btn.active {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+.story-nav-btn.completed::after {
+  content: ' ✓';
+  color: var(--sage);
+}
+.story-nav-btn.active.completed::after {
+  color: var(--bg);
+}
+
+.story-card {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  overflow: hidden;
+}
+.story-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+.story-difficulty {
+  background: linear-gradient(135deg, var(--accent), var(--gold));
+  color: var(--bg);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.story-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.story-body {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text);
+  position: relative;
+}
+.story-body .story-highlight {
+  color: var(--accent);
+  font-weight: 600;
+  border-bottom: 2px dotted color-mix(in srgb, var(--accent) 50%, transparent);
+  cursor: help;
+  transition: all 0.2s;
+}
+.story-body .story-highlight:hover {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-radius: 4px;
+}
+.story-body .paragraph {
+  margin-bottom: 0.8rem;
+}
+.story-body .paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.story-vocab {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+}
+.story-vocab-chip {
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.78rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.story-vocab-chip .vocab-target {
+  font-weight: 700;
+  color: var(--gold);
+}
+.story-vocab-chip .vocab-es {
+  opacity: 0.7;
+}
+
+.story-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+.story-question-block {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem;
+}
+.story-question-text {
+  font-size: 0.92rem;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+  color: var(--text);
+}
+.story-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.story-opt {
+  text-align: left;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  min-height: 38px;
+}
+.story-opt:hover:not(:disabled) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, transparent); }
+.story-opt:disabled { cursor: default; }
+.story-opt.correct { background: color-mix(in srgb, var(--success) 22%, transparent); border-color: var(--success); }
+.story-opt.wrong { background: color-mix(in srgb, var(--danger) 18%, transparent); border-color: var(--danger); opacity: 0.85; }
+.story-opt:disabled:not(.correct):not(.wrong) { opacity: 0.35; }
+
+.story-actions {
+  display: flex;
+  justify-content: center;
+}
+.story-actions .btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: var(--tap);
+}
+.story-actions .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* Notification toast for achievements */
+.achievement-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--surface);
+  border: 2px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 0.85rem 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+  z-index: 500;
+  animation: toastIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  max-width: 90vw;
+}
+.achievement-toast.leaving {
+  animation: toastOut 0.4s ease-in forwards;
+}
+@keyframes toastIn {
+  to { transform: translateX(-50%) translateY(0); }
+}
+@keyframes toastOut {
+  to { transform: translateX(-50%) translateY(100px); opacity: 0; }
+}
+.achievement-toast-icon {
+  font-size: 1.8rem;
+}
+.achievement-toast-text {
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
+.achievement-toast-text strong {
+  display: block;
+  color: var(--gold);
+  font-size: 0.9rem;
+}
