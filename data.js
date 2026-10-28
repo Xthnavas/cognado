@@ -42,7 +42,7 @@ window.PONTE_DATA = {
             { es: 'abuelo', target: 'nonno' }, { es: 'abuela', target: 'nonna' }, { es: 'tío', target: 'zio' }, { es: 'tía', target: 'zia' }
           ]},
           { cat: 'Colores', icon: '🎨', items: [
-            { es: 'rojo', target: 'rosso' }, { es: 'azul', target: 'blu' }, { es: 'verde', target: 'verde' }, { es: 'amarillo', target: 'giallo' },
+            { es: 'rojo', target: 'rosso' }, { es: 'azul oscuro', target: 'blu' }, { es: 'azul claro', target: 'azzurro' }, { es: 'verde', target: 'verde' }, { es: 'amarillo', target: 'giallo' },
             { es: 'negro', target: 'nero' }, { es: 'blanco', target: 'bianco' }
           ]}
         ],
@@ -641,7 +641,7 @@ window.PONTE_DATA = {
         supervivencia: [
           { categoria: 'Expresiones', icono: '🎭', frases: [
             { es: 'Meter la pata', target: 'Faire une gaffe' }, { es: 'Tomar el pelo', target: 'Se moquer de quelqu\'un' },
-            { es: 'Costar un ojo de la cara', target: 'Coûter les yeux de la tête' }, { es: 'Estar en las nubes', target: 'Être dans la lune' }
+            { es: 'Costar un ojo de la cara', target: 'Coûter les yeux de la tête' }, { es: 'Estar en las nubes', target: 'Être dans les nuages' }
           ]}
         ]
       }
