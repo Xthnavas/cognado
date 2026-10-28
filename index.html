@@ -3,41 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1A1512">
-<title>Cognados — Ya hablas más de lo que crees</title>
-<link rel="stylesheet" href="style.css">
+<meta name="theme-color" content="#171310">
+<title>Cognados — Aprende italiano y francés</title>
+<link rel="stylesheet" href="./style.css">
+<style>
+  .course-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px)}
+  .course-modal.show{display:flex}.course-panel{width:min(680px,100%);max-height:88vh;overflow:auto;background:var(--surface,#26201c);color:var(--text,#f5ebdc);border:1px solid var(--border,#443a33);border-radius:28px;padding:28px;box-shadow:0 30px 90px rgba(0,0,0,.45)}
+  .course-panel-head{display:flex;gap:16px;align-items:flex-start;justify-content:space-between}.course-close{border:0;background:transparent;color:inherit;font-size:24px;cursor:pointer}.course-kicker{font-size:.75rem;font-weight:900;letter-spacing:.12em;color:var(--accent,#7ba8d9)}
+  .course-panel h2{margin:.35rem 0 .5rem;font-size:clamp(1.6rem,4vw,2.3rem)}.course-panel p{line-height:1.6;opacity:.82}.lesson-progress{height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin:20px 0}.lesson-progress>span{display:block;height:100%;background:var(--accent,#7ba8d9);transition:width .3s ease}
+  .lesson-list{display:grid;gap:10px;margin:18px 0}.lesson-row{width:100%;display:grid;grid-template-columns:42px 1fr auto;gap:12px;align-items:center;text-align:left;padding:14px;border:1px solid var(--border,#443a33);border-radius:16px;background:rgba(255,255,255,.025);color:inherit;cursor:pointer}.lesson-row.locked{opacity:.42;cursor:not-allowed}.lesson-row.done{border-color:rgba(90,190,120,.45)}.lesson-num{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:rgba(123,168,217,.14);font-weight:900}.lesson-row small{display:block;opacity:.65;margin-top:3px}.lesson-state{font-size:.78rem;font-weight:800}
+  .course-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.course-actions button{border:0;border-radius:999px;padding:12px 18px;font-weight:850;cursor:pointer}.course-primary{background:var(--accent,#7ba8d9);color:#171310}.course-secondary{background:rgba(255,255,255,.08);color:inherit}.exam-options{display:grid;gap:10px;margin:18px 0}.exam-option{padding:13px 15px;border:1px solid var(--border,#443a33);border-radius:14px;background:transparent;color:inherit;text-align:left;cursor:pointer}.exam-option.selected{border-color:var(--accent,#7ba8d9);background:rgba(123,168,217,.12)}.exam-result{font-weight:800;margin-top:12px}.path-unit.locked{opacity:.48}.path-unit.locked .path-card,.path-unit.locked .path-node{cursor:not-allowed}.path-unit.completed .path-node{box-shadow:0 0 0 5px rgba(90,190,120,.12)}
+</style>
 </head>
 <body data-lang="it">
 
-<div class="modal" id="errorModal" role="dialog" aria-modal="true">
-  <div class="modal-card"><h2>⚠️ Falta <span class="rev">data.js</span></h2><p>Asegúrate de tener <code>data.js</code> en la misma carpeta.</p></div>
+<div class="modal" id="errorModal" role="dialog" aria-modal="true" aria-labelledby="errorTitle">
+  <div class="modal-card error-card">
+    <div class="modal-icon">⚠️</div>
+    <h2 id="errorTitle">No se pudo cargar el contenido</h2>
+    <p>Cognados necesita <code>data.js</code> para cargar las lecciones de italiano y francés.</p>
+    <p class="modal-help">Comprueba que <strong>data.js</strong> esté en la misma carpeta que <strong>index.html</strong>.</p>
+  </div>
 </div>
 
 <div class="modal" id="onboarding" role="dialog" aria-modal="true">
-  <div class="modal-card">
-    <h2 id="onboardingTitle">Bienvenido a <span class="rev">Cognados</span></h2>
-    <p>Elige tu nivel (A1 a C2) arriba y descubre lo que ya sabes.</p>
+  <div class="modal-card onboarding-card">
+    <span class="modal-eyebrow">COMIENZA TU CAMINO</span>
+    <h2>Bienvenido a <span class="rev">Cognados</span></h2>
+    <p>Aprende italiano y francés aprovechando todo lo que ya sabes en español.</p>
     <div class="steps">
-      <div class="step"><div class="num">1</div><div class="txt"><strong>Juega al Repaso Rápido</strong> para ganar XP extra.</div></div>
-      <div class="step"><div class="num">2</div><div class="txt"><strong>Estudia el vocabulario</strong> y los verbos.</div></div>
-      <div class="step"><div class="num">3</div><div class="txt"><strong>🎙️ Modo Habla</strong> — practica tu pronunciación.</div></div>
-      <div class="step"><div class="num">4</div><div class="txt"><strong>📖 Lee historias</strong> interactivas en el idioma.</div></div>
-      <div class="step"><div class="num">5</div><div class="txt"><strong>🏆 Desbloquea logros</strong> mientras aprendes.</div></div>
+      <div class="step"><div class="num">1</div><div class="txt"><strong>Aprende por unidades</strong>Sigue una ruta organizada según tu nivel.</div></div>
+      <div class="step"><div class="num">2</div><div class="txt"><strong>Descubre cognados</strong>Reconoce palabras que ya conoces.</div></div>
+      <div class="step"><div class="num">3</div><div class="txt"><strong>🎙️ Practica hablando</strong>Mejora tu pronunciación con Modo Habla.</div></div>
+      <div class="step"><div class="num">4</div><div class="txt"><strong>📖 Aprende con historias</strong>Lee y demuestra lo que comprendiste.</div></div>
+      <div class="step"><div class="num">5</div><div class="txt"><strong>🏆 Gana XP y logros</strong>Sigue tu progreso mientras aprendes.</div></div>
     </div>
-    <button class="btn-primary" id="startBtn">Empezar →</button>
+    <button class="btn-primary" id="startBtn" type="button">Comenzar</button>
   </div>
 </div>
 
 <div class="modal" id="celebration" role="dialog" aria-modal="true">
-  <div class="modal-card">
-    <h2 id="celebrationTitle">¡Bravissimo! 🎉</h2>
+  <div class="modal-card celebration-card">
+    <div class="celebration-emoji">🎉</div>
+    <h2 id="celebrationTitle">¡Bravissimo!</h2>
     <p>Has completado la lección de <span id="celebLang">italiano</span>.</p>
     <div class="celebration-stats">
       <div class="stat"><div class="value" id="celebXP">0</div><div class="label">XP total</div></div>
       <div class="stat"><div class="value" id="celebStreak">1</div><div class="label">días seguidos</div></div>
     </div>
-    <button class="btn-primary" id="celebrateClose">Seguir practicando</button>
-    <button class="btn-secondary" id="resetBtn">Reiniciar progreso</button>
+    <button class="btn-primary" id="celebrateClose" type="button">Seguir aprendiendo</button>
+    <button class="btn-secondary" id="resetBtn" type="button">Reiniciar progreso</button>
   </div>
 </div>
 
@@ -46,31 +61,31 @@
     <div class="game-progress" id="gameProgress">Pregunta 1 de 10</div>
     <div class="game-question" id="gameQuestion">Cargando...</div>
     <div class="game-options" id="gameOptions"></div>
-    </div>
+  </div>
 </div>
 
 <div class="game-modal" id="speechModal">
-  <div class="game-card" id="speechCard">
-    <div class="speech-close" id="speechClose">✕</div>
+  <div class="game-card speech-card" id="speechCard">
+    <button class="speech-close" id="speechClose" type="button" aria-label="Cerrar">✕</button>
     <div class="speech-header">
       <div class="speech-emoji">🎙️</div>
       <h2>Modo Habla</h2>
-      <p class="speech-desc">Practica tu pronunciación. Toca el micrófono y di la frase.</p>
+      <p class="speech-desc">Escucha, repite y practica tu pronunciación.</p>
     </div>
     <div class="speech-phrase-box">
-      <div class="speech-label">Di esta frase:</div>
+      <div class="speech-label">DI ESTA FRASE</div>
       <div class="speech-target" id="speechTarget">Cargando...</div>
       <div class="speech-translation" id="speechTranslation"></div>
     </div>
-    <button class="mic-btn" id="micBtn" type="button">
+    <button class="mic-btn" id="micBtn" type="button" aria-label="Activar micrófono">
       <span class="mic-icon" id="micIcon">🎙️</span>
       <span class="mic-pulse" id="micPulse"></span>
     </button>
     <div class="speech-status" id="speechStatus">Toca el micrófono para empezar</div>
     <div class="speech-result" id="speechResult"></div>
     <div class="speech-actions">
-      <button class="btn-secondary" id="speechSkip" type="button">Saltar →</button>
       <button class="btn-secondary" id="speechListen" type="button">🔊 Escuchar</button>
+      <button class="btn-secondary" id="speechSkip" type="button">Saltar →</button>
     </div>
     <div class="speech-score">
       <span>Aciertos: <strong id="speechScore">0</strong></span>
@@ -81,101 +96,141 @@
 
 <div class="modal" id="achievementsModal" role="dialog" aria-modal="true">
   <div class="modal-card achievements-card">
+    <span class="modal-eyebrow">TU COLECCIÓN</span>
     <h2>🏆 Logros</h2>
-    <p>Tu colección de medallas y logros.</p>
+    <p>Tus medallas y objetivos alcanzados.</p>
     <div class="achievements-grid" id="achievementsGrid"></div>
-    <button class="btn-primary" id="achievementsClose">Cerrar</button>
+    <button class="btn-primary" id="achievementsClose" type="button">Cerrar</button>
   </div>
 </div>
 
-<header>
-  <div class="logo">Cognados<em id="logoLang">italiano</em></div>
-  <div class="head-right">
-    <select id="levelSelector" class="level-select" aria-label="Selecciona nivel">
-      <option value="a1">A1 · Principiante</option>
-      <option value="a2">A2 · Básico</option>
-      <option value="b1">B1 · Intermedio</option>
-      <option value="b2">B2 · Intermedio Alto</option>
-      <option value="c1">C1 · Avanzado</option>
-      <option value="c2">C2 · Maestría</option>
-    </select>
-    <div class="lang-toggle" id="langToggle" role="tablist">
-      <button class="lang-btn active" data-lang="it">🇮🇹</button>
-      <button class="lang-btn" data-lang="fr">🇫🇷</button>
+<div class="course-modal" id="courseModal" role="dialog" aria-modal="true" aria-labelledby="courseModalTitle">
+  <div class="course-panel">
+    <div class="course-panel-head">
+      <div><span class="course-kicker" id="courseModalKicker">UNIDAD 1</span><h2 id="courseModalTitle">Primeros pasos</h2></div>
+      <button class="course-close" id="courseModalClose" type="button" aria-label="Cerrar">✕</button>
     </div>
-    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
-      <span class="icon-dark">☀️</span><span class="icon-light">🌙</span>
-    </button>
-    <div class="stats">
-      <div class="pill streak" title="Días seguidos">🔥 <span id="streakCount">0</span></div>
-      <div class="pill xp">XP <span id="xpCount">0</span></div>
+    <p id="courseModalDesc"></p>
+    <div class="lesson-progress"><span id="courseUnitBar" style="width:0%"></span></div>
+    <div id="courseModalBody"></div>
+  </div>
+</div>
+
+<header class="app-header">
+  <div class="header-inner">
+    <a href="#aprender" class="logo" aria-label="Cognados">Cognados<em id="logoLang">italiano</em></a>
+    <div class="head-right">
+      <select id="levelSelector" class="level-select" aria-label="Selecciona tu nivel">
+        <option value="a1">A1 · Principiante</option>
+        <option value="a2">A2 · Básico</option>
+        <option value="b1">B1 · Intermedio</option>
+        <option value="b2">B2 · Intermedio Alto</option>
+        <option value="c1">C1 · Avanzado</option>
+        <option value="c2">C2 · Maestría</option>
+      </select>
+      <div class="lang-toggle" id="langToggle" role="tablist" aria-label="Idioma">
+        <button class="lang-btn active" data-lang="it" type="button" aria-label="Italiano">IT</button>
+        <button class="lang-btn" data-lang="fr" type="button" aria-label="Francés">FR</button>
+      </div>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar tema">
+        <span class="icon-dark">☀️</span><span class="icon-light">🌙</span>
+      </button>
+      <div class="stats">
+        <div class="pill streak" title="Días seguidos">🔥 <span id="streakCount">0</span></div>
+        <div class="pill xp">XP <span id="xpCount">0</span></div>
+      </div>
     </div>
   </div>
 </header>
 
-<main>
-  <div class="hero">
-    <h1>Estás en el nivel <span class="rev" id="heroLevel">A1</span> de <span class="rev" id="heroLang">italiano</span>.</h1>
-    <p id="heroDesc">Lo esencial para sobrevivir y presentarte.</p>
-  </div>
+<main class="app-main">
+  <section id="aprender" class="learning-home" aria-labelledby="learningTitle">
+    <div class="learning-welcome">
+      <div class="learning-heading">
+        <p class="kicker">TU CAMINO</p>
+        <h1 id="learningTitle">Ruta de aprendizaje</h1>
+        <p class="sub">Avanza paso a paso y practica lo que necesitas para comunicarte de verdad.</p>
+      </div>
+      <div class="learning-ring" id="learningRing" aria-label="Progreso del nivel">
+        <div class="learning-ring-inner"><strong id="learningPct">0%</strong><span>del nivel</span></div>
+      </div>
+    </div>
+    <div class="next-lesson-card">
+      <div class="next-lesson-icon">▶</div>
+      <div class="next-lesson-copy">
+        <span>CONTINUAR APRENDIENDO</span>
+        <strong id="nextLessonTitle">Unidad 1 · Primeros pasos</strong>
+        <small id="nextLessonMeta">Vocabulario · Cognados · Verbos</small>
+      </div>
+      <button id="continueLearning" class="continue-learning-btn" type="button">Continuar <span>→</span></button>
+    </div>
+    <div class="learning-path" id="learningPath"></div>
+  </section>
 
-  <button class="quick-review-btn" id="btnQuickReview">
-    ⚡ Jugar Repaso Rápido (3 min)
-  </button>
-
-  <div class="feature-btns">
-    <button class="feature-btn speech-feature-btn" id="btnSpeechMode" type="button">
-      <span class="feature-icon">🎙️</span>
-      <span class="feature-text">Modo Habla</span>
-      <span class="feature-badge">Nuevo</span>
-    </button>
-    <button class="feature-btn achievements-feature-btn" id="btnAchievements" type="button">
-      <span class="feature-icon">🏆</span>
-      <span class="feature-text">Logros</span>
-      <span class="feature-badge" id="achievementsBadge">0</span>
-    </button>
-    <button class="feature-btn story-feature-btn" id="btnStoryMode" type="button">
-      <span class="feature-icon">📖</span>
-      <span class="feature-text">Modo Historia</span>
-      <span class="feature-badge">Nuevo</span>
-    </button>
-  </div>
+  <section id="practiceHome" class="practice-home">
+    <div class="hero">
+      <p class="kicker">TU NIVEL ACTUAL</p>
+      <h2>Estás en <span class="rev" id="heroLevel">A1</span> de <span class="rev" id="heroLang">italiano</span>.</h2>
+      <p id="heroDesc">Lo esencial para sobrevivir y presentarte.</p>
+    </div>
+    <div class="practice-actions">
+      <button class="quick-review-btn" id="btnQuickReview" type="button">
+        <span class="practice-action-icon">⚡</span>
+        <span><strong>Repaso Rápido</strong><small>Practica en unos minutos</small></span>
+      </button>
+      <button class="feature-btn speech-feature-btn" id="btnSpeechMode" type="button">
+        <span class="feature-icon">🎙️</span>
+        <span class="feature-copy"><strong>Modo Habla</strong><small>Practica pronunciación</small></span>
+        <span class="feature-badge">Nuevo</span>
+      </button>
+      <button class="feature-btn story-feature-btn" id="btnStoryMode" type="button">
+        <span class="feature-icon">📖</span>
+        <span class="feature-copy"><strong>Historias</strong><small>Aprende leyendo</small></span>
+        <span class="feature-badge">Nuevo</span>
+      </button>
+      <button class="feature-btn achievements-feature-btn" id="btnAchievements" type="button">
+        <span class="feature-icon">🏆</span>
+        <span class="feature-copy"><strong>Logros</strong><small>Mira tu progreso</small></span>
+        <span class="feature-badge" id="achievementsBadge">0</span>
+      </button>
+    </div>
+  </section>
 
   <div class="review-banner" id="reviewBanner" role="status">
-    <p>🔁 Tienes <strong id="reviewCount">0</strong> elementos pendientes.</p>
-    <button id="reviewBtn">Repasar ahora</button>
+    <div><span class="review-icon">🔁</span><p>Tienes <strong id="reviewCount">0</strong> elementos pendientes.</p></div>
+    <button id="reviewBtn" type="button">Repasar ahora</button>
   </div>
 
-  <section id="vocabulario">
+  <section id="vocabulario" class="content-section">
     <div class="section-head">
-      <p class="kicker">Lo básico</p>
+      <p class="kicker">LO BÁSICO</p>
       <h2>Vocabulario esencial</h2>
-      <p class="sub">Números, días y palabras del día a día. Toca cada una para escucharla.</p>
+      <p class="sub">Palabras útiles para empezar a comunicarte. Toca una palabra para escucharla.</p>
     </div>
     <div class="vocab-cats" id="vocabCats" role="tablist"></div>
     <div class="vocab-grid" id="vocabGrid"></div>
   </section>
 
-  <section id="cognados">
+  <section id="cognados" class="content-section">
     <div class="section-head">
-      <p class="kicker" id="catKicker">Categoría 1</p>
-      <h2 id="catTitle">-ción → -zione</h2>
-      <p class="sub" id="catSub">Palabras que ya sabes.</p>
+      <p class="kicker" id="catKicker">CATEGORÍA 1</p>
+      <h2 id="catTitle">Cognados</h2>
+      <p class="sub" id="catSub">Palabras que ya sabes sin darte cuenta.</p>
     </div>
     <div class="cat-tabs" id="catTabs" role="tablist"></div>
     <div class="grid" id="cardGrid"></div>
   </section>
 
-  <section id="trampa">
+  <section id="trampa" class="content-section">
     <div class="section-head">
-      <p class="kicker">La trampa</p>
+      <p class="kicker">LA TRAMPA</p>
       <h2>Falsos amigos</h2>
-      <p class="sub">Adivina qué significan de verdad.</p>
+      <p class="sub">Se parecen al español, pero significan otra cosa.</p>
     </div>
     <div class="trap">
       <div class="trap-top">
         <div class="tword" id="trapWord"></div>
-        <button class="speak-btn" id="trapSpeak" type="button">🔊</button>
+        <button class="speak-btn" id="trapSpeak" type="button" aria-label="Escuchar palabra">🔊</button>
       </div>
       <p class="prompt" id="trapPrompt"></p>
       <div class="opts" id="trapOpts"></div>
@@ -184,38 +239,32 @@
     </div>
   </section>
 
-  <section id="verbos">
+  <section id="verbos" class="content-section">
     <div class="section-head">
-      <p class="kicker">Base del idioma</p>
+      <p class="kicker">BASE DEL IDIOMA</p>
       <h2>Verbos esenciales</h2>
-      <p class="sub">Los verbos que necesitas para formar cualquier frase.</p>
+      <p class="sub">Aprende los verbos que necesitas para comenzar a formar tus propias frases.</p>
     </div>
     <div class="verb-selector" id="verbSelector"></div>
     <div class="verb-card" id="verbCard">
-      <div class="verb-header">
-        <div class="verb-inf" id="verbInf"></div>
-        <div class="verb-es" id="verbEs"></div>
-      </div>
+      <div class="verb-header"><div><div class="verb-inf" id="verbInf"></div><div class="verb-es" id="verbEs"></div></div></div>
       <div class="conj-grid" id="conjGrid"></div>
       <div class="verb-example">
-        <div class="ex-text">
-          <div class="ex-it" id="exIt"></div>
-          <div class="ex-es" id="exEs"></div>
-        </div>
-        <button class="survival-speak" id="exSpeak" type="button">🔊</button>
+        <div class="ex-text"><div class="ex-it" id="exIt"></div><div class="ex-es" id="exEs"></div></div>
+        <button class="survival-speak" id="exSpeak" type="button" aria-label="Escuchar ejemplo">🔊</button>
       </div>
     </div>
   </section>
 
-  <section id="constructor">
+  <section id="constructor" class="content-section">
     <div class="section-head">
-      <p class="kicker">Producción real</p>
+      <p class="kicker">PRODUCCIÓN REAL</p>
       <h2>Construye la frase</h2>
-      <p class="sub">Toca las palabras en el orden correcto.</p>
+      <p class="sub">Ordena las palabras y empieza a pensar en el idioma.</p>
     </div>
     <div class="builder">
       <div class="builder-prompt" id="builderPrompt"></div>
-      <div class="builder-hint">Toca las palabras para construir la frase</div>
+      <div class="builder-hint">Toca las palabras para construir la frase.</div>
       <div class="builder-answer" id="builderAnswer"></div>
       <div class="builder-pool" id="builderPool"></div>
       <div class="builder-actions">
@@ -227,50 +276,43 @@
     </div>
   </section>
 
-  <section id="supervivencia">
+  <section id="supervivencia" class="content-section">
     <div class="section-head">
-      <p class="kicker">Para viajar</p>
+      <p class="kicker">PARA LA VIDA REAL</p>
       <h2>Frases de supervivencia</h2>
-      <p class="sub">Las frases que usarás cada día.</p>
+      <p class="sub">Expresiones que puedes utilizar desde el primer día.</p>
     </div>
     <div class="survival-cats" id="survivalCats"></div>
     <div class="survival-list" id="survivalList"></div>
   </section>
 
-  <section id="tutor">
+  <section id="tutor" class="content-section tutor-section">
     <div class="section-head">
-      <p class="kicker">Conversación</p>
+      <p class="kicker">CONVERSACIÓN</p>
       <h2>Habla con <span id="tutorNameHead">Marco</span></h2>
-      <p class="sub">Tu tutor de IA nativo.</p>
+      <p class="sub">Practica conversaciones con tu tutor de IA.</p>
     </div>
     <div class="chat" id="chat">
       <div class="chat-header">
         <div class="chat-avatar" id="chatAvatar"></div>
-        <div class="chat-who">
-          <div class="chat-name" id="chatName"></div>
-          <div class="chat-status" id="chatStatus"></div>
-        </div>
+        <div class="chat-who"><div class="chat-name" id="chatName"></div><div class="chat-status" id="chatStatus"></div></div>
         <button class="chat-reset" id="chatReset" title="Nueva conversación" type="button">↻</button>
       </div>
-      <div class="chat-messages" id="chatMessages" role="log"></div>
+      <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"></div>
       <div class="chat-starters" id="chatStarters"></div>
-      
-      <div style="padding: 0 1rem 0.5rem; font-size: 0.75rem; opacity: 0.6; text-align: center;">
-        ⚠️ La IA tiene un límite diario. Por favor, úsala con moderación.
-      </div>
-
+      <div class="ai-limit-note">La IA tiene un límite diario de uso.</div>
       <form class="chat-input" id="chatForm">
-        <textarea id="chatTextarea" placeholder="Escribe..." rows="1"></textarea>
-        <button type="submit" id="chatSend">➤</button>
+        <textarea id="chatTextarea" placeholder="Escribe..." rows="1" aria-label="Mensaje para el tutor"></textarea>
+        <button type="submit" id="chatSend" aria-label="Enviar">➤</button>
       </form>
     </div>
   </section>
 
-  <section id="historia">
+  <section id="historia" class="content-section">
     <div class="section-head">
-      <p class="kicker">Lectura interactiva</p>
-      <h2>📖 Modo Historia</h2>
-      <p class="sub">Lee historias cortas y responde preguntas de comprensión.</p>
+      <p class="kicker">LECTURA INTERACTIVA</p>
+      <h2>Modo Historia</h2>
+      <p class="sub">Lee pequeñas historias y comprueba cuánto entiendes.</p>
     </div>
     <div class="story-container" id="storyContainer">
       <div class="story-nav" id="storyNav"></div>
@@ -282,64 +324,75 @@
         <div class="story-body" id="storyBody"></div>
         <div class="story-vocab" id="storyVocab"></div>
         <div class="story-questions" id="storyQuestions"></div>
-        <div class="story-actions">
-          <button class="btn-primary" id="storyNext" type="button">Siguiente historia →</button>
-        </div>
+        <div class="story-actions"><button class="btn-primary" id="storyNext" type="button">Siguiente historia →</button></div>
       </div>
     </div>
   </section>
 
-  <div class="progress-wrap">
-    <div class="bar-bg" role="progressbar" id="progressBar"><div class="bar-fill" id="barFill"></div></div>
-    <div class="progress-meta">
-      <span id="progressLabel">0 / 0 pasos</span>
-      <span id="progressBreakdown"></span>
+  <section id="perfil" class="profile-section">
+    <div class="section-head">
+      <p class="kicker">TU PROGRESO</p>
+      <h2>Perfil de aprendizaje</h2>
+      <p class="sub">Mira cuánto has avanzado en Cognados.</p>
     </div>
-  </div>
+    <div class="profile-grid">
+      <div class="profile-stat"><span class="profile-stat-icon">✦</span><strong id="profileXP">0</strong><span>XP</span></div>
+      <div class="profile-stat"><span class="profile-stat-icon">🔥</span><strong id="profileStreak">0</strong><span>días de racha</span></div>
+      <div class="profile-stat"><span class="profile-stat-icon">◈</span><strong id="profileKnown">0</strong><span>cognados</span></div>
+      <div class="profile-stat"><span class="profile-stat-icon">🏆</span><strong id="profileAchievements">0</strong><span>logros</span></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-top"><span>Progreso del nivel</span><span id="progressLabel">0 / 0 pasos</span></div>
+      <div class="bar-bg" id="progressBar" role="progressbar"><div class="bar-fill" id="barFill"></div></div>
+      <div class="progress-breakdown" id="progressBreakdown"></div>
+    </div>
+  </section>
 </main>
 
-<footer>
-  <p><strong>Cognados</strong> · aprende italiano y francés desde el español que ya tienes.</p>
-  <p>Hecho por Jorge Navas.</p>
+<footer class="app-footer">
+  <strong>Cognados</strong>
+  <p>Aprende italiano y francés desde el español que ya conoces.</p>
+  <span>Hecho por Jorge Navas.</span>
 </footer>
 
-<script src="data.js"></script>
+<nav class="app-bottom-nav" aria-label="Navegación principal">
+  <button class="app-nav-btn active" data-target="aprender" type="button"><span class="app-nav-icon">⌂</span><b>Aprender</b></button>
+  <button class="app-nav-btn" data-target="practiceHome" type="button"><span class="app-nav-icon">◎</span><b>Practicar</b></button>
+  <button class="app-nav-btn" data-target="tutor" type="button"><span class="app-nav-icon">✦</span><b>Tutor</b></button>
+  <button class="app-nav-btn" data-target="perfil" type="button"><span class="app-nav-icon">◉</span><b>Perfil</b></button>
+</nav>
+
+<script src="./data.js"></script>
 <script>
-(function(){
+(function () {
   'use strict';
 
-  if(!window.PONTE_DATA){ document.getElementById('errorModal').classList.add('show'); return; }
+  if (!window.PONTE_DATA) {
+    document.getElementById('errorModal').classList.add('show');
+    return;
+  }
 
   var DATA = window.PONTE_DATA;
   var lang = 'it';
   var currentLevel = 'a1';
   var state = null;
-  var trapIndex = 0, currentCat = 0, currentVerb = 0, builderIndex = 0, builderSelection = [];
-  var currentSurvivalCat = 0, currentVocabCat = 0;
+  var trapIndex = 0;
+  var currentCat = 0;
+  var currentVerb = 0;
+  var builderIndex = 0;
+  var builderSelection = [];
+  var currentSurvivalCat = 0;
+  var currentVocabCat = 0;
+  var chatHistory = [];
+  var currentStoryIndex = 0;
+  var storyCompletedSet = {};
 
-  async function callAI(history) {
-    var payload = {
-      systemPrompt: DATA[lang].tutor.systemPrompt,
-      history: history.map(function(m){ return { role: m.role === 'user' ? 'user' : 'model', text: m.text }; })
-    };
-    var res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    if (!res.ok) {
-      if (res.status === 429) throw new Error('RATE_LIMIT');
-      throw new Error('SERVER_ERROR');
-    }
-    var data = await res.json();
-    return data.text;
-  }
+  function getLevelData() { return DATA[lang].levels[currentLevel]; }
+  function escapeHTML(value) { return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+  function shuffle(array) { var result = array.slice(); for (var i = result.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var temp = result[i]; result[i] = result[j]; result[j] = temp; } return result; }
+  function safeElement(id) { return document.getElementById(id); }
+  function scrollToSection(id) { var element = safeElement(id); if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 
-  function getLevelData(){ return DATA[lang].levels[currentLevel]; }
-  function escapeHTML(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
-  function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t;} return a; }
-
-  // GAME JUICE
   var audioCtx = null;
   function playSound(type) {
     try {
@@ -348,966 +401,772 @@
       osc.connect(gain); gain.connect(audioCtx.destination);
       if (type === 'success') {
         osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+        osc.frequency.exponentialRampToValueAtTime(1046.5, audioCtx.currentTime + 0.1);
       } else {
         osc.type = 'triangle'; osc.frequency.setValueAtTime(220, audioCtx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.2);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.2);
       }
-    } catch (e) {}
+      gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+      osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+    } catch (error) {}
   }
 
   function fireConfetti() {
     var colors = ['#E07856', '#E8B860', '#8FA68E', '#7BA8D9', '#F5EBDC'];
-    for (var i = 0; i < 50; i++) {
-      var c = document.createElement('div'); c.className = 'confetti';
-      c.style.left = Math.random() * 100 + 'vw';
-      c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      c.style.animationDuration = (Math.random() * 2 + 2) + 's';
-      c.style.animationDelay = Math.random() * 0.5 + 's';
-      document.body.appendChild(c);
-      setTimeout(function(el) { el.remove(); }, 4000, c);
+    for (var i = 0; i < 45; i++) {
+      var confetti = document.createElement('div'); confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDuration = Math.random() * 2 + 2 + 's';
+      confetti.style.animationDelay = Math.random() * 0.4 + 's';
+      document.body.appendChild(confetti);
+      setTimeout(function (el) { el.remove(); }, 4000, confetti);
     }
   }
 
-  // LOGICA DEL JUEGO
-  var gameQuestions = [], gameIndex = 0, gameScore = 0;
-
-  document.getElementById('btnQuickReview').onclick = function() {
-    generateGameQuestions();
-    if(gameQuestions.length === 0) return alert('Completa algunas lecciones primero.');
-    gameIndex = 0; gameScore = 0;
-    document.getElementById('gameModal').classList.add('show');
-    renderGameQuestion();
-  };
-
-   function generateGameQuestions() {
-    gameQuestions = [];
-    var lvl = getLevelData();
-    
-    // 1. Creamos un "pozo" (pool) con todas las palabras del nivel actual
-    var allWords = [];
-    lvl.categorias.forEach(function(cat) {
-      cat.cognados.forEach(function(c) { allWords.push(c.target); });
-    });
-    lvl.vocabulario_esencial.forEach(function(vocabCat) {
-      vocabCat.items.forEach(function(item) { allWords.push(item.target); });
-    });
-
-    // 2. Generamos las preguntas de vocabulario
-    lvl.categorias.forEach(function(cat) {
-      cat.cognados.forEach(function(c) {
-        // Filtramos para no usar la respuesta correcta como distractor
-        var availableDistractors = allWords.filter(function(w) { return w !== c.target; });
-        var shuffledDistractors = shuffle(availableDistractors);
-        
-        // Tomamos 2 palabras aleatorias del nivel como distractores reales
-        var opt1 = shuffledDistractors[0] || "palabra";
-        var opt2 = shuffledDistractors[1] || "frase";
-        
-        gameQuestions.push({ 
-          q: "¿Cómo se dice '" + c.es + "'?", 
-          a: c.target, 
-          opts: [c.target, opt1, opt2] 
-        });
-      });
-    });
-
-    // 3. Generamos las preguntas de verbos
-    lvl.verbos.lista.forEach(function(v) {
-      var idx = Math.floor(Math.random()*6);
-      gameQuestions.push({
-        q: "Verbo " + v.inf + " (" + v.es + "):<br>¿Cuál es la forma para '" + lvl.verbos.pronombres[idx].it + "'?",
-        a: v.formas[idx], 
-        opts: [v.formas[idx], v.formas[(idx+1)%6], v.formas[(idx+2)%6]]
-      });
-    });
-
-    // 4. Mezclamos todo y tomamos 10 preguntas
-    gameQuestions = shuffle(gameQuestions).slice(0, 10);
-    
-    // 5. Aseguramos que siempre haya 3 opciones válidas y mezcladas
-    gameQuestions.forEach(function(q) {
-      q.opts = shuffle(q.opts.filter(function(o, i, arr){ return arr.indexOf(o) === i; }));
-      while(q.opts.length < 3) q.opts.push("..."); // Relleno de seguridad extremo
-      if(q.opts.indexOf(q.a) === -1) q.opts[0] = q.a;
-      q.opts = shuffle(q.opts);
-    });
-  }
-  function renderGameQuestion() {
-    if (gameIndex >= gameQuestions.length) {
-      fireConfetti(); playSound('success');
-      document.getElementById('gameCard').innerHTML = 
-        '<h2 style="color:var(--accent); font-family:var(--font-display); font-size:2rem;">¡Bravissimo! 🎉</h2>' +
-        '<p style="margin:1rem 0; font-size:1.2rem;">Has acertado ' + gameScore + ' de ' + gameQuestions.length + '</p>' +
-        '<p style="opacity:0.7; margin-bottom:1.5rem;">Has ganado +' + (gameScore * 5) + ' XP extra</p>' +
-        '<button class="btn-primary" onclick="document.getElementById(\'gameModal\').classList.remove(\'show\'); location.reload();">Volver al inicio</button>';
-      state.xp += (gameScore * 5); saveState(); return;
-    }
-    var q = gameQuestions[gameIndex];
-    document.getElementById('gameProgress').textContent = 'Pregunta ' + (gameIndex + 1) + ' de ' + gameQuestions.length;
-    document.getElementById('gameQuestion').innerHTML = q.q;
-    var optsEl = document.getElementById('gameOptions'); optsEl.innerHTML = '';
-    q.opts.forEach(function(opt) {
-      var btn = document.createElement('button'); btn.className = 'game-opt'; btn.textContent = opt; btn.type = 'button';
-      btn.onclick = function() {
-        Array.prototype.forEach.call(optsEl.children, function(b){ b.disabled = true; });
-        if (opt === q.a) { btn.classList.add('correct'); playSound('success'); gameScore++; }
-        else {
-          btn.classList.add('wrong'); playSound('error');
-          Array.prototype.forEach.call(optsEl.children, function(b){ if(b.textContent === q.a) b.classList.add('correct'); });
-        }
-        setTimeout(function() { gameIndex++; renderGameQuestion(); }, 1200);
-      };
-      optsEl.appendChild(btn);
-    });
-  }
-
-  // AUDIO TTS
-  var ttsAvailable = 'speechSynthesis' in window, availableVoices = [];
-  if(ttsAvailable){
+  var ttsAvailable = 'speechSynthesis' in window;
+  var availableVoices = [];
+  if (ttsAvailable) {
     availableVoices = window.speechSynthesis.getVoices();
-    window.speechSynthesis.onvoiceschanged = function(){ availableVoices = window.speechSynthesis.getVoices(); };
+    window.speechSynthesis.onvoiceschanged = function () { availableVoices = window.speechSynthesis.getVoices(); };
   }
-  function speak(text){
-    if(!ttsAvailable) return;
-    try{
+  function speak(text) {
+    if (!ttsAvailable || !text) return;
+    try {
       window.speechSynthesis.cancel();
-      var u = new SpeechSynthesisUtterance(text); u.lang = DATA[lang].voice; u.rate = 0.9;
-      var v = availableVoices.find(function(v){ return v.lang === u.lang; }) || availableVoices.find(function(v){ return v.lang.indexOf(lang) === 0; });
-      if(v) u.voice = v;
-      window.speechSynthesis.speak(u);
-    }catch(e){}
+      var utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = DATA[lang].voice; utterance.rate = 0.9;
+      var voice = availableVoices.find(function (item) { return item.lang === utterance.lang; });
+      if (!voice) voice = availableVoices.find(function (item) { return item.lang.toLowerCase().indexOf(lang) === 0; });
+      if (voice) utterance.voice = voice;
+      window.speechSynthesis.speak(utterance);
+    } catch (error) {}
   }
 
-  // ESTADO Y TEMA
-  function initTheme(){
-    var saved = null; try{ saved = localStorage.getItem('ponte-theme'); }catch(e){}
-    document.documentElement.setAttribute('data-theme', saved || 'dark');
-    document.getElementById('themeToggle').onclick = function(){
-      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  function initTheme() {
+    var savedTheme = null;
+    try { savedTheme = localStorage.getItem('ponte-theme'); } catch (error) {}
+    document.documentElement.setAttribute('data-theme', savedTheme || 'dark');
+    safeElement('themeToggle').onclick = function () {
+      var current = document.documentElement.getAttribute('data-theme');
+      var next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
-      try{ localStorage.setItem('ponte-theme', next); }catch(e){}
+      try { localStorage.setItem('ponte-theme', next); } catch (error) {}
     };
   }
 
-  function defaultState(){ return { xp: 0, done: 0, cards: {}, traps: {}, lastVisit: null, streak: 0 }; }
-  function loadState(){
-    try{ var saved = JSON.parse(localStorage.getItem('ponte-v3-' + lang)); state = Object.assign(defaultState(), saved || {}); if(!state.cards) state.cards = {}; if(!state.traps) state.traps = {}; }catch(e){ state = defaultState(); }
+  function defaultState() {
+    return { xp: 0, done: 0, cards: {}, traps: {}, lastVisit: null, streak: 0, achievements: {}, storiesCompleted: 0, speechSessions: 0, course: {} };
+  }
+  function loadState() {
+    try { var saved = JSON.parse(localStorage.getItem('ponte-v3-' + lang)); state = Object.assign(defaultState(), saved || {}); } catch (error) { state = defaultState(); }
+    if (!state.cards) state.cards = {};
+    if (!state.traps) state.traps = {};
+    if (!state.achievements) state.achievements = {};
+    if (!state.course) state.course = {};
     updateStreak();
   }
-  function saveState(){ try{ localStorage.setItem('ponte-v3-' + lang, JSON.stringify(state)); }catch(e){} }
-  function updateStreak(){
-    var today = new Date().toISOString().slice(0,10);
-    if(!state.lastVisit){ state.streak = 1; state.lastVisit = today; return; }
-    if(state.lastVisit === today) return;
-    var diff = Math.round((new Date(today) - new Date(state.lastVisit)) / 86400000);
-    state.streak = diff === 1 ? (state.streak || 0) + 1 : 1;
+  function saveState() { try { localStorage.setItem('ponte-v3-' + lang, JSON.stringify(state)); } catch (error) {} }
+  function updateStreak() {
+    var today = new Date().toISOString().slice(0, 10);
+    if (!state.lastVisit) { state.streak = 1; state.lastVisit = today; saveState(); return; }
+    if (state.lastVisit === today) return;
+    var difference = Math.round((new Date(today) - new Date(state.lastVisit)) / 86400000);
+    state.streak = difference === 1 ? (state.streak || 0) + 1 : 1;
     state.lastVisit = today; saveState();
   }
 
-  function totalDone(){
-    var c = 0, t = 0, lvl = getLevelData();
-    lvl.categorias.forEach(function(cat){ cat.cognados.forEach(function(_, i){ var k = currentLevel+'-c-'+cat.id+'-'+i; if(state.cards[k] && state.cards[k].done) c++; }); });
-    for(var k in state.traps) if(k.indexOf(currentLevel+'-')===0 && state.traps[k].done) t++;
-    return { cards: c, traps: t, total: c + t };
+  function totalDone() {
+    var cards = 0, traps = 0, level = getLevelData();
+    level.categorias.forEach(function (category) {
+      category.cognados.forEach(function (_, index) {
+        if (state.cards[currentLevel + '-c-' + category.id + '-' + index] && state.cards[currentLevel + '-c-' + category.id + '-' + index].done) cards++;
+      });
+    });
+    Object.keys(state.traps || {}).forEach(function (key) {
+      if (key.indexOf(currentLevel + '-') === 0 && state.traps[key].done) traps++;
+    });
+    return { cards: cards, traps: traps, total: cards + traps };
   }
 
-  function refreshCounters(){
-    var d = totalDone();
-    var totalCards = getLevelData().categorias.reduce(function(n,c){return n+c.cognados.length;},0);
-    var totalTraps = getLevelData().trampas.length;
+  function getProgressData() {
+    var done = totalDone(), level = getLevelData();
+    var totalCards = level.categorias.reduce(function (total, category) { return total + category.cognados.length; }, 0);
+    var totalTraps = level.trampas.length;
     var totalSteps = totalCards + totalTraps;
-    document.getElementById('xpCount').textContent = state.xp;
-    document.getElementById('streakCount').textContent = state.streak || 0;
-    document.getElementById('progressLabel').textContent = d.total + ' / ' + totalSteps + ' pasos';
-    document.getElementById('progressBreakdown').textContent = 'Cognados ' + d.cards + '/' + totalCards + ' · Trampas ' + d.traps + '/' + totalTraps;
-    var pct = totalSteps > 0 ? Math.round((d.total / totalSteps) * 100) : 0;
-    document.getElementById('barFill').style.width = pct + '%';
+    var percentage = totalSteps > 0 ? Math.round(done.total / totalSteps * 100) : 0;
+    return { done: done, totalCards: totalCards, totalTraps: totalTraps, totalSteps: totalSteps, percentage: percentage };
   }
 
-  function addCardDone(catId, idx){
-    var key = currentLevel+'-c-'+catId+'-'+idx;
-    if(state.cards[key] && state.cards[key].done) return;
+  function refreshCounters() {
+    var progress = getProgressData();
+    safeElement('xpCount').textContent = state.xp || 0;
+    safeElement('streakCount').textContent = state.streak || 0;
+    safeElement('progressLabel').textContent = progress.done.total + ' / ' + progress.totalSteps + ' pasos';
+    safeElement('progressBreakdown').textContent = 'Cognados ' + progress.done.cards + '/' + progress.totalCards + ' · Falsos amigos ' + progress.done.traps + '/' + progress.totalTraps;
+    safeElement('barFill').style.width = progress.percentage + '%';
+    safeElement('learningPct').textContent = progress.percentage + '%';
+    safeElement('learningRing').style.setProperty('--progress', progress.percentage * 3.6 + 'deg');
+    refreshProfile();
+  }
+
+  function addCardDone(categoryId, index) {
+    var key = currentLevel + '-c-' + categoryId + '-' + index;
+    if (state.cards[key] && state.cards[key].done) return;
     state.cards[key] = { done: true, interval: 1, nextReview: Date.now() + 86400000 };
     state.xp += 10; state.done = (state.done || 0) + 1; saveState();
   }
-  function addTrapDone(idx, ok){
-    var key = currentLevel+'-t'+idx;
-    if(state.traps[key] && state.traps[key].done) return;
-    var interval = ok ? 2 : 1;
-    state.traps[key] = { done: true, interval: interval, nextReview: Date.now() + interval*86400000 };
-    state.xp += ok ? 15 : 5; state.done = (state.done || 0) + 1; saveState();
+
+  function addTrapDone(index, correct) {
+    var key = currentLevel + '-t' + index;
+    if (state.traps[key] && state.traps[key].done) return;
+    var interval = correct ? 2 : 1;
+    state.traps[key] = { done: true, interval: interval, nextReview: Date.now() + interval * 86400000 };
+    state.xp += correct ? 15 : 5; state.done = (state.done || 0) + 1; saveState();
   }
 
-  // RENDERS
-  function renderVocabCats(){
-    var wrap = document.getElementById('vocabCats'); wrap.innerHTML = '';
-    getLevelData().vocabulario_esencial.forEach(function(v, i){
-      var btn = document.createElement('button'); btn.className = 'survival-cat' + (i === currentVocabCat ? ' active' : ''); btn.textContent = v.icon + ' ' + v.cat; btn.type = 'button';
-      btn.onclick = function(){ currentVocabCat = i; renderVocabCats(); renderVocabList(); };
-      wrap.appendChild(btn);
+  function renderVocabCats() {
+    var container = safeElement('vocabCats'); container.innerHTML = '';
+    getLevelData().vocabulario_esencial.forEach(function (category, index) {
+      var button = document.createElement('button'); button.type = 'button';
+      button.className = 'survival-cat' + (index === currentVocabCat ? ' active' : '');
+      button.textContent = category.icon + ' ' + category.cat;
+      button.onclick = function () { currentVocabCat = index; renderVocabCats(); renderVocabList(); };
+      container.appendChild(button);
     });
   }
-  function renderVocabList(){
-    var grid = document.getElementById('vocabGrid'); grid.innerHTML = '';
-    getLevelData().vocabulario_esencial[currentVocabCat].items.forEach(function(item){
-      var card = document.createElement('div'); card.className = 'survival-item';
-      card.innerHTML = '<div class="survival-text"><div class="survival-es">' + escapeHTML(item.es) + '</div><div class="survival-target">' + escapeHTML(item.target) + '</div></div><button class="survival-speak" type="button">🔊</button>';
-      card.querySelector('.survival-speak').onclick = function(){ speak(item.target); };
+
+  function renderVocabList() {
+    var grid = safeElement('vocabGrid'); grid.innerHTML = '';
+    var categories = getLevelData().vocabulario_esencial;
+    if (!categories[currentVocabCat]) currentVocabCat = 0;
+    categories[currentVocabCat].items.forEach(function (item) {
+      var card = document.createElement('article'); card.className = 'survival-item';
+      card.innerHTML = '<div class="survival-text"><div class="survival-es">' + escapeHTML(item.es) + '</div><div class="survival-target">' + escapeHTML(item.target) + '</div></div><button class="survival-speak" type="button" aria-label="Escuchar">🔊</button>';
+      card.querySelector('.survival-speak').onclick = function () { speak(item.target); };
       grid.appendChild(card);
     });
   }
 
-  function renderCatTabs(){
-    var tabs = document.getElementById('catTabs'); tabs.innerHTML = '';
-    getLevelData().categorias.forEach(function(cat, i){
-      var btn = document.createElement('button'); btn.className = 'cat-tab' + (i === currentCat ? ' active' : ''); btn.textContent = cat.titulo; btn.type = 'button';
-      var allDone = cat.cognados.every(function(_, idx){ var k = currentLevel+'-c-'+cat.id+'-'+idx; return state.cards[k] && state.cards[k].done; });
-      if(allDone) btn.classList.add('done');
-      btn.onclick = function(){
-  currentCat = i;
-  renderCatTabs();
-  renderCards();
-  document.getElementById('cognados').scrollIntoView({behavior: 'smooth'});
-};
-      tabs.appendChild(btn);
+  function renderCatTabs() {
+    var tabs = safeElement('catTabs'); tabs.innerHTML = '';
+    getLevelData().categorias.forEach(function (category, index) {
+      var button = document.createElement('button'); button.type = 'button';
+      button.className = 'cat-tab' + (index === currentCat ? ' active' : '');
+      button.textContent = category.titulo;
+      var completed = category.cognados.every(function (_, cardIndex) {
+        var key = currentLevel + '-c-' + category.id + '-' + cardIndex;
+        return state.cards[key] && state.cards[key].done;
+      });
+      if (completed) button.classList.add('done');
+      button.onclick = function () { currentCat = index; renderCatTabs(); renderCards(); };
+      tabs.appendChild(button);
     });
   }
-  function renderCards(){
-    var grid = document.getElementById('cardGrid'); grid.innerHTML = '';
-    var cat = getLevelData().categorias[currentCat];
-    document.getElementById('catKicker').textContent = 'Categoría ' + (currentCat + 1) + ' de ' + getLevelData().categorias.length;
-    document.getElementById('catTitle').textContent = cat.titulo;
-    document.getElementById('catSub').textContent = cat.cognados.length + ' palabras comparten este patrón.';
-    cat.cognados.forEach(function(pair, i){
-      var key = currentLevel+'-c-'+cat.id+'-'+i;
-      var isDone = state.cards[key] && state.cards[key].done;
-      var card = document.createElement('div'); card.className = 'card' + (isDone ? ' flipped done' : '');
-      card.innerHTML = '<span class="check">✓</span><div class="face front"><div class="es">Español</div><div class="es-word">' + pair.es + '</div><div class="hint">¿en ' + DATA[lang].label + '?</div></div><div class="face back"><div class="word">' + pair.target + '</div><div class="pattern">' + cat.titulo + '</div></div><span class="speak-mini" type="button">🔊</span>';
-      card.onclick = function(e){
-        if(e.target.classList.contains('speak-mini')){ e.stopPropagation(); speak(pair.target); return; }
-        var just = !card.classList.contains('flipped');
+
+  function renderCards() {
+    var grid = safeElement('cardGrid'); grid.innerHTML = '';
+    var category = getLevelData().categorias[currentCat];
+    if (!category) { currentCat = 0; category = getLevelData().categorias[0]; }
+    safeElement('catKicker').textContent = 'CATEGORÍA ' + (currentCat + 1) + ' DE ' + getLevelData().categorias.length;
+    safeElement('catTitle').textContent = category.titulo;
+    safeElement('catSub').textContent = category.cognados.length + ' palabras comparten este patrón.';
+
+    category.cognados.forEach(function (pair, index) {
+      var key = currentLevel + '-c-' + category.id + '-' + index;
+      var completed = state.cards[key] && state.cards[key].done;
+      var card = document.createElement('article');
+      card.className = 'card' + (completed ? ' flipped done' : '');
+      card.innerHTML = '<span class="check">✓</span><div class="face front"><div class="es">Español</div><div class="es-word">' + escapeHTML(pair.es) + '</div><div class="hint">¿en ' + escapeHTML(DATA[lang].label) + '?</div></div><div class="face back"><div class="word">' + escapeHTML(pair.target) + '</div><div class="pattern">' + escapeHTML(category.titulo) + '</div></div><button class="speak-mini" type="button" aria-label="Escuchar">🔊</button>';
+      card.querySelector('.speak-mini').onclick = function (event) { event.stopPropagation(); speak(pair.target); };
+      card.onclick = function (event) {
+        if (event.target.closest('.speak-mini')) return;
+        var firstTime = !card.classList.contains('flipped');
         card.classList.toggle('flipped');
-        if(just){ addCardDone(cat.id, i); card.classList.add('done'); speak(pair.target); renderCatTabs(); refreshCounters(); }
+        if (firstTime) {
+          addCardDone(category.id, index);
+          card.classList.add('done');
+          speak(pair.target);
+          renderCatTabs(); refreshCounters(); checkAchievements();
+        }
       };
       grid.appendChild(card);
     });
   }
 
-  // TRAMPAS (BUG ARREGLADO)
-  function renderTrap(idx){
-    var t = getLevelData().trampas[idx]; if(!t) return;
-    document.getElementById('trapWord').textContent = t.word;
-    document.getElementById('trapPrompt').textContent = 'En ' + DATA[lang].label + ', "' + t.word + '" significa...';
-    document.getElementById('trapFeedback').innerHTML = '';
-    var nextBtn = document.getElementById('nextTrap');
-    nextBtn.style.display = 'none';
-    
-    var optsEl = document.getElementById('trapOpts'); optsEl.innerHTML = '';
-    var opts = t.opts.slice().sort(function(){return Math.random()-0.5;});
-    
-    opts.forEach(function(o){
-      var btn = document.createElement('button'); btn.className = 'opt'; btn.textContent = o[0]; btn.type = 'button';
-      btn.onclick = function(){
-        Array.prototype.forEach.call(optsEl.children, function(b){ b.disabled = true; });
-        if(o[1]){ btn.classList.add('correct'); addTrapDone(idx, true); playSound('success'); } 
-        else { btn.classList.add('wrong'); addTrapDone(idx, false); playSound('error'); Array.prototype.forEach.call(optsEl.children, function(b){ if(b.dataset.correct === 'true') b.classList.add('correct'); }); }
-        document.getElementById('trapFeedback').innerHTML = '<strong>'+(o[1]?'¡Exacto!':'Casi.')+'</strong> ' + escapeHTML(t.note) + '<span class="mnemonic">💡 ' + escapeHTML(t.mnemonic) + '</span>';
-        nextBtn.style.display = 'inline-block';
-        nextBtn.textContent = (idx < getLevelData().trampas.length - 1) ? 'Siguiente trampa →' : 'Volver al inicio →';
-        refreshCounters();
+  function renderTrap(index) {
+    var traps = getLevelData().trampas;
+    if (!traps.length) return;
+    if (!traps[index]) { index = 0; trapIndex = 0; }
+    var trap = traps[index];
+    safeElement('trapWord').textContent = trap.word;
+    safeElement('trapPrompt').textContent = 'En ' + DATA[lang].label + ', "' + trap.word + '" significa...';
+    safeElement('trapFeedback').innerHTML = '';
+    var nextButton = safeElement('nextTrap'); nextButton.style.display = 'none';
+    var options = safeElement('trapOpts'); options.innerHTML = '';
+
+    shuffle(trap.opts).forEach(function (option) {
+      var button = document.createElement('button'); button.type = 'button'; button.className = 'opt'; button.textContent = option[0];
+      if (option[1]) button.dataset.correct = 'true';
+      button.onclick = function () {
+        Array.prototype.forEach.call(options.children, function (item) { item.disabled = true; });
+        if (option[1]) { button.classList.add('correct'); addTrapDone(index, true); playSound('success'); }
+        else {
+          button.classList.add('wrong'); addTrapDone(index, false); playSound('error');
+          Array.prototype.forEach.call(options.children, function (item) { if (item.dataset.correct === 'true') item.classList.add('correct'); });
+        }
+        safeElement('trapFeedback').innerHTML = '<strong>' + (option[1] ? '¡Exacto!' : 'Casi.') + '</strong> ' + escapeHTML(trap.note) + '<span class="mnemonic">💡 ' + escapeHTML(trap.mnemonic) + '</span>';
+        nextButton.style.display = 'inline-flex'; refreshCounters(); checkAchievements();
       };
-      if(o[1]) btn.dataset.correct = 'true';
-      optsEl.appendChild(btn);
+      options.appendChild(button);
     });
-    
-    nextBtn.onclick = function(){
-      trapIndex = (trapIndex + 1) % getLevelData().trampas.length;
-      renderTrap(trapIndex);
-    };
-    document.getElementById('trapSpeak').onclick = function(){ speak(t.word); };
+
+    nextButton.onclick = function () { trapIndex = (trapIndex + 1) % traps.length; renderTrap(trapIndex); };
+    safeElement('trapSpeak').onclick = function () { speak(trap.word); };
   }
 
-  function renderVerbSelector(){
-    var wrap = document.getElementById('verbSelector'); wrap.innerHTML = '';
-    getLevelData().verbos.lista.forEach(function(v, i){
-      var btn = document.createElement('button'); btn.className = 'verb-pill' + (i === currentVerb ? ' active' : ''); btn.textContent = v.inf; btn.type = 'button';
-      btn.onclick = function(){ currentVerb = i; renderVerbSelector(); renderVerbCard(); };
-      wrap.appendChild(btn);
+  function renderVerbSelector() {
+    var container = safeElement('verbSelector'); container.innerHTML = '';
+    getLevelData().verbos.lista.forEach(function (verb, index) {
+      var button = document.createElement('button'); button.type = 'button';
+      button.className = 'verb-pill' + (index === currentVerb ? ' active' : '');
+      button.textContent = verb.inf;
+      button.onclick = function () { currentVerb = index; renderVerbSelector(); renderVerbCard(); };
+      container.appendChild(button);
     });
   }
-  function renderVerbCard(){
-    var v = getLevelData().verbos.lista[currentVerb]; if(!v) return;
-    document.getElementById('verbInf').textContent = v.inf;
-    document.getElementById('verbEs').textContent = v.es;
-    document.getElementById('exIt').textContent = v.ejemplo;
-    document.getElementById('exEs').textContent = v.ejEs;
-    var grid = document.getElementById('conjGrid'); grid.innerHTML = '';
-    v.formas.forEach(function(forma, i){
-      var pro = getLevelData().verbos.pronombres[i];
+
+  function renderVerbCard() {
+    var verbs = getLevelData().verbos.lista;
+    if (!verbs[currentVerb]) currentVerb = 0;
+    var verb = verbs[currentVerb]; if (!verb) return;
+    safeElement('verbInf').textContent = verb.inf;
+    safeElement('verbEs').textContent = verb.es;
+    safeElement('exIt').textContent = verb.ejemplo;
+    safeElement('exEs').textContent = verb.ejEs;
+    var grid = safeElement('conjGrid'); grid.innerHTML = '';
+    verb.formas.forEach(function (form, index) {
+      var pronoun = getLevelData().verbos.pronombres[index];
       var row = document.createElement('div'); row.className = 'conj-row';
-      row.innerHTML = '<span class="conj-pron">'+pro.it+' <em>('+pro.es+')</em></span><span class="conj-form">'+forma+'</span><button class="conj-speak" type="button">🔊</button>';
-      row.querySelector('.conj-speak').onclick = function(){ speak(forma); };
+      row.innerHTML = '<span class="conj-pron">' + escapeHTML(pronoun.it) + ' <em>(' + escapeHTML(pronoun.es) + ')</em></span><span class="conj-form">' + escapeHTML(form) + '</span><button class="conj-speak" type="button">🔊</button>';
+      row.querySelector('.conj-speak').onclick = function () { speak(form); };
       grid.appendChild(row);
     });
-    document.getElementById('exSpeak').onclick = function(){ speak(v.ejemplo); };
+    safeElement('exSpeak').onclick = function () { speak(verb.ejemplo); };
   }
 
-  function renderBuilder(){
-    var ex = getLevelData().construccion[builderIndex]; if(!ex) return;
-    document.getElementById('builderPrompt').textContent = ex.es;
+  function renderBuilder() {
+    var exercises = getLevelData().construccion;
+    if (!exercises.length) return;
+    if (!exercises[builderIndex]) builderIndex = 0;
+    var exercise = exercises[builderIndex];
+    safeElement('builderPrompt').textContent = exercise.es;
     builderSelection = [];
-    var ans = document.getElementById('builderAnswer'); ans.className = 'builder-answer'; ans.innerHTML = '<span class="placeholder">Tu respuesta aquí...</span>';
-    document.getElementById('builderFeedback').textContent = '';
-    var pool = document.getElementById('builderPool'); pool.innerHTML = '';
-    var all = []; ex.palabras.forEach(function(w){ all.push({text:w, ok:true}); }); ex.distractores.forEach(function(w){ all.push({text:w, ok:false}); });
-    shuffle(all).forEach(function(item){
-      var chip = document.createElement('button'); chip.className = 'word-chip'; chip.textContent = item.text; chip.type = 'button';
-      chip.onclick = function(){
-        chip.classList.add('used'); chip.disabled = true;
-        builderSelection.push({text:item.text, chip:chip});
-        var a = document.getElementById('builderAnswer'); a.innerHTML = '';
-        builderSelection.forEach(function(it, idx){
-          var c = document.createElement('button'); c.className = 'word-chip selected'; c.textContent = it.text; c.type = 'button';
-          c.onclick = function(){ it.chip.classList.remove('used'); it.chip.disabled = false; builderSelection.splice(idx,1); renderBuilderAns(); };
-          a.appendChild(c);
-        });
-        if(builderSelection.length===0) a.innerHTML = '<span class="placeholder">Tu respuesta aquí...</span>';
+    safeElement('builderAnswer').innerHTML = '<span class="placeholder">Tu respuesta aparecerá aquí...</span>';
+    safeElement('builderFeedback').textContent = '';
+    var pool = safeElement('builderPool'); pool.innerHTML = '';
+    var words = [];
+    exercise.palabras.forEach(function (word) { words.push({ text: word }); });
+    exercise.distractores.forEach(function (word) { words.push({ text: word }); });
+
+    shuffle(words).forEach(function (item) {
+      var chip = document.createElement('button'); chip.type = 'button'; chip.className = 'word-chip'; chip.textContent = item.text;
+      chip.onclick = function () {
+        chip.disabled = true; chip.classList.add('used');
+        builderSelection.push({ text: item.text, chip: chip });
+        renderBuilderAnswer();
       };
       pool.appendChild(chip);
     });
   }
-  function renderBuilderAns(){
-    var a = document.getElementById('builderAnswer'); a.innerHTML = '';
-    builderSelection.forEach(function(it, idx){
-      var c = document.createElement('button'); c.className = 'word-chip selected'; c.textContent = it.text; c.type = 'button';
-      c.onclick = function(){ it.chip.classList.remove('used'); it.chip.disabled = false; builderSelection.splice(idx,1); renderBuilderAns(); };
-      a.appendChild(c);
-    });
-    if(builderSelection.length===0) a.innerHTML = '<span class="placeholder">Tu respuesta aquí...</span>';
-  }
-  document.getElementById('builderCheck').onclick = function(){
-    var ex = getLevelData().construccion[builderIndex];
-    var user = builderSelection.map(function(x){return x.text.toLowerCase();}).join(' ');
-    var correct = ex.palabras.join(' ').toLowerCase();
-    var fb = document.getElementById('builderFeedback');
-    if(user === correct){ fb.textContent = '¡Perfecto!'; fb.className = 'builder-feedback ok'; speak(ex.traduccion); state.xp += 5; saveState(); refreshCounters(); playSound('success'); }
-    else { fb.textContent = 'Casi... inténtalo de nuevo.'; fb.className = 'builder-feedback bad'; playSound('error'); }
-  };
-  document.getElementById('builderClear').onclick = renderBuilder;
-  document.getElementById('builderNext').onclick = function(){ builderIndex = (builderIndex+1) % getLevelData().construccion.length; renderBuilder(); };
 
-  function renderSurvivalCats(){
-    var wrap = document.getElementById('survivalCats'); wrap.innerHTML = '';
-    getLevelData().supervivencia.forEach(function(cat, i){
-      var b = document.createElement('button'); b.className = 'survival-cat' + (i===currentSurvivalCat?' active':''); b.textContent = cat.icono+' '+cat.categoria; b.type = 'button';
-      b.onclick = function(){ currentSurvivalCat = i; renderSurvivalCats(); renderSurvivalList(); };
-      wrap.appendChild(b);
+  function renderBuilderAnswer() {
+    var answer = safeElement('builderAnswer'); answer.innerHTML = '';
+    builderSelection.forEach(function (item, index) {
+      var chip = document.createElement('button'); chip.type = 'button'; chip.className = 'word-chip selected'; chip.textContent = item.text;
+      chip.onclick = function () { item.chip.disabled = false; item.chip.classList.remove('used'); builderSelection.splice(index, 1); renderBuilderAnswer(); };
+      answer.appendChild(chip);
     });
-  }
-  function renderSurvivalList(){
-    var list = document.getElementById('survivalList'); list.innerHTML = '';
-    getLevelData().supervivencia[currentSurvivalCat].frases.forEach(function(f){
-      var d = document.createElement('div'); d.className = 'survival-item';
-      d.innerHTML = '<div class="survival-text"><div class="survival-es">'+escapeHTML(f.es)+'</div><div class="survival-target">'+escapeHTML(f.target)+'</div></div><button class="survival-speak" type="button">🔊</button>';
-      d.querySelector('.survival-speak').onclick = function(){ speak(f.target); };
-      list.appendChild(d);
-    });
+    if (builderSelection.length === 0) answer.innerHTML = '<span class="placeholder">Tu respuesta aparecerá aquí...</span>';
   }
 
-  var chatHistory = [];
-  function renderChatHeader(){
-    var t = DATA[lang].tutor;
-    document.getElementById('tutorNameHead').textContent = t.name;
-    document.getElementById('chatAvatar').textContent = t.avatar;
-    document.getElementById('chatName').textContent = t.name;
-    document.getElementById('chatStatus').textContent = t.status;
-    document.getElementById('chatTextarea').placeholder = 'Escribe en ' + DATA[lang].label + '...';
-  }
-  function renderChat(){
-    var msgs = document.getElementById('chatMessages'); msgs.innerHTML = '';
-    if(chatHistory.length === 0) chatHistory.push({role:'model', text:DATA[lang].tutor.greeting});
-    chatHistory.forEach(function(m){
-      var w = document.createElement('div'); w.className = 'msg msg-'+m.role;
-      w.innerHTML = '<div class="bubble">'+escapeHTML(m.text)+'</div>';
-      msgs.appendChild(w);
-    });
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-  document.getElementById('chatForm').onsubmit = async function(e){
-    e.preventDefault();
-    var txt = document.getElementById('chatTextarea').value.trim(); if(!txt) return;
-    document.getElementById('chatTextarea').value = '';
-    chatHistory.push({role:'user', text:txt}); renderChat();
-    
-    var msgs = document.getElementById('chatMessages');
-    var typing = document.createElement('div'); typing.className = 'msg msg-model typing'; typing.id = 'typing'; typing.innerHTML = '<div class="bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>';
-    msgs.appendChild(typing); msgs.scrollTop = msgs.scrollHeight;
-    
-    try{
-      var resText = await callAI(chatHistory);
-      document.getElementById('typing').remove();
-      chatHistory.push({role:'model', text:resText}); renderChat(); speak(resText);
-    }catch(err){
-      document.getElementById('typing').remove();
-      var errorMsg = err.message === 'RATE_LIMIT' ? '⚠️ He alcanzado mi límite de respuestas por hoy. ¡Vuelve mañana!' : '⚠️ Error de conexión.';
-      chatHistory.push({role:'model', text: errorMsg}); renderChat();
+  safeElement('builderCheck').onclick = function () {
+    var exercise = getLevelData().construccion[builderIndex];
+    var userAnswer = builderSelection.map(function (item) { return item.text.toLowerCase(); }).join(' ');
+    var correctAnswer = exercise.palabras.join(' ').toLowerCase();
+    var feedback = safeElement('builderFeedback');
+    if (userAnswer === correctAnswer) {
+      feedback.textContent = '¡Perfecto!'; feedback.className = 'builder-feedback ok';
+      speak(exercise.traduccion); state.xp += 5; saveState(); refreshCounters(); playSound('success');
+    } else {
+      feedback.textContent = 'Casi. Revisa el orden e inténtalo otra vez.'; feedback.className = 'builder-feedback bad'; playSound('error');
     }
   };
-  document.getElementById('chatReset').onclick = function(){
-    if(!confirm('¿Reiniciar conversación?')) return;
-    chatHistory = [{role:'model', text:DATA[lang].tutor.greeting}]; renderChat();
+  safeElement('builderClear').onclick = renderBuilder;
+  safeElement('builderNext').onclick = function () { builderIndex = (builderIndex + 1) % getLevelData().construccion.length; renderBuilder(); };
+
+  function renderSurvivalCats() {
+    var container = safeElement('survivalCats'); container.innerHTML = '';
+    getLevelData().supervivencia.forEach(function (category, index) {
+      var button = document.createElement('button'); button.type = 'button';
+      button.className = 'survival-cat' + (index === currentSurvivalCat ? ' active' : '');
+      button.textContent = category.icono + ' ' + category.categoria;
+      button.onclick = function () { currentSurvivalCat = index; renderSurvivalCats(); renderSurvivalList(); };
+      container.appendChild(button);
+    });
+  }
+
+  function renderSurvivalList() {
+    var categories = getLevelData().supervivencia;
+    if (!categories[currentSurvivalCat]) currentSurvivalCat = 0;
+    var container = safeElement('survivalList'); container.innerHTML = '';
+    categories[currentSurvivalCat].frases.forEach(function (phrase) {
+      var item = document.createElement('article'); item.className = 'survival-item';
+      item.innerHTML = '<div class="survival-text"><div class="survival-es">' + escapeHTML(phrase.es) + '</div><div class="survival-target">' + escapeHTML(phrase.target) + '</div></div><button class="survival-speak" type="button">🔊</button>';
+      item.querySelector('.survival-speak').onclick = function () { speak(phrase.target); };
+      container.appendChild(item);
+    });
+  }
+
+  async function callAI(history) {
+    var payload = { systemPrompt: DATA[lang].tutor.systemPrompt, history: history.map(function (message) { return { role: message.role === 'user' ? 'user' : 'model', text: message.text }; }) };
+    var response = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    if (!response.ok) throw new Error(response.status === 429 ? 'RATE_LIMIT' : 'SERVER_ERROR');
+    var result = await response.json();
+    return result.text;
+  }
+
+  function renderChatHeader() {
+    var tutor = DATA[lang].tutor;
+    safeElement('tutorNameHead').textContent = tutor.name;
+    safeElement('chatAvatar').textContent = tutor.avatar;
+    safeElement('chatName').textContent = tutor.name;
+    safeElement('chatStatus').textContent = tutor.status;
+    safeElement('chatTextarea').placeholder = 'Escribe en ' + DATA[lang].label + '...';
+  }
+
+  function renderChat() {
+    var container = safeElement('chatMessages'); container.innerHTML = '';
+    if (chatHistory.length === 0) chatHistory.push({ role: 'model', text: DATA[lang].tutor.greeting });
+    chatHistory.forEach(function (message) {
+      var wrapper = document.createElement('div'); wrapper.className = 'msg msg-' + message.role;
+      wrapper.innerHTML = '<div class="bubble">' + escapeHTML(message.text) + '</div>';
+      container.appendChild(wrapper);
+    });
+    container.scrollTop = container.scrollHeight;
+  }
+
+  safeElement('chatForm').onsubmit = async function (event) {
+    event.preventDefault();
+    var textarea = safeElement('chatTextarea'); var text = textarea.value.trim();
+    if (!text) return; textarea.value = '';
+    chatHistory.push({ role: 'user', text: text }); renderChat();
+    var typing = document.createElement('div'); typing.className = 'msg msg-model typing'; typing.id = 'typing';
+    typing.innerHTML = '<div class="bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>';
+    safeElement('chatMessages').appendChild(typing);
+    try {
+      var response = await callAI(chatHistory);
+      var typingElement = safeElement('typing'); if (typingElement) typingElement.remove();
+      chatHistory.push({ role: 'model', text: response }); renderChat();
+    } catch (error) {
+      var currentTyping = safeElement('typing'); if (currentTyping) currentTyping.remove();
+      chatHistory.push({ role: 'model', text: error.message === 'RATE_LIMIT' ? 'He alcanzado el límite diario de respuestas. Vuelve mañana.' : 'No pude conectarme con el tutor en este momento.' });
+      renderChat();
+    }
   };
-
-  // ============================================================
-  //  SPEECH MODE (Modo Habla 🎙️)
-  // ============================================================
-  var speechPhrases = [], speechIndex = 0, speechCorrect = 0, speechTotal = 0;
-  var recognition = null, isRecording = false;
-
+  safeElement('chatReset').onclick = function () { chatHistory = []; renderChat(); };
+  
+  // MODO HABLA
+  var speechPhrases = [], speechIndex = 0, speechCorrect = 0, speechTotal = 0, recognition = null, isRecording = false;
   function getSpeechPhrases() {
-    var lvl = getLevelData();
-    var phrases = [];
-    // From survival phrases
-    lvl.supervivencia.forEach(function(cat) {
-      cat.frases.forEach(function(f) {
-        phrases.push({ target: f.target, es: f.es });
-      });
-    });
-    // From vocabulary
-    lvl.vocabulario_esencial.forEach(function(cat) {
-      cat.items.forEach(function(item) {
-        phrases.push({ target: item.target, es: item.es });
-      });
-    });
+    var level = getLevelData(), phrases = [];
+    level.supervivencia.forEach(function (category) { category.frases.forEach(function (phrase) { phrases.push({ target: phrase.target, es: phrase.es }); }); });
+    level.vocabulario_esencial.forEach(function (category) { category.items.forEach(function (item) { phrases.push({ target: item.target, es: item.es }); }); });
     return shuffle(phrases).slice(0, 15);
   }
-
   function openSpeechMode() {
     speechPhrases = getSpeechPhrases();
-    if (speechPhrases.length === 0) return alert('No hay frases disponibles.');
+    if (!speechPhrases.length) return alert('No hay frases disponibles.');
     speechIndex = 0; speechCorrect = 0; speechTotal = 0;
-    document.getElementById('speechModal').classList.add('show');
-    renderSpeechPhrase();
+    safeElement('speechModal').classList.add('show'); renderSpeechPhrase();
   }
-
   function renderSpeechPhrase() {
     if (speechIndex >= speechPhrases.length) {
-      // Show results
-      fireConfetti(); playSound('success');
-      var pct = speechTotal > 0 ? Math.round((speechCorrect / speechTotal) * 100) : 0;
-      document.getElementById('speechCard').innerHTML =
-        '<div class="speech-close" id="speechCloseEnd">✕</div>' +
-        '<div class="speech-emoji">🎉</div>' +
-        '<h2 style="font-family:var(--font-display); font-size:1.8rem; margin:0.5rem 0;">¡Increíble!</h2>' +
-        '<p style="opacity:0.8; margin-bottom:1rem;">Has practicado tu pronunciación</p>' +
-        '<div class="celebration-stats">' +
-          '<div class="stat"><div class="value">' + speechCorrect + '/' + speechTotal + '</div><div class="label">aciertos</div></div>' +
-          '<div class="stat"><div class="value">' + pct + '%</div><div class="label">precisión</div></div>' +
-        '</div>' +
-        '<p style="font-size:0.85rem; opacity:0.65; margin:1rem 0;">+' + (speechCorrect * 8) + ' XP ganados</p>' +
-        '<button class="btn-primary" onclick="document.getElementById(\'speechModal\').classList.remove(\'show\'); location.reload();">Volver</button>';
-      document.getElementById('speechCloseEnd').onclick = function() {
-        document.getElementById('speechModal').classList.remove('show'); location.reload();
-      };
-      state.xp += (speechCorrect * 8); saveState();
-      checkAchievements();
+      state.speechSessions = (state.speechSessions || 0) + 1; state.xp += speechCorrect * 8; saveState();
+      fireConfetti(); playSound('success'); checkAchievements();
+      safeElement('speechCard').innerHTML = '<div class="speech-finish"><div class="speech-emoji">🎉</div><h2>¡Excelente!</h2><p>Terminaste tu práctica de pronunciación.</p><div class="celebration-stats"><div class="stat"><div class="value">' + speechCorrect + '/' + speechTotal + '</div><div class="label">aciertos</div></div></div><button class="btn-primary" id="speechFinishBtn" type="button">Volver</button></div>';
+      safeElement('speechFinishBtn').onclick = function () { safeElement('speechModal').classList.remove('show'); location.reload(); };
       return;
     }
-    var p = speechPhrases[speechIndex];
-    document.getElementById('speechTarget').textContent = p.target;
-    document.getElementById('speechTranslation').textContent = p.es;
-    document.getElementById('speechStatus').textContent = 'Toca el micrófono para empezar';
-    document.getElementById('speechStatus').className = 'speech-status';
-    document.getElementById('speechResult').innerHTML = '';
-    document.getElementById('speechScore').textContent = speechCorrect;
-    document.getElementById('speechTotal').textContent = speechTotal;
-    document.getElementById('micBtn').classList.remove('recording');
+    var phrase = speechPhrases[speechIndex];
+    safeElement('speechTarget').textContent = phrase.target;
+    safeElement('speechTranslation').textContent = phrase.es;
+    safeElement('speechStatus').textContent = 'Toca el micrófono para empezar';
+    safeElement('speechResult').innerHTML = '';
+    safeElement('speechScore').textContent = speechCorrect; safeElement('speechTotal').textContent = speechTotal;
+    safeElement('micBtn').classList.remove('recording');
   }
-
-  function normalizeSpeech(text) {
-    return text.toLowerCase().replace(/[.,!?¿¡;:'"…\-]/g, '').replace(/\s+/g, ' ').trim();
-  }
-
+  function normalizeSpeech(text) { return text.toLowerCase().replace(/[.,!?¿¡;:'"…\-]/g, '').replace(/\s+/g, ' ').trim(); }
   function compareSpeech(heard, expected) {
-    var h = normalizeSpeech(heard);
-    var e = normalizeSpeech(expected);
-    if (h === e) return 1;
-    // Fuzzy: check if most words match
-    var hWords = h.split(' ');
-    var eWords = e.split(' ');
-    var matches = 0;
-    eWords.forEach(function(w) { if (hWords.indexOf(w) !== -1) matches++; });
-    return eWords.length > 0 ? matches / eWords.length : 0;
+    var heardText = normalizeSpeech(heard), expectedText = normalizeSpeech(expected);
+    if (heardText === expectedText) return 1;
+    var heardWords = heardText.split(' '), expectedWords = expectedText.split(' '), matches = 0;
+    expectedWords.forEach(function (word) { if (heardWords.indexOf(word) !== -1) matches++; });
+    return expectedWords.length ? matches / expectedWords.length : 0;
   }
-
-  document.getElementById('micBtn').onclick = function() {
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      document.getElementById('speechStatus').textContent = '⚠️ Tu navegador no soporta reconocimiento de voz.';
-      return;
-    }
-    if (isRecording && recognition) {
-      recognition.stop();
-      return;
-    }
-    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SR();
-    recognition.lang = DATA[lang].voice;
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 3;
-
-    recognition.onstart = function() {
-      isRecording = true;
-      document.getElementById('micBtn').classList.add('recording');
-      document.getElementById('speechStatus').textContent = '🎤 Escuchando...';
-      document.getElementById('speechStatus').className = 'speech-status listening';
-    };
-
-    recognition.onresult = function(event) {
-      var results = event.results[0];
-      var bestMatch = 0;
-      var bestText = '';
+  safeElement('micBtn').onclick = function () {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) { safeElement('speechStatus').textContent = 'Tu navegador no soporta reconocimiento de voz.'; return; }
+    if (isRecording && recognition) { recognition.stop(); return; }
+    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition(); recognition.lang = DATA[lang].voice; recognition.interimResults = false; recognition.maxAlternatives = 3;
+    recognition.onstart = function () { isRecording = true; safeElement('micBtn').classList.add('recording'); safeElement('speechStatus').textContent = 'Escuchando...'; };
+    recognition.onresult = function (event) {
+      var results = event.results[0], bestScore = 0, bestText = '';
       for (var i = 0; i < results.length; i++) {
         var score = compareSpeech(results[i].transcript, speechPhrases[speechIndex].target);
-        if (score > bestMatch) { bestMatch = score; bestText = results[i].transcript; }
+        if (score > bestScore) { bestScore = score; bestText = results[i].transcript; }
       }
       speechTotal++;
-      var resultEl = document.getElementById('speechResult');
-      if (bestMatch >= 0.7) {
-        speechCorrect++;
-        resultEl.innerHTML = '<div class="result-correct">✅ ¡Perfecto! "' + escapeHTML(bestText) + '"</div>';
-        playSound('success');
-        state.xp += 3; saveState();
-      } else {
-        resultEl.innerHTML = '<div class="result-wrong">❌ Casi...<span class="heard">Escuché: "' + escapeHTML(bestText) + '"</span></div>';
-        playSound('error');
-      }
-      document.getElementById('speechScore').textContent = speechCorrect;
-      document.getElementById('speechTotal').textContent = speechTotal;
-      setTimeout(function() { speechIndex++; renderSpeechPhrase(); }, 2000);
+      if (bestScore >= 0.7) { speechCorrect++; safeElement('speechResult').innerHTML = '<div class="result-correct">✓ ¡Muy bien! "' + escapeHTML(bestText) + '"</div>'; state.xp += 3; saveState(); playSound('success'); }
+      else { safeElement('speechResult').innerHTML = '<div class="result-wrong">Inténtalo de nuevo. Escuché: "' + escapeHTML(bestText) + '"</div>'; playSound('error'); }
+      safeElement('speechScore').textContent = speechCorrect; safeElement('speechTotal').textContent = speechTotal;
+      setTimeout(function () { speechIndex++; renderSpeechPhrase(); }, 1800);
     };
-
-    recognition.onerror = function(event) {
-      isRecording = false;
-      document.getElementById('micBtn').classList.remove('recording');
-      if (event.error === 'no-speech') {
-        document.getElementById('speechStatus').textContent = 'No escuché nada. Intenta de nuevo.';
-      } else {
-        document.getElementById('speechStatus').textContent = '⚠️ Error: ' + event.error;
-      }
-      document.getElementById('speechStatus').className = 'speech-status';
-    };
-
-    recognition.onend = function() {
-      isRecording = false;
-      document.getElementById('micBtn').classList.remove('recording');
-      document.getElementById('speechStatus').className = 'speech-status';
-      if (document.getElementById('speechStatus').textContent === '🎤 Escuchando...') {
-        document.getElementById('speechStatus').textContent = 'Toca el micrófono para empezar';
-      }
-    };
-
+    recognition.onerror = function () { isRecording = false; safeElement('micBtn').classList.remove('recording'); safeElement('speechStatus').textContent = 'No pude escucharte. Inténtalo otra vez.'; };
+    recognition.onend = function () { isRecording = false; var button = safeElement('micBtn'); if (button) button.classList.remove('recording'); };
     recognition.start();
   };
+  safeElement('speechClose').onclick = function () { if (recognition) { try { recognition.stop(); } catch (error) {} } safeElement('speechModal').classList.remove('show'); };
+  safeElement('speechSkip').onclick = function () { speechTotal++; speechIndex++; renderSpeechPhrase(); };
+  safeElement('speechListen').onclick = function () { if (speechPhrases[speechIndex]) speak(speechPhrases[speechIndex].target); };
+  safeElement('btnSpeechMode').onclick = openSpeechMode;
 
-  document.getElementById('speechClose').onclick = function() {
-    if (recognition) try { recognition.stop(); } catch(e) {}
-    document.getElementById('speechModal').classList.remove('show');
-  };
-  document.getElementById('speechSkip').onclick = function() {
-    speechTotal++;
-    speechIndex++;
-    renderSpeechPhrase();
-  };
-  document.getElementById('speechListen').onclick = function() {
-    if (speechPhrases[speechIndex]) speak(speechPhrases[speechIndex].target);
-  };
-  document.getElementById('btnSpeechMode').onclick = openSpeechMode;
-
-  // ============================================================
-  //  ACHIEVEMENTS (Logros 🏆)
-  // ============================================================
+  // LOGROS
   var ACHIEVEMENTS = [
-    { id: 'first_card', icon: '🌟', name: 'Primera Carta', desc: 'Voltea tu primera tarjeta de cognado.', check: function() { return (state.done || 0) >= 1; } },
-    { id: 'ten_cards', icon: '🃏', name: '10 Cognados', desc: 'Aprende 10 cognados.', check: function() { return Object.keys(state.cards || {}).filter(function(k){ return state.cards[k].done; }).length >= 10; } },
-    { id: 'fifty_cards', icon: '🎴', name: 'Coleccionista', desc: 'Aprende 50 cognados.', check: function() { return Object.keys(state.cards || {}).filter(function(k){ return state.cards[k].done; }).length >= 50; } },
-    { id: 'first_trap', icon: '🪤', name: 'Cazatrampas', desc: 'Resuelve tu primera trampa.', check: function() { return Object.keys(state.traps || {}).length >= 1; } },
-    { id: 'five_traps', icon: '🛡️', name: 'Resistente', desc: 'Resuelve 5 trampas.', check: function() { return Object.keys(state.traps || {}).filter(function(k){ return state.traps[k].done; }).length >= 5; } },
-    { id: 'xp_50', icon: '⭐', name: 'Aprendiz', desc: 'Acumula 50 XP.', check: function() { return (state.xp || 0) >= 50; } },
-    { id: 'xp_200', icon: '💫', name: 'Estudiante', desc: 'Acumula 200 XP.', check: function() { return (state.xp || 0) >= 200; } },
-    { id: 'xp_500', icon: '🔥', name: 'Maestro', desc: 'Acumula 500 XP.', check: function() { return (state.xp || 0) >= 500; } },
-    { id: 'streak_3', icon: '📅', name: '3 días seguidos', desc: 'Mantén una racha de 3 días.', check: function() { return (state.streak || 0) >= 3; } },
-    { id: 'streak_7', icon: '🗓️', name: 'Semana perfecta', desc: 'Mantén una racha de 7 días.', check: function() { return (state.streak || 0) >= 7; } },
-    { id: 'story_1', icon: '📖', name: 'Lector', desc: 'Completa tu primera historia.', check: function() { return (state.storiesCompleted || 0) >= 1; } },
-    { id: 'speech_1', icon: '🎙️', name: 'Hablante', desc: 'Completa una sesión de Modo Habla.', check: function() { return (state.speechSessions || 0) >= 1; } }
+    { id: 'first_card', icon: '🌟', name: 'Primera carta', desc: 'Descubre tu primer cognado.', check: function () { return (state.done || 0) >= 1; } },
+    { id: 'ten_cards', icon: '🃏', name: '10 cognados', desc: 'Aprende 10 cognados.', check: function () { return Object.keys(state.cards || {}).filter(function (key) { return state.cards[key].done; }).length >= 10; } },
+    { id: 'first_trap', icon: '🪤', name: 'Cazatrampas', desc: 'Resuelve tu primer falso amigo.', check: function () { return Object.keys(state.traps || {}).length >= 1; } },
+    { id: 'xp_50', icon: '⭐', name: 'Aprendiz', desc: 'Consigue 50 XP.', check: function () { return (state.xp || 0) >= 50; } },
+    { id: 'xp_200', icon: '💫', name: 'Estudiante', desc: 'Consigue 200 XP.', check: function () { return (state.xp || 0) >= 200; } },
+    { id: 'xp_500', icon: '🔥', name: 'Maestro', desc: 'Consigue 500 XP.', check: function () { return (state.xp || 0) >= 500; } },
+    { id: 'streak_3', icon: '📅', name: 'Constancia', desc: 'Mantén una racha de 3 días.', check: function () { return (state.streak || 0) >= 3; } },
+    { id: 'streak_7', icon: '🗓️', name: 'Semana perfecta', desc: 'Mantén una racha de 7 días.', check: function () { return (state.streak || 0) >= 7; } },
+    { id: 'story_1', icon: '📖', name: 'Lector', desc: 'Completa tu primera historia.', check: function () { return (state.storiesCompleted || 0) >= 1; } },
+    { id: 'speech_1', icon: '🎙️', name: 'Hablante', desc: 'Completa una sesión de Modo Habla.', check: function () { return (state.speechSessions || 0) >= 1; } }
   ];
-
-  function getUnlockedAchievements() {
-    if (!state.achievements) state.achievements = {};
-    var count = 0;
-    ACHIEVEMENTS.forEach(function(a) {
-      if (a.check()) {
-        if (!state.achievements[a.id]) {
-          state.achievements[a.id] = Date.now();
-          showAchievementToast(a);
-          count++;
-        }
-      }
-    });
-    if (count > 0) saveState();
-    return state.achievements;
-  }
-
-  function checkAchievements() {
-    getUnlockedAchievements();
-    updateAchievementBadge();
-  }
-
-  function updateAchievementBadge() {
-    var unlocked = state.achievements ? Object.keys(state.achievements).length : 0;
-    document.getElementById('achievementsBadge').textContent = unlocked + '/' + ACHIEVEMENTS.length;
-  }
-
+  function getUnlockedAchievements() { if (!state.achievements) state.achievements = {}; ACHIEVEMENTS.forEach(function (achievement) { if (achievement.check() && !state.achievements[achievement.id]) { state.achievements[achievement.id] = Date.now(); showAchievementToast(achievement); } }); saveState(); }
+  function checkAchievements() { getUnlockedAchievements(); updateAchievementBadge(); refreshProfile(); }
+  function updateAchievementBadge() { safeElement('achievementsBadge').textContent = Object.keys(state.achievements || {}).length; }
   function showAchievementToast(achievement) {
-    var toast = document.createElement('div');
-    toast.className = 'achievement-toast';
-    toast.innerHTML = '<span class="achievement-toast-icon">' + achievement.icon + '</span><div class="achievement-toast-text"><strong>¡Logro desbloqueado!</strong>' + escapeHTML(achievement.name) + '</div>';
-    document.body.appendChild(toast);
-    playSound('success');
-    setTimeout(function() {
-      toast.classList.add('leaving');
-      setTimeout(function() { toast.remove(); }, 500);
-    }, 3500);
+    var toast = document.createElement('div'); toast.className = 'achievement-toast';
+    toast.innerHTML = '<span class="achievement-toast-icon">' + achievement.icon + '</span><div class="achievement-toast-text"><strong>¡Nuevo logro!</strong>' + escapeHTML(achievement.name) + '</div>';
+    document.body.appendChild(toast); setTimeout(function () { toast.remove(); }, 3500);
   }
-
   function renderAchievements() {
-    var grid = document.getElementById('achievementsGrid');
-    grid.innerHTML = '';
-    var unlocked = state.achievements || {};
-    ACHIEVEMENTS.forEach(function(a) {
-      var isUnlocked = !!unlocked[a.id];
-      var item = document.createElement('div');
-      item.className = 'achievement-item ' + (isUnlocked ? 'unlocked' : 'locked');
-      item.innerHTML =
-        (isUnlocked ? '<span class="achievement-check">✓</span>' : '') +
-        '<span class="achievement-icon">' + a.icon + '</span>' +
-        '<div class="achievement-name">' + escapeHTML(a.name) + '</div>' +
-        '<div class="achievement-desc">' + escapeHTML(a.desc) + '</div>';
+    var grid = safeElement('achievementsGrid'); grid.innerHTML = '';
+    ACHIEVEMENTS.forEach(function (achievement) {
+      var unlocked = !!state.achievements[achievement.id];
+      var item = document.createElement('article'); item.className = 'achievement-item ' + (unlocked ? 'unlocked' : 'locked');
+      item.innerHTML = '<span class="achievement-icon">' + achievement.icon + '</span><div class="achievement-name">' + escapeHTML(achievement.name) + '</div><div class="achievement-desc">' + escapeHTML(achievement.desc) + '</div>';
       grid.appendChild(item);
     });
   }
+  safeElement('btnAchievements').onclick = function () { checkAchievements(); renderAchievements(); safeElement('achievementsModal').classList.add('show'); };
+  safeElement('achievementsClose').onclick = function () { safeElement('achievementsModal').classList.remove('show'); };
 
-  document.getElementById('btnAchievements').onclick = function() {
-    checkAchievements();
-    renderAchievements();
-    document.getElementById('achievementsModal').classList.add('show');
-  };
-  document.getElementById('achievementsClose').onclick = function() {
-    document.getElementById('achievementsModal').classList.remove('show');
-  };
-
-  // ============================================================
-  //  STORY MODE (Modo Historia 📖)
-  // ============================================================
+  // HISTORIAS
   var STORIES = {
-    it: [
-      {
-        id: 'caffe', title: 'Un caffè a Roma', difficulty: 'A1',
-        body: [
-          'Marco va al <hl data-es="bar">bar</hl> ogni <hl data-es="mañana">mattina</hl>.',
-          'Lui <hl data-es="pide">ordina</hl> un <hl data-es="café">caffè</hl> e un <hl data-es="cruasán">cornetto</hl>.',
-          'Il barista dice: "<hl data-es="Buenos días">Buongiorno</hl>, Marco!"',
-          'Marco <hl data-es="responde">risponde</hl>: "Buongiorno! Un caffè, <hl data-es="por favor">per favore</hl>."',
-          'Il caffè è <hl data-es="bueno">buono</hl>. Marco è <hl data-es="feliz">felice</hl>.'
-        ],
-        vocab: [
-          { target: 'bar', es: 'bar/cafetería' },
-          { target: 'mattina', es: 'mañana' },
-          { target: 'caffè', es: 'café' },
-          { target: 'cornetto', es: 'cruasán' },
-          { target: 'buono', es: 'bueno' }
-        ],
-        questions: [
-          { q: '¿Adónde va Marco cada mañana?', opts: [['Al bar', true], ['Al parque', false], ['Al trabajo', false]] },
-          { q: '¿Qué ordena Marco?', opts: [['Un caffè e un cornetto', true], ['Una pizza', false], ['Un gelato', false]] },
-          { q: '¿Cómo está Marco?', opts: [['Felice (feliz)', true], ['Triste', false], ['Arrabbiato (enojado)', false]] }
-        ]
-      },
-      {
-        id: 'viaggio', title: 'Il viaggio a Firenze', difficulty: 'A2',
-        body: [
-          'Laura <hl data-es="quiere">vuole</hl> <hl data-es="visitar">visitare</hl> Firenze.',
-          'Lei <hl data-es="compra">compra</hl> un <hl data-es="billete">biglietto</hl> del treno.',
-          'Il <hl data-es="viaje">viaggio</hl> dura due <hl data-es="horas">ore</hl>.',
-          'A Firenze, Laura <hl data-es="ve">vede</hl> il <hl data-es="Duomo">Duomo</hl> e il Ponte Vecchio.',
-          'Lei <hl data-es="toma fotos">fa delle foto</hl> e <hl data-es="come">mangia</hl> un gelato.',
-          '"Firenze è <hl data-es="bellissima">bellissima</hl>!" dice Laura.'
-        ],
-        vocab: [
-          { target: 'visitare', es: 'visitar' },
-          { target: 'biglietto', es: 'billete' },
-          { target: 'viaggio', es: 'viaje' },
-          { target: 'ore', es: 'horas' },
-          { target: 'bellissima', es: 'bellísima' }
-        ],
-        questions: [
-          { q: '¿Adónde quiere ir Laura?', opts: [['A Firenze', true], ['A Roma', false], ['A Venezia', false]] },
-          { q: '¿Cuánto dura el viaje?', opts: [['Due ore (2 horas)', true], ['Una hora', false], ['Tre ore', false]] },
-          { q: '¿Qué come Laura en Firenze?', opts: [['Un gelato', true], ['Una pizza', false], ['Un cornetto', false]] }
-        ]
-      },
-      {
-        id: 'mercato', title: 'Al mercato', difficulty: 'B1',
-        body: [
-          'Ogni <hl data-es="sábado">sabato</hl>, la <hl data-es="familia">famiglia</hl> Rossi va al <hl data-es="mercado">mercato</hl>.',
-          'La <hl data-es="madre">mamma</hl> compra la <hl data-es="fruta">frutta</hl>: mele, arance e <hl data-es="fresas">fragole</hl>.',
-          'Il papà <hl data-es="elige">sceglie</hl> il <hl data-es="pescado fresco">pesce fresco</hl>.',
-          'I bambini <hl data-es="quieren">vogliono</hl> <hl data-es="siempre">sempre</hl> la <hl data-es="pizza">pizza</hl>.',
-          '"<hl data-es="Hoy">Oggi</hl> <hl data-es="cocino">cucino</hl> io!" dice il papà.',
-          'La <hl data-es="cena">cena</hl> è <hl data-es="deliciosa">deliziosa</hl>.'
-        ],
-        vocab: [
-          { target: 'mercato', es: 'mercado' },
-          { target: 'frutta', es: 'fruta' },
-          { target: 'fragole', es: 'fresas' },
-          { target: 'pesce fresco', es: 'pescado fresco' },
-          { target: 'deliziosa', es: 'deliciosa' }
-        ],
-        questions: [
-          { q: '¿Cuándo va la familia al mercado?', opts: [['Ogni sabato', true], ['Ogni domenica', false], ['Ogni lunedì', false]] },
-          { q: '¿Quién cocina hoy?', opts: [['Il papà', true], ['La mamma', false], ['I bambini', false]] },
-          { q: '¿Qué quieren siempre los niños?', opts: [['La pizza', true], ['Il pesce', false], ['La frutta', false]] }
-        ]
-      }
-    ],
-    fr: [
-      {
-        id: 'cafe_paris', title: 'Un café à Paris', difficulty: 'A1',
-        body: [
-          'Sophie va au <hl data-es="café">café</hl> <hl data-es="cada">chaque</hl> <hl data-es="mañana">matin</hl>.',
-          'Elle <hl data-es="pide">commande</hl> un <hl data-es="café">café</hl> et un <hl data-es="cruasán">croissant</hl>.',
-          'Le serveur dit: "<hl data-es="Buenos días">Bonjour</hl>, Sophie!"',
-          'Sophie <hl data-es="responde">répond</hl>: "Bonjour! Un café, <hl data-es="por favor">s\'il vous plaît</hl>."',
-          'Le café est <hl data-es="bueno">bon</hl>. Sophie est <hl data-es="contenta">contente</hl>.'
-        ],
-        vocab: [
-          { target: 'café', es: 'café' },
-          { target: 'matin', es: 'mañana' },
-          { target: 'croissant', es: 'cruasán' },
-          { target: 'bon', es: 'bueno' },
-          { target: 'contente', es: 'contenta' }
-        ],
-        questions: [
-          { q: '¿Adónde va Sophie cada mañana?', opts: [['Au café', true], ['Au parc', false], ['Au travail', false]] },
-          { q: '¿Qué pide Sophie?', opts: [['Un café et un croissant', true], ['Une pizza', false], ['Un jus d\'orange', false]] },
-          { q: '¿Cómo se siente Sophie?', opts: [['Contente (contenta)', true], ['Triste', false], ['Fatiguée (cansada)', false]] }
-        ]
-      },
-      {
-        id: 'voyage_lyon', title: 'Le voyage à Lyon', difficulty: 'A2',
-        body: [
-          'Pierre <hl data-es="quiere">veut</hl> <hl data-es="visitar">visiter</hl> Lyon.',
-          'Il <hl data-es="compra">achète</hl> un <hl data-es="billete">billet</hl> de train.',
-          'Le <hl data-es="viaje">voyage</hl> <hl data-es="dura">dure</hl> deux <hl data-es="horas">heures</hl>.',
-          'À Lyon, Pierre <hl data-es="ve">voit</hl> la basilique et le <hl data-es="viejo">vieux</hl> Lyon.',
-          'Il <hl data-es="come">mange</hl> dans un <hl data-es="restaurante">restaurant</hl> <hl data-es="típico">typique</hl>.',
-          '"Lyon est <hl data-es="magnífica">magnifique</hl>!" dit Pierre.'
-        ],
-        vocab: [
-          { target: 'visiter', es: 'visitar' },
-          { target: 'billet', es: 'billete' },
-          { target: 'voyage', es: 'viaje' },
-          { target: 'heures', es: 'horas' },
-          { target: 'magnifique', es: 'magnífica' }
-        ],
-        questions: [
-          { q: '¿Adónde quiere ir Pierre?', opts: [['À Lyon', true], ['À Paris', false], ['À Marseille', false]] },
-          { q: '¿Cuánto dura el viaje?', opts: [['Deux heures (2 horas)', true], ['Une heure', false], ['Trois heures', false]] },
-          { q: '¿Qué dice Pierre sobre Lyon?', opts: [['Magnifique', true], ['Terrible', false], ['Ennuyeuse (aburrida)', false]] }
-        ]
-      },
-      {
-        id: 'marche', title: 'Au marché', difficulty: 'B1',
-        body: [
-          '<hl data-es="Cada">Chaque</hl> <hl data-es="domingo">dimanche</hl>, la <hl data-es="familia">famille</hl> Dupont va au <hl data-es="mercado">marché</hl>.',
-          'La <hl data-es="madre">mère</hl> <hl data-es="compra">achète</hl> des <hl data-es="frutas">fruits</hl>: des <hl data-es="manzanas">pommes</hl>, des oranges et des <hl data-es="fresas">fraises</hl>.',
-          'Le <hl data-es="padre">père</hl> <hl data-es="elige">choisit</hl> le <hl data-es="pescado fresco">poisson frais</hl>.',
-          'Les <hl data-es="niños">enfants</hl> <hl data-es="quieren">veulent</hl> <hl data-es="siempre">toujours</hl> des <hl data-es="crêpes">crêpes</hl>.',
-          '"<hl data-es="Hoy">Aujourd\'hui</hl>, je <hl data-es="cocino">cuisine</hl>!" dit le père.',
-          'Le <hl data-es="almuerzo">déjeuner</hl> est <hl data-es="delicioso">délicieux</hl>.'
-        ],
-        vocab: [
-          { target: 'marché', es: 'mercado' },
-          { target: 'fruits', es: 'frutas' },
-          { target: 'fraises', es: 'fresas' },
-          { target: 'poisson frais', es: 'pescado fresco' },
-          { target: 'délicieux', es: 'delicioso' }
-        ],
-        questions: [
-          { q: '¿Cuándo va la familia al mercado?', opts: [['Chaque dimanche', true], ['Chaque samedi', false], ['Chaque lundi', false]] },
-          { q: '¿Quién cocina hoy?', opts: [['Le père', true], ['La mère', false], ['Les enfants', false]] },
-          { q: '¿Qué quieren siempre los niños?', opts: [['Des crêpes', true], ['Du poisson', false], ['Des fruits', false]] }
-        ]
-      }
-    ]
+    it: [{ id: 'caffe', title: 'Un caffè a Roma', difficulty: 'A1', body: ['Marco va al bar ogni mattina.', 'Lui ordina un caffè e un cornetto.', 'Il barista dice: "Buongiorno, Marco!"', 'Marco risponde: "Un caffè, per favore."', 'Il caffè è buono e Marco è felice.'], vocab: [{ target: 'mattina', es: 'mañana' }, { target: 'caffè', es: 'café' }, { target: 'cornetto', es: 'cruasán' }, { target: 'buono', es: 'bueno' }], questions: [{ q: '¿Adónde va Marco cada mañana?', opts: [['Al bar', true], ['Al parque', false], ['Al trabajo', false]] }, { q: '¿Qué pide Marco?', opts: [['Un caffè e un cornetto', true], ['Una pizza', false], ['Un gelato', false]] }] }],
+    fr: [{ id: 'cafe_paris', title: 'Un café à Paris', difficulty: 'A1', body: ['Sophie va au café chaque matin.', 'Elle commande un café et un croissant.', 'Le serveur dit: "Bonjour, Sophie!"', 'Sophie répond: "Un café, s\'il vous plaît."', 'Le café est bon et Sophie est contente.'], vocab: [{ target: 'matin', es: 'mañana' }, { target: 'croissant', es: 'cruasán' }, { target: 'bon', es: 'bueno' }], questions: [{ q: '¿Adónde va Sophie cada mañana?', opts: [['Au café', true], ['Au parc', false], ['Au travail', false]] }, { q: '¿Qué pide Sophie?', opts: [['Un café et un croissant', true], ['Une pizza', false], ['Un jus', false]] }] }]
   };
-
-  var currentStoryIndex = 0;
-  var storyCompletedSet = {};
-
   function getStories() { return STORIES[lang] || []; }
-
   function renderStoryNav() {
-    var nav = document.getElementById('storyNav');
-    nav.innerHTML = '';
-    var stories = getStories();
-    stories.forEach(function(s, i) {
-      var btn = document.createElement('button');
-      btn.className = 'story-nav-btn' + (i === currentStoryIndex ? ' active' : '');
-      if (storyCompletedSet[lang + '-' + s.id]) btn.classList.add('completed');
-      btn.textContent = s.title;
-      btn.type = 'button';
-      btn.onclick = function() { currentStoryIndex = i; renderStoryNav(); renderStory(); };
-      nav.appendChild(btn);
+    var container = safeElement('storyNav'); container.innerHTML = '';
+    getStories().forEach(function (story, index) {
+      var button = document.createElement('button'); button.type = 'button';
+      button.className = 'story-nav-btn' + (index === currentStoryIndex ? ' active' : ''); button.textContent = story.title;
+      button.onclick = function () { currentStoryIndex = index; renderStoryNav(); renderStory(); };
+      container.appendChild(button);
     });
   }
-
   function renderStory() {
-    var stories = getStories();
-    if (!stories.length) {
-      document.getElementById('storyCard').innerHTML = '<p style="opacity:0.6; text-align:center; padding:2rem;">No hay historias disponibles para este idioma.</p>';
-      return;
-    }
-    var s = stories[currentStoryIndex];
-    document.getElementById('storyDifficulty').textContent = s.difficulty;
-    document.getElementById('storyTitle').textContent = s.title;
-
-    // Body with highlights
-    var bodyHtml = '';
-    s.body.forEach(function(line) {
-      var parsed = line.replace(/<hl data-es="([^"]+)">([^<]+)<\/hl>/g, '<span class="story-highlight" title="$1">$2</span>');
-      bodyHtml += '<p class="paragraph">' + parsed + '</p>';
-    });
-    document.getElementById('storyBody').innerHTML = bodyHtml;
-
-    // Vocabulary chips
-    var vocabHtml = '';
-    s.vocab.forEach(function(v) {
-      vocabHtml += '<span class="story-vocab-chip"><span class="vocab-target">' + escapeHTML(v.target) + '</span> <span class="vocab-es">= ' + escapeHTML(v.es) + '</span></span>';
-    });
-    document.getElementById('storyVocab').innerHTML = vocabHtml;
-
-    // Questions
-    var qEl = document.getElementById('storyQuestions');
-    qEl.innerHTML = '';
-    var answeredCount = 0;
-    s.questions.forEach(function(question, qi) {
-      var block = document.createElement('div');
-      block.className = 'story-question-block';
-      block.innerHTML = '<div class="story-question-text">' + (qi + 1) + '. ' + escapeHTML(question.q) + '</div><div class="story-options" id="storyOpts' + qi + '"></div>';
-      qEl.appendChild(block);
-      var optsEl = block.querySelector('.story-options');
-      var shuffledOpts = shuffle(question.opts.slice());
-      shuffledOpts.forEach(function(opt) {
-        var btn = document.createElement('button');
-        btn.className = 'story-opt';
-        btn.textContent = opt[0];
-        btn.type = 'button';
-        btn.onclick = function() {
-          Array.prototype.forEach.call(optsEl.children, function(b) { b.disabled = true; });
-          if (opt[1]) {
-            btn.classList.add('correct');
-            playSound('success');
-            state.xp += 5; saveState(); refreshCounters();
-          } else {
-            btn.classList.add('wrong');
-            playSound('error');
-            Array.prototype.forEach.call(optsEl.children, function(b) {
-              if (b.textContent === question.opts.find(function(o){ return o[1]; })[0]) b.classList.add('correct');
-            });
-          }
-          answeredCount++;
-          if (answeredCount >= s.questions.length) {
-            storyCompletedSet[lang + '-' + s.id] = true;
-            if (!state.storiesCompleted) state.storiesCompleted = 0;
-            state.storiesCompleted++;
-            saveState();
-            renderStoryNav();
-            checkAchievements();
-          }
+    var stories = getStories(); if (!stories.length) return;
+    if (!stories[currentStoryIndex]) currentStoryIndex = 0;
+    var story = stories[currentStoryIndex];
+    safeElement('storyDifficulty').textContent = story.difficulty; safeElement('storyTitle').textContent = story.title;
+    var body = safeElement('storyBody'); body.innerHTML = '';
+    story.body.forEach(function (paragraph) { var element = document.createElement('p'); element.className = 'paragraph'; element.textContent = paragraph; body.appendChild(element); });
+    var vocabulary = safeElement('storyVocab'); vocabulary.innerHTML = '';
+    story.vocab.forEach(function (item) { var chip = document.createElement('span'); chip.className = 'story-vocab-chip'; chip.innerHTML = '<span class="vocab-target">' + escapeHTML(item.target) + '</span><span class="vocab-es"> = ' + escapeHTML(item.es) + '</span>'; vocabulary.appendChild(chip); });
+    var questions = safeElement('storyQuestions'); questions.innerHTML = ''; var answered = 0;
+    story.questions.forEach(function (question, questionIndex) {
+      var block = document.createElement('div'); block.className = 'story-question-block';
+      block.innerHTML = '<div class="story-question-text">' + (questionIndex + 1) + '. ' + escapeHTML(question.q) + '</div><div class="story-options"></div>';
+      var options = block.querySelector('.story-options');
+      shuffle(question.opts).forEach(function (option) {
+        var button = document.createElement('button'); button.type = 'button'; button.className = 'story-opt'; button.textContent = option[0];
+        button.onclick = function () {
+          Array.prototype.forEach.call(options.children, function (item) { item.disabled = true; });
+          if (option[1]) { button.classList.add('correct'); state.xp += 5; saveState(); playSound('success'); }
+          else { button.classList.add('wrong'); playSound('error'); Array.prototype.forEach.call(options.children, function (item) { if (item.dataset.correct === 'true') item.classList.add('correct'); }); }
+          answered++;
+          if (answered >= story.questions.length) { var storyKey = lang + '-' + story.id; if (!storyCompletedSet[storyKey]) { storyCompletedSet[storyKey] = true; state.storiesCompleted = (state.storiesCompleted || 0) + 1; saveState(); checkAchievements(); } }
+          refreshCounters();
         };
-        if (opt[1]) btn.dataset.correct = 'true';
-        optsEl.appendChild(btn);
+        if (option[1]) button.dataset.correct = 'true';
+        options.appendChild(button);
+      });
+      questions.appendChild(block);
+    });
+  }
+  safeElement('storyNext').onclick = function () { var stories = getStories(); if (!stories.length) return; currentStoryIndex = (currentStoryIndex + 1) % stories.length; renderStoryNav(); renderStory(); };
+  safeElement('btnStoryMode').onclick = function () { scrollToSection('historia'); };
+
+  // RUTA DE APRENDIZAJE + LECCIONES
+  function courseKey() { return lang + '-' + currentLevel; }
+  function getCourseState() { if (!state.course) state.course = {}; var key = courseKey(); if (!state.course[key]) state.course[key] = { lessons: {}, exams: {} }; if (!state.course[key].lessons) state.course[key].lessons = {}; if (!state.course[key].exams) state.course[key].exams = {}; return state.course[key]; }
+  function getLearningUnits() {
+    return [
+      { icon:'👋', title:'Primeros pasos', desc:'Empieza con las palabras y estructuras esenciales.', lessons:[{id:'u1-vocab', title:'Vocabulario esencial', meta:'Palabras básicas para comenzar', target:'vocabulario'},{id:'u1-cognados', title:'Tus primeros cognados', meta:'Reconoce palabras que ya conoces', target:'cognados'},{id:'u1-verbos', title:'Verbos básicos', meta:'Empieza a expresar acciones', target:'verbos'},{id:'u1-frases', title:'Construye tus primeras frases', meta:'Ordena y produce frases', target:'constructor'},{id:'u1-exam', title:'Examen de Unidad 1', meta:'Necesitas 70% para aprobar', exam:true}]},
+      { icon:'🧩', title:'Construye confianza', desc:'Reconoce trampas y comienza a formar frases.', lessons:[{id:'u2-trampas', title:'Falsos amigos', meta:'Evita errores frecuentes', target:'trampa'},{id:'u2-frases', title:'Construcción práctica', meta:'Refuerza la estructura', target:'constructor'},{id:'u2-habla', title:'Habla con confianza', meta:'Practica pronunciación', action:'speech'},{id:'u2-exam', title:'Examen de Unidad 2', meta:'Necesitas 70% para aprobar', exam:true}]},
+      { icon:'💬', title:'Comunícate', desc:'Aprende expresiones para situaciones reales.', lessons:[{id:'u3-supervivencia', title:'Frases de supervivencia', meta:'Comunícate en situaciones reales', target:'supervivencia'},{id:'u3-habla', title:'Pronunciación', meta:'Escucha y repite', action:'speech'},{id:'u3-tutor', title:'Conversación guiada', meta:'Practica con tu tutor IA', target:'tutor'},{id:'u3-exam', title:'Examen de Unidad 3', meta:'Necesitas 70% para aprobar', exam:true}]},
+      { icon:'📖', title:'Comprende', desc:'Lee y escucha el idioma en contexto.', lessons:[{id:'u4-historia', title:'Historia interactiva', meta:'Comprensión en contexto', target:'historia'},{id:'u4-repaso', title:'Repaso rápido', meta:'Consolida lo aprendido', action:'review'},{id:'u4-tutor', title:'Tutor IA', meta:'Resuelve dudas y conversa', target:'tutor'},{id:'u4-exam', title:'Examen de Unidad 4', meta:'Necesitas 70% para aprobar', exam:true}]},
+      { icon:'🏆', title:'Domina el nivel ' + currentLevel.toUpperCase(), desc:'Consolida el nivel antes de continuar.', lessons:[{id:'u5-repaso', title:'Repaso final', meta:'Practica todo el nivel', action:'review'},{id:'u5-habla', title:'Reto de pronunciación', meta:'Demuestra lo que puedes decir', action:'speech'},{id:'u5-exam', title:'Evaluación final', meta:'Necesitas 70% para completar el nivel', exam:true}]}
+    ];
+  }
+  function isLessonDone(id) { return !!getCourseState().lessons[id]; }
+  function isUnitComplete(index) { var unit = getLearningUnits()[index]; return unit.lessons.every(function(lesson){ return isLessonDone(lesson.id); }); }
+  function isUnitUnlocked(index) { return index === 0 || isUnitComplete(index - 1); }
+  function getCourseProgress() { var units = getLearningUnits(), total = 0, done = 0; units.forEach(function(unit){ unit.lessons.forEach(function(lesson){ total++; if (isLessonDone(lesson.id)) done++; }); }); return {done:done,total:total,percentage:total?Math.round(done/total*100):0}; }
+  function getCurrentUnitIndex() { var units = getLearningUnits(); for (var i=0;i<units.length;i++) if (!isUnitComplete(i)) return i; return units.length - 1; }
+  function getFirstIncompleteLesson(unitIndex) { var lessons = getLearningUnits()[unitIndex].lessons; for (var i=0;i<lessons.length;i++) if (!isLessonDone(lessons[i].id)) return i; return lessons.length - 1; }
+  function completeCourseLesson(lesson, xp) { if (isLessonDone(lesson.id)) return; getCourseState().lessons[lesson.id] = {done:true, completedAt:Date.now()}; state.xp = (state.xp || 0) + (xp || 20); saveState(); playSound('success'); refreshCounters(); renderLearningPath(); refreshProfile(); }
+  
+  function renderLearningPath() {
+    var container = safeElement('learningPath'); if (!container) return;
+    var units = getLearningUnits(), course = getCourseProgress(), currentUnit = getCurrentUnitIndex();
+    container.innerHTML = '';
+    safeElement('learningPct').textContent = course.percentage + '%';
+    safeElement('learningRing').style.setProperty('--progress', course.percentage * 3.6 + 'deg');
+    units.forEach(function(unit,index){
+      var completed = isUnitComplete(index), unlocked = isUnitUnlocked(index), current = unlocked && !completed && index === currentUnit;
+      var article = document.createElement('article');
+      article.className = 'path-unit' + (completed?' completed':'') + (current?' current':'') + (!unlocked?' locked':'');
+      var statusText = completed ? 'Completada' : current ? 'Actual' : unlocked ? 'Disponible' : 'Bloqueada';
+      var icon = completed ? '✓' : !unlocked ? '🔒' : unit.icon;
+      article.innerHTML = '<div class="path-rail"><button class="path-node" type="button" '+(!unlocked?'disabled':'')+'>'+icon+'</button>'+(index<units.length-1?'<span class="path-line"></span>':'')+'</div>'+
+        '<button class="path-card" type="button" '+(!unlocked?'disabled':'')+'><div class="path-unit-top"><span>UNIDAD '+(index+1)+'</span><em>'+statusText+'</em></div><h3>'+escapeHTML(unit.title)+'</h3><p>'+escapeHTML(unit.desc)+'</p><div class="path-tags">'+unit.lessons.map(function(l){return '<span>'+(isLessonDone(l.id)?'✓ ':'')+escapeHTML(l.title)+'</span>';}).join('')+'</div></button>';
+      if (unlocked) { article.querySelector('.path-node').onclick=function(){ openCourseUnit(index); }; article.querySelector('.path-card').onclick=function(){ openCourseUnit(index); }; }
+      container.appendChild(article);
+    });
+    var current = units[currentUnit], lessonIndex = getFirstIncompleteLesson(currentUnit), lesson = current.lessons[lessonIndex];
+    safeElement('nextLessonTitle').textContent = 'Unidad '+(currentUnit+1)+' · '+lesson.title;
+    safeElement('nextLessonMeta').textContent = lesson.meta;
+    safeElement('continueLearning').dataset.unit = currentUnit;
+    safeElement('continueLearning').textContent = course.percentage === 100 ? 'Repasar →' : 'Continuar →';
+  }
+
+  function openCourseUnit(unitIndex) {
+    if (!isUnitUnlocked(unitIndex)) return;
+    var modal=safeElement('courseModal'), unit=getLearningUnits()[unitIndex];
+    safeElement('courseModalKicker').textContent='UNIDAD '+(unitIndex+1);
+    safeElement('courseModalTitle').textContent=unit.title;
+    safeElement('courseModalDesc').textContent=unit.desc;
+    var done=unit.lessons.filter(function(l){return isLessonDone(l.id);}).length;
+    safeElement('courseUnitBar').style.width=Math.round(done/unit.lessons.length*100)+'%';
+    var body=safeElement('courseModalBody'); body.innerHTML='<div class="lesson-list"></div>';
+    var list=body.querySelector('.lesson-list');
+    unit.lessons.forEach(function(lesson,index){
+      var doneLesson=isLessonDone(lesson.id), previousDone=index===0 || isLessonDone(unit.lessons[index-1].id), locked=!previousDone;
+      var btn=document.createElement('button'); btn.type='button'; btn.className='lesson-row'+(doneLesson?' done':'')+(locked?' locked':''); btn.disabled=locked;
+      btn.innerHTML='<span class="lesson-num">'+(doneLesson?'✓':(index+1))+'</span><span><strong>'+escapeHTML(lesson.title)+'</strong><small>'+escapeHTML(lesson.meta)+'</small></span><span class="lesson-state">'+(doneLesson?'Completada':locked?'Bloqueada':'Abrir →')+'</span>';
+      if(!locked) btn.onclick=function(){ startCourseLesson(unitIndex,index); };
+      list.appendChild(btn);
+    });
+    modal.classList.add('show');
+  }
+
+  function startCourseLesson(unitIndex, lessonIndex) {
+    var unit=getLearningUnits()[unitIndex], lesson=unit.lessons[lessonIndex];
+    if (lessonIndex>0 && !isLessonDone(unit.lessons[lessonIndex-1].id)) return;
+    if (lesson.exam) { renderUnitExam(unitIndex, lessonIndex); return; }
+    var body=safeElement('courseModalBody');
+    body.innerHTML='<p><strong>'+escapeHTML(lesson.title)+'</strong></p><p>'+escapeHTML(lesson.meta)+'. Abre la actividad, practícala y vuelve aquí para completar esta lección.</p><div class="course-actions"><button type="button" class="course-primary" id="courseOpenActivity">Abrir actividad →</button><button type="button" class="course-secondary" id="courseMarkDone">Marcar como completada</button></div>';
+    safeElement('courseOpenActivity').onclick=function(){ safeElement('courseModal').classList.remove('show'); if(lesson.action==='speech') safeElement('btnSpeechMode').click(); else if(lesson.action==='review') safeElement('btnQuickReview').click(); else scrollToSection(lesson.target); };
+    safeElement('courseMarkDone').onclick=function(){ completeCourseLesson(lesson,20); openCourseUnit(unitIndex); };
+  }
+
+  function buildExamQuestions() {
+    var questions=[], level=getLevelData();
+    if(level.categorias && level.categorias.length){
+      level.categorias.slice(0,3).forEach(function(cat){
+        if(!cat.cognados || !cat.cognados.length) return;
+        var pair=cat.cognados[Math.floor(Math.random()*cat.cognados.length)], pool=[];
+        level.categorias.forEach(function(c){ (c.cognados||[]).forEach(function(p){ if(p.target!==pair.target) pool.push(p.target); }); });
+        pool=shuffle(pool).slice(0,3); pool.push(pair.target);
+        questions.push({q:'¿Cómo se dice "'+pair.es+'"?', options:shuffle(pool), answer:pair.target});
+      });
+    }
+    if(level.trampas && level.trampas.length){
+      var trap = level.trampas[Math.floor(Math.random() * level.trampas.length)], correctOpt = trap.opts.find(function(o){ return o[1]; }), wrongOpts = trap.opts.filter(function(o){ return !o[1]; });
+      if(correctOpt) { var opts = [correctOpt[0]]; wrongOpts.slice(0, 2).forEach(function(o){ opts.push(o[0]); }); while(opts.length < 3) opts.push("..."); questions.push({q: 'En ' + DATA[lang].label + ', "' + trap.word + '" significa...', options: shuffle(opts), answer: correctOpt[0]}); }
+    }
+    return questions.slice(0,4);
+  }
+
+  function renderUnitExam(unitIndex, lessonIndex) {
+    var lesson=getLearningUnits()[unitIndex].lessons[lessonIndex], questions=buildExamQuestions(), body=safeElement('courseModalBody');
+    if(!questions.length){ body.innerHTML='<p>No hay suficiente contenido cargado para generar el examen de este nivel.</p>'; return; }
+    var answers={};
+    body.innerHTML='<p>Responde las preguntas. Necesitas <strong>70%</strong> para aprobar.</p><div id="courseExam"></div><div class="course-actions"><button type="button" class="course-primary" id="courseExamCheck">Calificar examen</button></div><div class="exam-result" id="courseExamResult"></div>';
+    var exam=safeElement('courseExam');
+    questions.forEach(function(q,qi){
+      var block=document.createElement('div'); block.innerHTML='<p><strong>'+(qi+1)+'. '+escapeHTML(q.q)+'</strong></p><div class="exam-options"></div>';
+      q.options.forEach(function(option){ var b=document.createElement('button'); b.type='button'; b.className='exam-option'; b.textContent=option; b.onclick=function(){Array.prototype.forEach.call(block.querySelectorAll('.exam-option'),function(x){x.classList.remove('selected');});b.classList.add('selected');answers[qi]=option;}; block.querySelector('.exam-options').appendChild(b); });
+      exam.appendChild(block);
+    });
+    safeElement('courseExamCheck').onclick=function(){
+      var correct=0; questions.forEach(function(q,i){if(answers[i]===q.answer) correct++;});
+      var score=Math.round(correct/questions.length*100), result=safeElement('courseExamResult');
+      if(score>=70){ result.textContent='✓ Aprobado con '+score+'%. Unidad completada.'; completeCourseLesson(lesson,50); fireConfetti(); setTimeout(function(){openCourseUnit(unitIndex);},700); }
+      else { result.textContent='Obtuviste '+score+'%. Repasa la unidad e inténtalo nuevamente.'; playSound('error'); }
+    };
+  }
+
+  safeElement('courseModalClose').onclick=function(){ safeElement('courseModal').classList.remove('show'); };
+  safeElement('courseModal').onclick=function(e){ if(e.target===this) this.classList.remove('show'); };
+  safeElement('continueLearning').onclick=function(){ openCourseUnit(Number(this.dataset.unit||0)); };
+
+  function refreshProfile() {
+    if (!state) return;
+    safeElement('profileXP').textContent = state.xp || 0;
+    safeElement('profileStreak').textContent = state.streak || 0;
+    safeElement('profileKnown').textContent = Object.keys(state.cards || {}).filter(function (key) { return state.cards[key] && state.cards[key].done; }).length;
+    safeElement('profileAchievements').textContent = Object.keys(state.achievements || {}).length;
+  }
+
+  // REPASO RÁPIDO (MEJORADO)
+  var gameQuestions = [], gameIndex = 0, gameScore = 0;
+  function generateGameQuestions() {
+    gameQuestions = [];
+    var level = getLevelData(), label = DATA[lang].label;
+    level.vocabulario_esencial.forEach(function(cat) {
+      cat.items.forEach(function(item) {
+        var sameCat = cat.items.filter(function(i) { return i.target !== item.target; });
+        var distractors = [];
+        if (sameCat.length >= 2) { var sh = shuffle(sameCat); distractors = [sh[0].target, sh[1].target]; }
+        else { var allVocab = []; level.vocabulario_esencial.forEach(function(c) { c.items.forEach(function(i) { if (i.target !== item.target) allVocab.push(i.target); }); }); var shAll = shuffle(allVocab); distractors = [shAll[0] || '...', shAll[1] || '...']; }
+        gameQuestions.push({ q: '¿Cómo se dice "' + item.es + '" en ' + label + '?', a: item.target, opts: shuffle([item.target].concat(distractors)) });
       });
     });
+    level.vocabulario_esencial.forEach(function(cat) {
+      cat.items.forEach(function(item) {
+        var sameCat = cat.items.filter(function(i) { return i.es !== item.es; });
+        var distractors = [];
+        if (sameCat.length >= 2) { var sh = shuffle(sameCat); distractors = [sh[0].es, sh[1].es]; }
+        else { var allVocab = []; level.vocabulario_esencial.forEach(function(c) { c.items.forEach(function(i) { if (i.es !== item.es) allVocab.push(i.es); }); }); var shAll = shuffle(allVocab); distractors = [shAll[0] || '...', shAll[1] || '...']; }
+        gameQuestions.push({ q: '¿Qué significa "' + item.target + '" en español?', a: item.es, opts: shuffle([item.es].concat(distractors)) });
+      });
+    });
+    level.categorias.forEach(function(cat) {
+      cat.cognados.forEach(function(item) {
+        var sameCat = cat.cognados.filter(function(i) { return i.target !== item.target; });
+        var distractors = [];
+        if (sameCat.length >= 2) { var sh = shuffle(sameCat); distractors = [sh[0].target, sh[1].target]; }
+        else { var allCog = []; level.categorias.forEach(function(c) { c.cognados.forEach(function(i) { if (i.target !== item.target) allCog.push(i.target); }); }); var shAll = shuffle(allCog); distractors = [shAll[0] || '...', shAll[1] || '...']; }
+        gameQuestions.push({ q: '¿Cómo se dice "' + item.es + '" en ' + label + '?', a: item.target, opts: shuffle([item.target].concat(distractors)) });
+      });
+    });
+    level.verbos.lista.forEach(function(verb) {
+      var pronouns = shuffle(level.verbos.pronombres.map(function(p, i) { return { p: p, i: i }; })).slice(0, 3);
+      pronouns.forEach(function(obj) {
+        var correctForm = verb.formas[obj.i], otherForms = verb.formas.filter(function(f, idx) { return idx !== obj.i; }), sh = shuffle(otherForms);
+        gameQuestions.push({ q: 'Verbo "' + verb.inf + '":<br>¿Cuál es la forma para "' + obj.p.it + '"?', a: correctForm, opts: shuffle([correctForm, sh[0], sh[1]]) });
+      });
+    });
+    level.trampas.forEach(function(trap) {
+      var correctOpt = trap.opts.find(function(o) { return o[1]; }), wrongOpts = trap.opts.filter(function(o) { return !o[1]; });
+      if (correctOpt && wrongOpts.length >= 2) { var shuffled = shuffle(wrongOpts).slice(0, 2).map(function(o) { return o[0]; }); gameQuestions.push({ q: 'En ' + label + ', "' + trap.word + '" significa...', a: correctOpt[0], opts: shuffle([correctOpt[0]].concat(shuffled)) }); }
+    });
+    gameQuestions = shuffle(gameQuestions).slice(0, 10);
+    gameQuestions.forEach(function(q) {
+      q.opts = shuffle(q.opts.filter(function(o, i, arr) { return arr.indexOf(o) === i; }));
+      while (q.opts.length < 3) q.opts.push('...');
+      if (q.opts.indexOf(q.a) === -1) q.opts[0] = q.a;
+      q.opts = shuffle(q.opts);
+    });
   }
 
-  document.getElementById('storyNext').onclick = function() {
-    var stories = getStories();
-    currentStoryIndex = (currentStoryIndex + 1) % stories.length;
-    renderStoryNav();
-    renderStory();
-    document.getElementById('historia').scrollIntoView({ behavior: 'smooth' });
-  };
-
-  document.getElementById('btnStoryMode').onclick = function() {
-    document.getElementById('historia').scrollIntoView({ behavior: 'smooth' });
-  };
-
-  // ============================================================
-  //  RENDER ALL (updated with new features)
-  // ============================================================
-  function renderAll(){
-    loadState();
-    if (!state.achievements) state.achievements = {};
-    if (!state.storiesCompleted) state.storiesCompleted = 0;
-    if (!state.speechSessions) state.speechSessions = 0;
-    document.body.setAttribute('data-lang', lang);
-    document.getElementById('logoLang').textContent = DATA[lang].label;
-    document.getElementById('heroLang').textContent = DATA[lang].label;
-    document.getElementById('heroLevel').textContent = currentLevel.toUpperCase();
-    document.getElementById('heroDesc').textContent = getLevelData().desc;
-    
-    trapIndex = 0; currentCat = 0; currentVerb = 0; builderIndex = 0; currentSurvivalCat = 0; currentVocabCat = 0;
-    currentStoryIndex = 0;
-    
-    renderVocabCats(); renderVocabList();
-    renderCatTabs(); renderCards(); renderTrap(0);
-    renderVerbSelector(); renderVerbCard();
-    renderBuilder();
-    renderSurvivalCats(); renderSurvivalList();
-    renderStoryNav(); renderStory();
-    refreshCounters();
-    renderChatHeader(); renderChat();
-    checkAchievements();
-    updateAchievementBadge();
+  function renderGameQuestion() {
+    if (gameIndex >= gameQuestions.length) {
+      state.xp += gameScore * 5; saveState(); refreshCounters(); fireConfetti();
+      safeElement('gameCard').innerHTML = '<div class="game-finish"><div class="game-finish-icon">🎉</div><h2>¡Muy bien!</h2><p>Acertaste ' + gameScore + ' de ' + gameQuestions.length + ' preguntas.</p><strong>+' + (gameScore * 5) + ' XP</strong><button class="btn-primary" id="gameFinishBtn" type="button">Continuar</button></div>';
+      safeElement('gameFinishBtn').onclick = function () { safeElement('gameModal').classList.remove('show'); location.reload(); };
+      return;
+    }
+    var question = gameQuestions[gameIndex];
+    safeElement('gameProgress').textContent = 'Pregunta ' + (gameIndex + 1) + ' de ' + gameQuestions.length;
+    safeElement('gameQuestion').textContent = question.q;
+    var options = safeElement('gameOptions'); options.innerHTML = '';
+    question.opts.forEach(function (option) {
+      var button = document.createElement('button'); button.type = 'button'; button.className = 'game-opt'; button.textContent = option;
+      button.onclick = function () {
+        Array.prototype.forEach.call(options.children, function (item) { item.disabled = true; });
+        if (option === question.a) { gameScore++; button.classList.add('correct'); playSound('success'); }
+        else { button.classList.add('wrong'); Array.prototype.forEach.call(options.children, function (item) { if (item.textContent === question.a) item.classList.add('correct'); }); playSound('error'); }
+        setTimeout(function () { gameIndex++; renderGameQuestion(); }, 900);
+      };
+      options.appendChild(button);
+    });
   }
 
-  document.getElementById('langToggle').onclick = function(e){
-    var btn = e.target.closest('.lang-btn'); if(!btn) return;
-    var nl = btn.getAttribute('data-lang'); if(nl === lang) return;
-    lang = nl;
-    Array.prototype.forEach.call(document.querySelectorAll('.lang-btn'), function(b){ b.classList.toggle('active', b.getAttribute('data-lang') === lang); });
+  safeElement('btnQuickReview').onclick = function () {
+    generateGameQuestions();
+    if (!gameQuestions.length) return alert('No hay preguntas disponibles para este nivel.');
+    gameIndex = 0; gameScore = 0; safeElement('gameModal').classList.add('show'); renderGameQuestion();
+  };
+
+  // NAVEGACIÓN
+  Array.prototype.forEach.call(document.querySelectorAll('.app-nav-btn'), function (button) {
+    button.onclick = function () {
+      Array.prototype.forEach.call(document.querySelectorAll('.app-nav-btn'), function (item) { item.classList.remove('active'); });
+      button.classList.add('active'); scrollToSection(button.dataset.target);
+    };
+  });
+
+  safeElement('langToggle').onclick = function (event) {
+    var button = event.target.closest('.lang-btn'); if (!button) return;
+    var newLanguage = button.dataset.lang; if (newLanguage === lang) return;
+    lang = newLanguage;
+    document.querySelectorAll('.lang-btn').forEach(function (item) { item.classList.toggle('active', item.dataset.lang === lang); });
     chatHistory = []; renderAll();
   };
 
-  document.getElementById('levelSelector').onchange = function(e){
-    var nl = e.target.value; 
-    if(nl === currentLevel) return;
-    currentLevel = nl;
-    renderAll();
-    window.scrollTo({top: 0, behavior: 'smooth'});
+  safeElement('levelSelector').onchange = function (event) {
+    var newLevel = event.target.value; if (newLevel === currentLevel) return;
+    currentLevel = newLevel; renderAll(); window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  if(!localStorage.getItem('ponte-onboarding-seen')) document.getElementById('onboarding').classList.add('show');
-  document.getElementById('startBtn').onclick = function(){ document.getElementById('onboarding').classList.remove('show'); try{ localStorage.setItem('ponte-onboarding-seen','1'); }catch(e){} };
+  try { if (!localStorage.getItem('ponte-onboarding-seen')) safeElement('onboarding').classList.add('show'); } catch (error) {}
+  safeElement('startBtn').onclick = function () { safeElement('onboarding').classList.remove('show'); try { localStorage.setItem('ponte-onboarding-seen', '1'); } catch (error) {} };
 
-  initTheme();
-  renderAll();
+  function renderAll() {
+    loadState();
+    document.body.setAttribute('data-lang', lang);
+    safeElement('levelSelector').value = currentLevel;
+    safeElement('logoLang').textContent = DATA[lang].label;
+    safeElement('heroLang').textContent = DATA[lang].label;
+    safeElement('heroLevel').textContent = currentLevel.toUpperCase();
+    safeElement('heroDesc').textContent = getLevelData().desc;
+    trapIndex = 0; currentCat = 0; currentVerb = 0; builderIndex = 0; currentSurvivalCat = 0; currentVocabCat = 0; currentStoryIndex = 0;
+    renderVocabCats(); renderVocabList(); renderCatTabs(); renderCards(); renderTrap(trapIndex);
+    renderVerbSelector(); renderVerbCard(); renderBuilder(); renderSurvivalCats(); renderSurvivalList();
+    renderChatHeader(); renderChat(); renderStoryNav(); renderStory();
+    refreshCounters(); checkAchievements(); renderLearningPath();
+  }
+
+  initTheme(); renderAll();
 })();
 </script>
 </body>
