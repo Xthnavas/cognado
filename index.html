@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#171310">
-<title>Cognados — Aprende italiano y francés</title>
+<title>Cognados — Aprende idiomas desde el español</title>
 <link rel="stylesheet" href="./style.css">
 <style>
   .course-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px)}
@@ -21,7 +21,7 @@
   <div class="modal-card error-card">
     <div class="modal-icon">⚠️</div>
     <h2 id="errorTitle">No se pudo cargar el contenido</h2>
-    <p>Cognados necesita <code>data.js</code> para cargar las lecciones de italiano y francés.</p>
+    <p>Cognados necesita <code>data.js</code> para cargar las lecciones de italiano, francés, inglés y portugués.</p>
     <p class="modal-help">Comprueba que <strong>data.js</strong> esté en la misma carpeta que <strong>index.html</strong>.</p>
   </div>
 </div>
@@ -30,7 +30,7 @@
   <div class="modal-card onboarding-card">
     <span class="modal-eyebrow">COMIENZA TU CAMINO</span>
     <h2>Bienvenido a <span class="rev">Cognados</span></h2>
-    <p>Aprende italiano y francés aprovechando todo lo que ya sabes en español.</p>
+    <p>Aprende italiano, francés, inglés y portugués aprovechando todo lo que ya sabes en español.</p>
     <div class="steps">
       <div class="step"><div class="num">1</div><div class="txt"><strong>Aprende por unidades</strong>Sigue una ruta organizada según tu nivel.</div></div>
       <div class="step"><div class="num">2</div><div class="txt"><strong>Descubre cognados</strong>Reconoce palabras que ya conoces.</div></div>
@@ -131,6 +131,8 @@
       <div class="lang-toggle" id="langToggle" role="tablist" aria-label="Idioma">
         <button class="lang-btn active" data-lang="it" type="button" aria-label="Italiano">IT</button>
         <button class="lang-btn" data-lang="fr" type="button" aria-label="Francés">FR</button>
+        <button class="lang-btn" data-lang="en" type="button" aria-label="Inglés">EN</button>
+        <button class="lang-btn" data-lang="pt" type="button" aria-label="Portugués">PT</button>
       </div>
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar tema">
         <span class="icon-dark">☀️</span><span class="icon-light">🌙</span>
@@ -351,7 +353,7 @@
 
 <footer class="app-footer">
   <strong>Cognados</strong>
-  <p>Aprende italiano y francés desde el español que ya conoces.</p>
+  <p>Aprende italiano, francés, inglés y portugués desde el español que ya conoces.</p>
   <span>Hecho por Jorge Navas.</span>
 </footer>
 
@@ -425,23 +427,42 @@
     }
   }
 
+  // TEXT TO SPEECH (TTS) CORREGIDO PARA 4 IDIOMAS
   var ttsAvailable = 'speechSynthesis' in window;
   var availableVoices = [];
-  if (ttsAvailable) {
+
+  function loadVoices() {
+    if (!ttsAvailable) return;
     availableVoices = window.speechSynthesis.getVoices();
-    window.speechSynthesis.onvoiceschanged = function () { availableVoices = window.speechSynthesis.getVoices(); };
   }
+
+  if (ttsAvailable) {
+    loadVoices();
+    if (typeof window.speechSynthesis.onvoiceschanged !== 'undefined') {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+  }
+
   function speak(text) {
     if (!ttsAvailable || !text) return;
     try {
       window.speechSynthesis.cancel();
       var utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = DATA[lang].voice; utterance.rate = 0.9;
+      var targetLang = (DATA[lang] && DATA[lang].voice) ? DATA[lang].voice : 'es-ES';
+      utterance.lang = targetLang;
+      utterance.rate = 0.9;
+
       var voice = availableVoices.find(function (item) { return item.lang === utterance.lang; });
-      if (!voice) voice = availableVoices.find(function (item) { return item.lang.toLowerCase().indexOf(lang) === 0; });
+      if (!voice) {
+        var shortLang = targetLang.split('-')[0];
+        voice = availableVoices.find(function (item) { return item.lang && item.lang.toLowerCase().indexOf(shortLang) === 0; });
+      }
+
       if (voice) utterance.voice = voice;
       window.speechSynthesis.speak(utterance);
-    } catch (error) {}
+    } catch (error) {
+      console.warn("Error al reproducir audio:", error);
+    }
   }
 
   function initTheme() {
@@ -730,11 +751,59 @@
   }
 
   async function callAI(history) {
-    var payload = { systemPrompt: DATA[lang].tutor.systemPrompt, history: history.map(function (message) { return { role: message.role === 'user' ? 'user' : 'model', text: message.text }; }) };
-    var response = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-    if (!response.ok) throw new Error(response.status === 429 ? 'RATE_LIMIT' : 'SERVER_ERROR');
-    var result = await response.json();
-    return result.text;
+    var transcript = history.filter(function (message, index) {
+      return !message.transientError &&
+        !(index === 0 && message.role === 'model' && message.text === DATA[lang].tutor.greeting);
+    }).slice(-20);
+    while (transcript.length && transcript[0].role !== 'user') transcript.shift();
+
+    var payload = {
+      systemPrompt: DATA[lang].tutor.systemPrompt,
+      history: transcript.map(function (message) {
+        return { role: message.role, text: message.text };
+      })
+    };
+    var response;
+    try {
+      response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (error) {
+      throw new Error('NETWORK_ERROR');
+    }
+
+    var result = {};
+    try {
+      result = await response.json();
+    } catch (error) {
+      if (response.ok) throw new Error('SERVER_ERROR');
+    }
+    if (!response.ok) {
+      if (response.status === 429 || result.error === 'rate_limited') throw new Error('RATE_LIMIT');
+      if (result.error === 'missing_api_key') throw new Error('MISSING_API_KEY');
+      if (response.status === 404) throw new Error('API_NOT_FOUND');
+      if (result.error === 'upstream_error') throw new Error('UPSTREAM_ERROR');
+      throw new Error('SERVER_ERROR');
+    }
+    if (!result || typeof result.text !== 'string' || !result.text.trim()) {
+      throw new Error('EMPTY_RESPONSE');
+    }
+    return result.text.trim();
+  }
+
+  function getAIErrorMessage(error) {
+    var messages = {
+      RATE_LIMIT: 'Se alcanzó el límite de solicitudes de la IA. Inténtalo más tarde.',
+      MISSING_API_KEY: 'Falta configurar GEMINI_API_KEY en el servidor. Añádela como variable de entorno en el despliegue.',
+      API_NOT_FOUND: 'No se encontró el endpoint /api/chat. Despliega este proyecto con sus funciones de servidor.',
+      UPSTREAM_ERROR: 'Gemini rechazó la solicitud. Comprueba la clave, los permisos y la cuota de la API.',
+      NETWORK_ERROR: 'No se pudo llegar al servidor. Comprueba tu conexión e inténtalo de nuevo.',
+      EMPTY_RESPONSE: 'La IA no devolvió una respuesta. Inténtalo de nuevo.',
+      SERVER_ERROR: 'El servidor de IA devolvió un error. Revisa los registros del despliegue.'
+    };
+    return messages[error.message] || messages.SERVER_ERROR;
   }
 
   function renderChatHeader() {
@@ -761,18 +830,28 @@
     event.preventDefault();
     var textarea = safeElement('chatTextarea'); var text = textarea.value.trim();
     if (!text) return; textarea.value = '';
-    chatHistory.push({ role: 'user', text: text }); renderChat();
+    var userMessage = { role: 'user', text: text };
+    var requestLanguage = lang;
+    chatHistory.push(userMessage); renderChat();
     var typing = document.createElement('div'); typing.className = 'msg msg-model typing'; typing.id = 'typing';
     typing.innerHTML = '<div class="bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>';
     safeElement('chatMessages').appendChild(typing);
+    safeElement('chatSend').disabled = true;
+    textarea.disabled = true;
     try {
       var response = await callAI(chatHistory);
+      if (requestLanguage !== lang) return;
       var typingElement = safeElement('typing'); if (typingElement) typingElement.remove();
       chatHistory.push({ role: 'model', text: response }); renderChat();
     } catch (error) {
+      if (requestLanguage !== lang) return;
       var currentTyping = safeElement('typing'); if (currentTyping) currentTyping.remove();
-      chatHistory.push({ role: 'model', text: error.message === 'RATE_LIMIT' ? 'He alcanzado el límite diario de respuestas. Vuelve mañana.' : 'No pude conectarme con el tutor en este momento.' });
+      userMessage.transientError = true;
+      chatHistory.push({ role: 'model', text: getAIErrorMessage(error), transientError: true });
       renderChat();
+    } finally {
+      safeElement('chatSend').disabled = false;
+      textarea.disabled = false;
     }
   };
   safeElement('chatReset').onclick = function () { chatHistory = []; renderChat(); };
@@ -878,7 +957,9 @@
   // HISTORIAS
   var STORIES = {
     it: [{ id: 'caffe', title: 'Un caffè a Roma', difficulty: 'A1', body: ['Marco va al bar ogni mattina.', 'Lui ordina un caffè e un cornetto.', 'Il barista dice: "Buongiorno, Marco!"', 'Marco risponde: "Un caffè, per favore."', 'Il caffè è buono e Marco è felice.'], vocab: [{ target: 'mattina', es: 'mañana' }, { target: 'caffè', es: 'café' }, { target: 'cornetto', es: 'cruasán' }, { target: 'buono', es: 'bueno' }], questions: [{ q: '¿Adónde va Marco cada mañana?', opts: [['Al bar', true], ['Al parque', false], ['Al trabajo', false]] }, { q: '¿Qué pide Marco?', opts: [['Un caffè e un cornetto', true], ['Una pizza', false], ['Un gelato', false]] }] }],
-    fr: [{ id: 'cafe_paris', title: 'Un café à Paris', difficulty: 'A1', body: ['Sophie va au café chaque matin.', 'Elle commande un café et un croissant.', 'Le serveur dit: "Bonjour, Sophie!"', 'Sophie répond: "Un café, s\'il vous plaît."', 'Le café est bon et Sophie est contente.'], vocab: [{ target: 'matin', es: 'mañana' }, { target: 'croissant', es: 'cruasán' }, { target: 'bon', es: 'bueno' }], questions: [{ q: '¿Adónde va Sophie cada mañana?', opts: [['Au café', true], ['Au parc', false], ['Au travail', false]] }, { q: '¿Qué pide Sophie?', opts: [['Un café et un croissant', true], ['Une pizza', false], ['Un jus', false]] }] }]
+    fr: [{ id: 'cafe_paris', title: 'Un café à Paris', difficulty: 'A1', body: ['Sophie va au café chaque matin.', 'Elle commande un café et un croissant.', 'Le serveur dit: "Bonjour, Sophie!"', 'Sophie répond: "Un café, s\'il vous plaît."', 'Le café est bon et Sophie est contente.'], vocab: [{ target: 'matin', es: 'mañana' }, { target: 'croissant', es: 'cruasán' }, { target: 'bon', es: 'bueno' }], questions: [{ q: '¿Adónde va Sophie cada mañana?', opts: [['Au café', true], ['Au parc', false], ['Au travail', false]] }, { q: '¿Qué pide Sophie?', opts: [['Un café et un croissant', true], ['Une pizza', false], ['Un jus', false]] }] }],
+    en: [{ id: 'morning_london', title: 'A Morning in London', difficulty: 'A1', body: ['Emma lives in London and starts her day at seven.', 'She has tea and toast for breakfast.', 'Then she takes the bus to work.', 'A colleague says: "Good morning, Emma!"', 'Emma smiles and answers: "Good morning!"'], vocab: [{ target: 'morning', es: 'mañana' }, { target: 'breakfast', es: 'desayuno' }, { target: 'bus', es: 'autobús' }, { target: 'colleague', es: 'compañero de trabajo' }], questions: [{ q: '¿A qué hora empieza su día Emma?', opts: [['A las siete', true], ['A las nueve', false], ['Al mediodía', false]] }, { q: '¿Cómo va Emma al trabajo?', opts: [['En autobús', true], ['En tren', false], ['A pie', false]] }] }],
+    pt: [{ id: 'manha_sao_paulo', title: 'Uma manhã em São Paulo', difficulty: 'A1', body: ['Rafa mora em São Paulo e começa o dia às sete.', 'Ele toma café e come pão no café da manhã.', 'Depois, pega o ônibus para o trabalho.', 'Uma colega diz: "Bom dia, Rafa!"', 'Rafa sorri e responde: "Bom dia!"'], vocab: [{ target: 'manhã', es: 'mañana' }, { target: 'café da manhã', es: 'desayuno' }, { target: 'ônibus', es: 'autobús' }, { target: 'colega', es: 'compañero de trabajo' }], questions: [{ q: 'A que horas Rafa começa o dia?', opts: [['Às sete', true], ['Às nove', false], ['Ao meio-dia', false]] }, { q: 'Como Rafa vai ao trabalho?', opts: [['De ônibus', true], ['De trem', false], ['A pé', false]] }] }]
   };
   function getStories() { return STORIES[lang] || []; }
   function renderStoryNav() {
