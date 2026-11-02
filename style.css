@@ -1,3 +1,8 @@
+/* ============================================================
+   COGNADOS — HOJA DE ESTILOS COMPLETA
+   ============================================================ */
+
+/* ============ 1. VARIABLES Y TEMAS ============ */
 :root,
 [data-theme="dark"]{
   --bg: #1A1512;
@@ -8,6 +13,8 @@
   --line: rgba(245,235,220,0.14);
   --accent-it: #E07856;
   --accent-fr: #7BA8D9;
+  --accent-en: #D8A84E;
+  --accent-pt: #63B78A;
   --gold: #E8B860;
   --sage: #8FA68E;
   --coral: #E07856;
@@ -25,6 +32,8 @@
   --line: rgba(43,31,23,0.14);
   --accent-it: #C8442E;
   --accent-fr: #3A5A8F;
+  --accent-en: #9A6B16;
+  --accent-pt: #267A4B;
   --gold: #C89235;
   --sage: #6E8B4F;
   --coral: #C8442E;
@@ -35,6 +44,8 @@
 
 body[data-lang="it"]{ --accent: var(--accent-it); }
 body[data-lang="fr"]{ --accent: var(--accent-fr); }
+body[data-lang="en"]{ --accent: var(--accent-en); }
+body[data-lang="pt"]{ --accent: var(--accent-pt); }
 
 :root{
   --font-display: Georgia, 'Times New Roman', serif;
@@ -169,10 +180,13 @@ button:focus-visible, [role="button"]:focus-visible, textarea:focus-visible{
   .logo{font-size:1.05rem;}
 }
 @media (max-width:420px){
+  .header-inner{flex-wrap:wrap; gap:0.4rem; padding:0.4rem 0;}
+  .head-right{width:100%; justify-content:space-between; gap:0.3rem;}
+  .stats{display:none;}
   .logo em{display:none;}
   header{padding: 0 4vw; gap:0.4rem;}
-  .level-select { padding: 0.3rem 0.4rem; font-size: 0.75rem; padding-right: 1.5rem; }
-  .lang-btn{padding: 0.3rem 0.55rem; font-size:0.75rem;}
+  .level-select { width:125px; padding: 0.3rem 0.4rem; font-size: 0.75rem; padding-right: 1.5rem; }
+  .lang-btn{padding: 0.3rem 0.45rem; font-size:0.75rem;}
   .theme-toggle{width:34px;height:34px;font-size:0.95rem;}
   .pill{padding:0.3rem 0.6rem; font-size:0.75rem;}
 }
