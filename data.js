@@ -648,3 +648,253 @@ window.PONTE_DATA = {
     }
   }
 };
+
+(function () {
+  var levels = ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'];
+  var levelTitles = ['A1 · Principiante', 'A2 · Básico', 'B1 · Intermedio', 'B2 · Intermedio Alto', 'C1 · Avanzado', 'C2 · Maestría'];
+  var levelDescriptions = [
+    'Lo esencial para sobrevivir y presentarte.',
+    'Conversa sobre experiencias, rutinas y planes.',
+    'Comunícate con confianza en viajes y trabajo.',
+    'Expresa opiniones y participa en conversaciones complejas.',
+    'Comprende temas abstractos y matices del idioma.',
+    'Domina expresiones, literatura y registros avanzados.'
+  ];
+
+  function makeLevel(config, index, pronouns) {
+    return {
+      titulo: levelTitles[index],
+      desc: levelDescriptions[index],
+      categorias: [{
+        id: 'cognados-' + levels[index],
+        titulo: config.pattern,
+        cognados: config.cognates.map(function (item) { return { es: item[0], target: item[1] }; })
+      }],
+      vocabulario_esencial: [{
+        cat: config.topic,
+        icon: config.icon,
+        items: config.vocabulary.map(function (item) { return { es: item[0], target: item[1] }; })
+      }],
+      trampas: [{
+        word: config.trap.word,
+        opts: [[config.trap.correct, true], [config.trap.wrong[0], false], [config.trap.wrong[1], false]],
+        note: config.trap.note,
+        mnemonic: config.trap.mnemonic,
+        phrase: config.trap.phrase
+      }],
+      verbos: {
+        pronombres: pronouns,
+        lista: config.verbs.map(function (verb) {
+          return {
+            inf: verb.inf,
+            es: verb.es,
+            formas: verb.forms,
+            ejemplo: verb.example,
+            ejEs: verb.translation
+          };
+        })
+      },
+      construccion: config.sentences.map(function (sentence) {
+        return {
+          es: sentence[0],
+          palabras: sentence[1],
+          distractores: sentence[2],
+          traduccion: sentence[3]
+        };
+      }),
+      supervivencia: [{
+        categoria: config.survivalTitle,
+        icono: config.icon,
+        frases: config.survival.map(function (phrase) { return { es: phrase[0], target: phrase[1] }; })
+      }]
+    };
+  }
+
+  function makeLanguage(label, voice, tutor, pronouns, configs) {
+    var languageLevels = {};
+    configs.forEach(function (config, index) {
+      languageLevels[levels[index]] = makeLevel(config, index, pronouns);
+    });
+    return {
+      label: label,
+      voice: voice,
+      tutor: tutor,
+      levels: languageLevels
+    };
+  }
+
+  window.PONTE_DATA.en = makeLanguage('inglés', 'en-US', {
+    name: 'Emma',
+    avatar: '👩‍🏫',
+    status: 'Tutora nativa · Londres',
+    greeting: 'Hello! I am Emma. What would you like to practice today?',
+    starters: ['Hello, Emma!', 'I am a beginner', 'My name is...', 'I do not understand'],
+    systemPrompt: 'You are Emma, a friendly native English tutor. Adapt your English to the learner’s level. Correct mistakes kindly, explain briefly in Spanish when useful, and always end with a helpful question.'
+  }, [
+    { it: 'I', es: 'yo' }, { it: 'you', es: 'tú' }, { it: 'he/she', es: 'él/ella' },
+    { it: 'we', es: 'nosotros' }, { it: 'you', es: 'ustedes' }, { it: 'they', es: 'ellos/ellas' }
+  ], [
+    {
+      topic: 'Saludos y presentaciones', icon: '👋', survivalTitle: 'Primeras conversaciones',
+      pattern: 'Palabras internacionales',
+      cognates: [['animal', 'animal'], ['hospital', 'hospital'], ['natural', 'natural'], ['música', 'music']],
+      vocabulary: [['hola', 'hello'], ['por favor', 'please'], ['gracias', 'thank you'], ['buenos días', 'good morning'], ['adiós', 'goodbye'], ['¿cómo estás?', 'how are you?'], ['me llamo...', 'my name is...'], ['mucho gusto', 'nice to meet you']],
+      trap: { word: 'actually', correct: 'En realidad', wrong: ['Actualmente', 'Actuado'], note: 'Actually significa “en realidad”; actualmente es “currently”.', mnemonic: 'Actually aclara la realidad.', phrase: 'Actually, I live in Madrid.' },
+      verbs: [{ inf: 'to be', es: 'ser / estar', forms: ['am', 'are', 'is', 'are', 'are', 'are'], example: 'I am from Panama.', translation: 'Soy de Panamá.' }, { inf: 'to have', es: 'tener', forms: ['have', 'have', 'has', 'have', 'have', 'have'], example: 'She has a brother.', translation: 'Ella tiene un hermano.' }],
+      sentences: [['Me llamo Ana', ['My', 'name', 'is', 'Ana'], ['am', 'are'], 'My name is Ana.'], ['¿De dónde eres?', ['Where', 'are', 'you', 'from'], ['who', 'is'], 'Where are you from?'], ['Estoy aprendiendo inglés', ['I', 'am', 'learning', 'English'], ['he', 'learns'], 'I am learning English.']],
+      survival: [['No entiendo', 'I do not understand'], ['¿Puedes repetir, por favor?', 'Can you repeat, please?'], ['¿Hablas español?', 'Do you speak Spanish?'], ['Mucho gusto', 'Nice to meet you']]
+    },
+    {
+      topic: 'Viajes y transporte', icon: '✈️', survivalTitle: 'En el viaje',
+      pattern: 'Cognados de viaje',
+      cognates: [['hotel', 'hotel'], ['taxi', 'taxi'], ['mapa', 'map'], ['visita', 'visit']],
+      vocabulary: [['aeropuerto', 'airport'], ['estación', 'station'], ['billete', 'ticket'], ['equipaje', 'luggage'], ['vuelo', 'flight'], ['andén', 'platform'], ['reserva', 'booking'], ['pasaporte', 'passport']],
+      trap: { word: 'embarrassed', correct: 'Avergonzado', wrong: ['Embarazada', 'Enojado'], note: 'Embarrassed no significa embarazada; para eso se dice pregnant.', mnemonic: 'Embarrassed = incómodo por vergüenza.', phrase: 'I felt embarrassed.' },
+      verbs: [{ inf: 'to go', es: 'ir', forms: ['go', 'go', 'goes', 'go', 'go', 'go'], example: 'We go by train.', translation: 'Vamos en tren.' }, { inf: 'to take', es: 'tomar / llevar', forms: ['take', 'take', 'takes', 'take', 'take', 'take'], example: 'She takes the bus.', translation: 'Ella toma el autobús.' }],
+      sentences: [['El tren sale a las ocho', ['The', 'train', 'leaves', 'at', 'eight'], ['leave', 'on'], 'The train leaves at eight.'], ['Necesito un billete', ['I', 'need', 'a', 'ticket'], ['needs', 'the'], 'I need a ticket.'], ['¿Dónde está el aeropuerto?', ['Where', 'is', 'the', 'airport'], ['are', 'what'], 'Where is the airport?']],
+      survival: [['¿Dónde está la estación?', 'Where is the station?'], ['Tengo una reserva', 'I have a booking'], ['¿Cuánto cuesta el billete?', 'How much is the ticket?'], ['Mi equipaje está aquí', 'My luggage is here']]
+    },
+    {
+      topic: 'Rutina y trabajo', icon: '💼', survivalTitle: 'En el trabajo',
+      pattern: 'Cognados del trabajo',
+      cognates: [['oficina', 'office'], ['doctor', 'doctor'], ['importante', 'important'], ['minuto', 'minute']],
+      vocabulary: [['reunión', 'meeting'], ['horario', 'schedule'], ['compañero', 'colleague'], ['informe', 'report'], ['descanso', 'break'], ['tarea', 'task'], ['correo', 'email'], ['proyecto', 'project']],
+      trap: { word: 'sensible', correct: 'Sensato', wrong: ['Sensible / emotivo', 'Sensible al tacto'], note: 'Sensible suele significar sensato; “sensible” en español es sensitive.', mnemonic: 'A sensible decision es una decisión sensata.', phrase: 'That is a sensible idea.' },
+      verbs: [{ inf: 'to work', es: 'trabajar', forms: ['work', 'work', 'works', 'work', 'work', 'work'], example: 'I work from home.', translation: 'Trabajo desde casa.' }, { inf: 'to make', es: 'hacer / crear', forms: ['make', 'make', 'makes', 'make', 'make', 'make'], example: 'They make a plan.', translation: 'Ellos hacen un plan.' }],
+      sentences: [['Trabajo desde casa los lunes', ['I', 'work', 'from', 'home', 'on', 'Mondays'], ['works', 'in'], 'I work from home on Mondays.'], ['Tenemos una reunión importante', ['We', 'have', 'an', 'important', 'meeting'], ['has', 'the'], 'We have an important meeting.'], ['Ella escribe un informe', ['She', 'writes', 'a', 'report'], ['write', 'is'], 'She writes a report.']],
+      survival: [['¿A qué hora empieza la reunión?', 'What time does the meeting start?'], ['Te envío un correo', 'I will send you an email'], ['Necesito un descanso', 'I need a break'], ['Estoy de acuerdo', 'I agree']]
+    },
+    {
+      topic: 'Opiniones y sociedad', icon: '🗣️', survivalTitle: 'Expresar opiniones',
+      pattern: 'Cognados de opinión',
+      cognates: [['opinión', 'opinion'], ['decisión', 'decision'], ['cultura', 'culture'], ['posible', 'possible']],
+      vocabulary: [['ventaja', 'advantage'], ['desventaja', 'disadvantage'], ['elección', 'choice'], ['evidencia', 'evidence'], ['punto de vista', 'point of view'], ['acuerdo', 'agreement'], ['desafío', 'challenge'], ['investigación', 'research']],
+      trap: { word: 'eventually', correct: 'Finalmente / con el tiempo', wrong: ['Eventualmente', 'De inmediato'], note: 'Eventually significa finalmente, no “de vez en cuando”.', mnemonic: 'Eventually, al final sucede.', phrase: 'Eventually, we found the answer.' },
+      verbs: [{ inf: 'to think', es: 'pensar', forms: ['think', 'think', 'thinks', 'think', 'think', 'think'], example: 'I think this is useful.', translation: 'Pienso que esto es útil.' }, { inf: 'to choose', es: 'elegir', forms: ['choose', 'choose', 'chooses', 'choose', 'choose', 'choose'], example: 'They choose a new option.', translation: 'Ellos eligen una nueva opción.' }],
+      sentences: [['En mi opinión, es una buena idea', ['In', 'my', 'opinion', 'it', 'is', 'a', 'good', 'idea'], ['are', 'your'], 'In my opinion, it is a good idea.'], ['Tenemos que considerar otra opción', ['We', 'have', 'to', 'consider', 'another', 'option'], ['has', 'the'], 'We have to consider another option.'], ['Estoy de acuerdo con tu argumento', ['I', 'agree', 'with', 'your', 'argument'], ['am', 'at'], 'I agree with your argument.']],
+      survival: [['Desde mi punto de vista...', 'From my point of view...'], ['Estoy de acuerdo contigo', 'I agree with you'], ['Sin embargo...', 'However...'], ['¿Podrías explicar tu idea?', 'Could you explain your idea?']]
+    },
+    {
+      topic: 'Medio ambiente y tecnología', icon: '🌍', survivalTitle: 'Conversaciones actuales',
+      pattern: 'Cognados académicos',
+      cognates: [['energía', 'energy'], ['tecnología', 'technology'], ['global', 'global'], ['digital', 'digital']],
+      vocabulary: [['medio ambiente', 'environment'], ['energía renovable', 'renewable energy'], ['investigación', 'research'], ['datos', 'data'], ['privacidad', 'privacy'], ['desarrollo', 'development'], ['desigualdad', 'inequality'], ['solución', 'solution']],
+      trap: { word: 'comprehensive', correct: 'Completo / exhaustivo', wrong: ['Comprensivo', 'Fácil de entender'], note: 'Comprehensive describe algo completo; comprensivo es understanding.', mnemonic: 'Un informe comprehensive cubre todo.', phrase: 'The report provides a comprehensive overview.' },
+      verbs: [{ inf: 'to improve', es: 'mejorar', forms: ['improve', 'improve', 'improves', 'improve', 'improve', 'improve'], example: 'We can improve the system.', translation: 'Podemos mejorar el sistema.' }, { inf: 'to develop', es: 'desarrollar', forms: ['develop', 'develop', 'develops', 'develop', 'develop', 'develop'], example: 'They develop new technology.', translation: 'Desarrollan nueva tecnología.' }],
+      sentences: [['La energía renovable reduce la contaminación', ['Renewable', 'energy', 'reduces', 'pollution'], ['reduce', 'produces'], 'Renewable energy reduces pollution.'], ['La investigación presenta una solución', ['The', 'research', 'presents', 'a', 'solution'], ['present', 'an'], 'The research presents a solution.'], ['Debemos proteger la privacidad', ['We', 'must', 'protect', 'privacy'], ['can', 'protection'], 'We must protect privacy.']],
+      survival: [['Los datos muestran una tendencia', 'The data show a trend'], ['Es una solución sostenible', 'It is a sustainable solution'], ['La privacidad es importante', 'Privacy is important'], ['Hay varias posibilidades', 'There are several possibilities']]
+    },
+    {
+      topic: 'Literatura y expresiones', icon: '📚', survivalTitle: 'Expresiones avanzadas',
+      pattern: 'Expresiones idiomáticas',
+      cognates: [['obra maestra', 'masterpiece'], ['personaje', 'character'], ['narrativa', 'narrative'], ['metáfora', 'metaphor']],
+      vocabulary: [['trama', 'plot'], ['personaje', 'character'], ['relato', 'short story'], ['punto de inflexión', 'turning point'], ['doble sentido', 'double meaning'], ['proverbio', 'proverb'], ['ironía', 'irony'], ['estilo', 'style']],
+      trap: { word: 'to read between the lines', correct: 'Leer entre líneas', wrong: ['Leer en voz alta', 'Leer rápidamente'], note: 'Es una expresión idiomática para descubrir un significado implícito.', mnemonic: 'Lo que no se dice también comunica.', phrase: 'You have to read between the lines.' },
+      verbs: [{ inf: 'to imply', es: 'insinuar', forms: ['imply', 'imply', 'implies', 'imply', 'imply', 'imply'], example: 'The ending implies a new beginning.', translation: 'El final insinúa un nuevo comienzo.' }, { inf: 'to convey', es: 'transmitir', forms: ['convey', 'convey', 'conveys', 'convey', 'convey', 'convey'], example: 'The poem conveys deep emotion.', translation: 'El poema transmite una emoción profunda.' }],
+      sentences: [['El personaje cambia a lo largo de la novela', ['The', 'character', 'changes', 'throughout', 'the', 'novel'], ['change', 'between'], 'The character changes throughout the novel.'], ['La metáfora transmite una idea compleja', ['The', 'metaphor', 'conveys', 'a', 'complex', 'idea'], ['convey', 'simple'], 'The metaphor conveys a complex idea.'], ['El final deja espacio para la interpretación', ['The', 'ending', 'leaves', 'room', 'for', 'interpretation'], ['leave', 'with'], 'The ending leaves room for interpretation.']],
+      survival: [['En otras palabras...', 'In other words...'], ['Eso depende del contexto', 'That depends on the context'], ['La expresión tiene doble sentido', 'The expression has a double meaning'], ['Para resumir...', 'To sum up...']]
+    }
+  ]);
+
+  window.PONTE_DATA.pt = makeLanguage('portugués', 'pt-BR', {
+    name: 'Rafa',
+    avatar: '🧑‍🍳',
+    status: 'Tutor nativo · São Paulo',
+    greeting: 'Olá! Sou o Rafa. O que você gostaria de praticar hoje?',
+    starters: ['Olá, Rafa!', 'Estou começando', 'Meu nome é...', 'Não entendi'],
+    systemPrompt: 'Você é Rafa, um tutor nativo de português brasileiro, paciente e amigável. Adapte o português ao nível do estudante. Corrija erros com gentileza, explique brevemente em espanhol quando for útil e sempre termine com uma pergunta.'
+  }, [
+    { it: 'eu', es: 'yo' }, { it: 'você', es: 'tú / usted' }, { it: 'ele / ela', es: 'él/ella' },
+    { it: 'nós', es: 'nosotros' }, { it: 'vocês', es: 'ustedes' }, { it: 'eles / elas', es: 'ellos/ellas' }
+  ], [
+    {
+      topic: 'Saludos y presentaciones', icon: '👋', survivalTitle: 'Primeras conversaciones',
+      pattern: 'Cognados en -ção',
+      cognates: [['información', 'informação'], ['educación', 'educação'], ['nación', 'nação'], ['conversación', 'conversação']],
+      vocabulary: [['hola', 'olá'], ['por favor', 'por favor'], ['gracias', 'obrigado / obrigada'], ['buenos días', 'bom dia'], ['adiós', 'tchau'], ['¿cómo estás?', 'como você está?'], ['me llamo...', 'meu nome é...'], ['mucho gusto', 'prazer']],
+      trap: { word: 'esquisito', correct: 'Extraño / raro', wrong: ['Exquisito', 'Delicioso'], note: 'Esquisito en portugués significa extraño; exquisito es delicioso.', mnemonic: 'Algo esquisito parece extraño.', phrase: 'Esse lugar é esquisito.' },
+      verbs: [{ inf: 'ser', es: 'ser', forms: ['sou', 'é', 'é', 'somos', 'são', 'são'], example: 'Sou do Panamá.', translation: 'Soy de Panamá.' }, { inf: 'ter', es: 'tener', forms: ['tenho', 'tem', 'tem', 'temos', 'têm', 'têm'], example: 'Ela tem um irmão.', translation: 'Ella tiene un hermano.' }],
+      sentences: [['Me llamo Ana', ['Meu', 'nome', 'é', 'Ana'], ['sou', 'está'], 'Meu nome é Ana.'], ['¿De dónde eres?', ['De', 'onde', 'você', 'é?'], ['quem', 'como'], 'De onde você é?'], ['Estoy aprendiendo portugués', ['Estou', 'aprendendo', 'português'], ['está', 'aprende'], 'Estou aprendendo português.']],
+      survival: [['No entiendo', 'Não entendi'], ['¿Puedes repetir, por favor?', 'Pode repetir, por favor?'], ['¿Hablas español?', 'Você fala espanhol?'], ['Mucho gusto', 'Prazer']]
+    },
+    {
+      topic: 'Viajes y transporte', icon: '✈️', survivalTitle: 'En el viaje',
+      pattern: 'Cognados de viaje',
+      cognates: [['hotel', 'hotel'], ['taxi', 'táxi'], ['visita', 'visita'], ['turista', 'turista']],
+      vocabulary: [['aeropuerto', 'aeroporto'], ['estación', 'estação'], ['billete', 'passagem'], ['equipaje', 'bagagem'], ['vuelo', 'voo'], ['andén', 'plataforma'], ['reserva', 'reserva'], ['pasaporte', 'passaporte']],
+      trap: { word: 'pasta', correct: 'Carpeta / maletín', wrong: ['Pasta italiana', 'Pastel'], note: 'Pasta en portugués suele ser una carpeta o un maletín.', mnemonic: 'Guarda los documentos en una pasta.', phrase: 'Os documentos estão na pasta.' },
+      verbs: [{ inf: 'ir', es: 'ir', forms: ['vou', 'vai', 'vai', 'vamos', 'vão', 'vão'], example: 'Vamos de trem.', translation: 'Vamos en tren.' }, { inf: 'pegar', es: 'tomar / coger', forms: ['pego', 'pega', 'pega', 'pegamos', 'pegam', 'pegam'], example: 'Ela pega o ônibus.', translation: 'Ella toma el autobús.' }],
+      sentences: [['El tren sale a las ocho', ['O', 'trem', 'sai', 'às', 'oito'], ['saem', 'em'], 'O trem sai às oito.'], ['Necesito una reserva', ['Preciso', 'de', 'uma', 'reserva'], ['precisa', 'um'], 'Preciso de uma reserva.'], ['¿Dónde está el aeropuerto?', ['Onde', 'fica', 'o', 'aeroporto?'], ['quem', 'são'], 'Onde fica o aeroporto?']],
+      survival: [['¿Dónde está la estación?', 'Onde fica a estação?'], ['Tengo una reserva', 'Tenho uma reserva'], ['¿Cuánto cuesta el billete?', 'Quanto custa a passagem?'], ['Mi equipaje está aquí', 'Minha bagagem está aqui']]
+    },
+    {
+      topic: 'Rutina y trabajo', icon: '💼', survivalTitle: 'En el trabajo',
+      pattern: 'Cognados del trabajo',
+      cognates: [['oficina', 'oficina'], ['doctor', 'doutor'], ['importante', 'importante'], ['minuto', 'minuto']],
+      vocabulary: [['reunión', 'reunião'], ['horario', 'horário'], ['compañero', 'colega'], ['informe', 'relatório'], ['descanso', 'intervalo'], ['tarea', 'tarefa'], ['correo', 'e-mail'], ['proyecto', 'projeto']],
+      trap: { word: 'apelido', correct: 'Apodo', wrong: ['Apellido', 'Nombre completo'], note: 'Apelido significa apodo; apellido se dice sobrenome.', mnemonic: 'Seu apelido é como te chamam.', phrase: 'Meu apelido é Rafa.' },
+      verbs: [{ inf: 'trabalhar', es: 'trabajar', forms: ['trabalho', 'trabalha', 'trabalha', 'trabalhamos', 'trabalham', 'trabalham'], example: 'Trabalho de casa.', translation: 'Trabajo desde casa.' }, { inf: 'fazer', es: 'hacer', forms: ['faço', 'faz', 'faz', 'fazemos', 'fazem', 'fazem'], example: 'Eles fazem um plano.', translation: 'Ellos hacen un plan.' }],
+      sentences: [['Trabajo desde casa los lunes', ['Trabalho', 'de', 'casa', 'às', 'segundas-feiras'], ['trabalha', 'em'], 'Trabalho de casa às segundas-feiras.'], ['Tenemos una reunión importante', ['Temos', 'uma', 'reunião', 'importante'], ['tem', 'um'], 'Temos uma reunião importante.'], ['Ella escribe un informe', ['Ela', 'escreve', 'um', 'relatório'], ['escrevem', 'é'], 'Ela escreve um relatório.']],
+      survival: [['¿A qué hora empieza la reunión?', 'A que horas começa a reunião?'], ['Te envío un correo', 'Vou enviar um e-mail para você'], ['Necesito un descanso', 'Preciso de um intervalo'], ['Estoy de acuerdo', 'Concordo']]
+    },
+    {
+      topic: 'Opiniones y sociedad', icon: '🗣️', survivalTitle: 'Expresar opiniones',
+      pattern: 'Cognados de opinión',
+      cognates: [['opinión', 'opinião'], ['decisión', 'decisão'], ['cultura', 'cultura'], ['posible', 'possível']],
+      vocabulary: [['ventaja', 'vantagem'], ['desventaja', 'desvantagem'], ['elección', 'escolha'], ['evidencia', 'evidência'], ['punto de vista', 'ponto de vista'], ['acuerdo', 'acordo'], ['desafío', 'desafio'], ['investigación', 'pesquisa']],
+      trap: { word: 'oficina', correct: 'Taller / garaje', wrong: ['Oficina de trabajo', 'Tienda'], note: 'Oficina en portugués es un taller; una oficina de trabajo es escritório.', mnemonic: 'Uma oficina conserta autos.', phrase: 'O carro está na oficina.' },
+      verbs: [{ inf: 'pensar', es: 'pensar', forms: ['penso', 'pensa', 'pensa', 'pensamos', 'pensam', 'pensam'], example: 'Penso que isso é útil.', translation: 'Pienso que eso es útil.' }, { inf: 'escolher', es: 'elegir', forms: ['escolho', 'escolhe', 'escolhe', 'escolhemos', 'escolhem', 'escolhem'], example: 'Eles escolhem outra opção.', translation: 'Ellos eligen otra opción.' }],
+      sentences: [['En mi opinión, es una buena idea', ['Na', 'minha', 'opinião,', 'é', 'uma', 'boa', 'ideia'], ['são', 'seu'], 'Na minha opinião, é uma boa ideia.'], ['Tenemos que considerar otra opción', ['Temos', 'que', 'considerar', 'outra', 'opção'], ['tem', 'essa'], 'Temos que considerar outra opção.'], ['Estoy de acuerdo con tu argumento', ['Concordo', 'com', 'o', 'seu', 'argumento'], ['concorda', 'para'], 'Concordo com o seu argumento.']],
+      survival: [['Desde mi punto de vista...', 'Do meu ponto de vista...'], ['Estoy de acuerdo contigo', 'Concordo com você'], ['Sin embargo...', 'No entanto...'], ['¿Podrías explicar tu idea?', 'Você poderia explicar sua ideia?']]
+    },
+    {
+      topic: 'Medio ambiente y tecnología', icon: '🌍', survivalTitle: 'Conversaciones actuales',
+      pattern: 'Cognados académicos',
+      cognates: [['energía', 'energia'], ['tecnología', 'tecnologia'], ['global', 'global'], ['digital', 'digital']],
+      vocabulary: [['medio ambiente', 'meio ambiente'], ['energía renovable', 'energia renovável'], ['investigación', 'pesquisa'], ['datos', 'dados'], ['privacidad', 'privacidade'], ['desarrollo', 'desenvolvimento'], ['desigualdad', 'desigualdade'], ['solución', 'solução']],
+      trap: { word: 'propina', correct: 'Matrícula / tasa académica', wrong: ['Propina de restaurante', 'Regalo'], note: 'Propina suele ser una tasa de estudios; la propina de restaurante es gorjeta.', mnemonic: 'Paguei a propina da universidade.', phrase: 'A propina da universidade aumentou.' },
+      verbs: [{ inf: 'melhorar', es: 'mejorar', forms: ['melhoro', 'melhora', 'melhora', 'melhoramos', 'melhoram', 'melhoram'], example: 'Podemos melhorar o sistema.', translation: 'Podemos mejorar el sistema.' }, { inf: 'desenvolver', es: 'desarrollar', forms: ['desenvolvo', 'desenvolve', 'desenvolve', 'desenvolvemos', 'desenvolvem', 'desenvolvem'], example: 'Desenvolvem novas tecnologias.', translation: 'Desarrollan nuevas tecnologías.' }],
+      sentences: [['La energía renovable reduce la contaminación', ['A', 'energia', 'renovável', 'reduz', 'a', 'poluição'], ['reduzem', 'produz'], 'A energia renovável reduz a poluição.'], ['La investigación presenta una solución', ['A', 'pesquisa', 'apresenta', 'uma', 'solução'], ['apresentam', 'um'], 'A pesquisa apresenta uma solução.'], ['Debemos proteger la privacidad', ['Devemos', 'proteger', 'a', 'privacidade'], ['podemos', 'proteção'], 'Devemos proteger a privacidade.']],
+      survival: [['Los datos muestran una tendencia', 'Os dados mostram uma tendência'], ['Es una solución sostenible', 'É uma solução sustentável'], ['La privacidad es importante', 'A privacidade é importante'], ['Hay varias posibilidades', 'Há várias possibilidades']]
+    },
+    {
+      topic: 'Literatura y expresiones', icon: '📚', survivalTitle: 'Expresiones avanzadas',
+      pattern: 'Expresiones idiomáticas',
+      cognates: [['obra maestra', 'obra-prima'], ['personaje', 'personagem'], ['narrativa', 'narrativa'], ['metáfora', 'metáfora']],
+      vocabulary: [['trama', 'enredo'], ['personaje', 'personagem'], ['relato', 'conto'], ['punto de inflexión', 'ponto de virada'], ['doble sentido', 'duplo sentido'], ['proverbio', 'provérbio'], ['ironía', 'ironia'], ['estilo', 'estilo']],
+      trap: { word: 'puxar o saco', correct: 'Adular / hacer la pelota', wrong: ['Tirar una bolsa', 'Pedir ayuda'], note: 'Es una expresión coloquial para adular a alguien.', mnemonic: 'Quem puxa o saco elogia demais.', phrase: 'Ele vive puxando o saco do chefe.' },
+      verbs: [{ inf: 'sugerir', es: 'insinuar / sugerir', forms: ['sugiro', 'sugere', 'sugere', 'sugerimos', 'sugerem', 'sugerem'], example: 'O final sugere um novo começo.', translation: 'El final sugiere un nuevo comienzo.' }, { inf: 'transmitir', es: 'transmitir', forms: ['transmito', 'transmite', 'transmite', 'transmitimos', 'transmitem', 'transmitem'], example: 'O poema transmite emoção.', translation: 'El poema transmite emoción.' }],
+      sentences: [['El personaje cambia a lo largo de la novela', ['A', 'personagem', 'muda', 'ao', 'longo', 'do', 'romance'], ['mudam', 'entre'], 'A personagem muda ao longo do romance.'], ['La metáfora transmite una idea compleja', ['A', 'metáfora', 'transmite', 'uma', 'ideia', 'complexa'], ['transmitem', 'simples'], 'A metáfora transmite uma ideia complexa.'], ['El final deja espacio para la interpretación', ['O', 'final', 'deixa', 'espaço', 'para', 'interpretação'], ['deixam', 'com'], 'O final deixa espaço para interpretação.']],
+      survival: [['En otras palabras...', 'Em outras palavras...'], ['Eso depende del contexto', 'Isso depende do contexto'], ['La expresión tiene doble sentido', 'A expressão tem duplo sentido'], ['Para resumir...', 'Resumindo...']]
+    }
+  ]);
+
+  var extraContent = {
+    it: [
+      ['Comidas', '🍝', [['pan', 'pane'], ['queso', 'formaggio'], ['fruta', 'frutta'], ['agua', 'acqua'], ['desayuno', 'colazione'], ['cena', 'cena']]],
+      ['En casa', '🏠', [['cocina', 'cucina'], ['ventana', 'finestra'], ['puerta', 'porta'], ['mesa', 'tavolo'], ['silla', 'sedia'], ['llave', 'chiave']]],
+      ['Naturaleza', '🌿', [['montaña', 'montagna'], ['bosque', 'bosco'], ['río', 'fiume'], ['playa', 'spiaggia'], ['lluvia', 'pioggia'], ['árbol', 'albero']]],
+      ['Tecnología', '💻', [['pantalla', 'schermo'], ['teclado', 'tastiera'], ['archivo', 'file'], ['contraseña', 'password'], ['mensaje', 'messaggio'], ['cargar', 'caricare']]],
+      ['Sociedad', '🌍', [['comunidad', 'comunità'], ['derecho', 'diritto'], ['investigación', 'ricerca'], ['desafío', 'sfida'], ['recurso', 'risorsa'], ['cambio', 'cambiamento']]],
+      ['Expresiones', '🎭', [['estar de acuerdo', 'essere d’accordo'], ['tener en cuenta', 'tenere conto'], ['de vez en cuando', 'di tanto in tanto'], ['por si acaso', 'nel caso'], ['darse cuenta', 'rendersi conto'], ['al fin y al cabo', 'in fin dei conti']]]
+    ],
+    fr: [
+      ['Comidas', '🥐', [['pan', 'pain'], ['queso', 'fromage'], ['fruta', 'fruit'], ['agua', 'eau'], ['desayuno', 'petit-déjeuner'], ['cena', 'dîner']]],
+      ['En casa', '🏠', [['cocina', 'cuisine'], ['ventana', 'fenêtre'], ['puerta', 'porte'], ['mesa', 'table'], ['silla', 'chaise'], ['llave', 'clé']]],
+      ['Naturaleza', '🌿', [['montaña', 'montagne'], ['bosque', 'forêt'], ['río', 'rivière'], ['playa', 'plage'], ['lluvia', 'pluie'], ['árbol', 'arbre']]],
+      ['Tecnología', '💻', [['pantalla', 'écran'], ['teclado', 'clavier'], ['archivo', 'fichier'], ['contraseña', 'mot de passe'], ['mensaje', 'message'], ['cargar', 'charger']]],
+      ['Sociedad', '🌍', [['comunidad', 'communauté'], ['derecho', 'droit'], ['investigación', 'recherche'], ['desafío', 'défi'], ['recurso', 'ressource'], ['cambio', 'changement']]],
+      ['Expresiones', '🎭', [['estar de acuerdo', 'être d’accord'], ['tener en cuenta', 'tenir compte'], ['de vez en cuando', 'de temps en temps'], ['por si acaso', 'au cas où'], ['darse cuenta', 'se rendre compte'], ['al fin y al cabo', 'après tout']]]
+    ]
+  };
+  Object.keys(extraContent).forEach(function (language) {
+    extraContent[language].forEach(function (category, index) {
+      var level = window.PONTE_DATA[language].levels[levels[index]];
+      level.vocabulario_esencial.push({
+        cat: category[0],
+        icon: category[1],
+        items: category[2].map(function (item) { return { es: item[0], target: item[1] }; })
+      });
+    });
+  });
+})();
